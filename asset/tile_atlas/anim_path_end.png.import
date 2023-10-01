@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dtoyu5lb8o815"
-path="res://.godot/imported/tile_atlas_orange_blocks.png-03124e20dbda19814362c09bf22adc3d.ctex"
+uid="uid://p2u7tet8ysny"
+path="res://.godot/imported/anim_path_end.png-316222c8d42f64f20992b2d5a7450919.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://asset/tile_atlas_orange_blocks.png"
-dest_files=["res://.godot/imported/tile_atlas_orange_blocks.png-03124e20dbda19814362c09bf22adc3d.ctex"]
+source_file="res://asset/tile_atlas/anim_path_end.png"
+dest_files=["res://.godot/imported/anim_path_end.png-316222c8d42f64f20992b2d5a7450919.ctex"]
 
 [params]
 
