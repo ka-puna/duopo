@@ -2,14 +2,14 @@
 extends TileMap
 
 
-## Aliases for each layer.
-enum LAYER { BACKGROUND, ACTIVE_TILES, PATH }
+## Aliases for each layer's integer id.
+enum LAYER { BACKGROUND, DROP, PATH }
 ## The local coordinates of the top-left tile of the in-bounds region.
-@export var top_left = Vector2i(0, 8)
+@export var inbound_top_left = Vector2i(0, 8)
 ## The local coordinates of the bottom-right tile of the in-bounds region.
-@export var bottom_right = Vector2i(10, 18)
+@export var inbound_bottom_right = Vector2i(10, 18)
 var atlas = TileAtlas.new()
-## An array of coordinates in the path layer.
+## An array of coordinates corresponding to tiles in the path layer.
 var path: Array
 
 
@@ -23,41 +23,41 @@ func _process(_delta):
 	pass
 
 
-## Adds coords to the path layer.
-## Returns true if the operation is successful.
-func path_append(coords: Vector2i) -> bool:
-	if tile_is_pathable(coords):
-		path.append(coords)
-		_path_update()
-		return true
-	return false
-
-
-## Clears the path layer.
-func path_clear() -> void:
+## Clears the path.
+func clear_path() -> void:
 	self.clear_layer(LAYER.PATH)
 	path.clear()
 
 
-## Truncates the path such that it ends at index.
-func path_truncate(index: int):
+## Adds 'coords' to the path layer.
+## Returns true if the operation is successful.
+func path_append(coords: Vector2i) -> bool:
+	if tile_is_pathable(coords):
+		path.append(coords)
+		_update_path_layer()
+		return true
+	return false
+
+
+## Returns true if 'coords' is in bounds.
+func tile_is_in_bounds(coords: Vector2i) -> bool:
+	return coords.x >= inbound_top_left.x and coords.x <= inbound_bottom_right.x \
+			and coords.y >= inbound_top_left.y and coords.y <= inbound_bottom_right.y
+
+
+## Truncates the path such that it ends at 'index'.
+func truncate_path(index: int):
 	if not index in range(path.size()):
 		return
-	# Erase tiles from layer.
+	# Erase tiles from the path layer.
 	for i in path.slice(index + 1).size():
 			self.set_cell(2, path[i + index + 1], -1)
-	# Truncate path.
+	# Truncate the path array.
 	path = path.slice(0, index + 1)
-	_path_update()
+	_update_path_layer()
 
 
-## Returns true if coords is in bounds.
-func tile_is_in_bounds(coords: Vector2i) -> bool:
-	return coords.x >= top_left.x and coords.x <= bottom_right.x \
-			and coords.y >= top_left.y and coords.y <= bottom_right.y
-
-
-## Returns true if coords can be added to the path.
+## Returns true if 'coords' can be added to the path.
 func tile_is_pathable(coords: Vector2i) -> bool:
 	if not tile_is_in_bounds(coords):
 		return false
@@ -70,11 +70,11 @@ func tile_is_pathable(coords: Vector2i) -> bool:
 				or coords.y == path[-1].y and abs(path[-1].x - coords.x) == 1
 
 
-## Updates the drawing of the last two tiles in the path.
-func _path_update() -> void:
+## Updates the drawing of the last two tiles in the path layer.
+func _update_path_layer() -> void:
 	if not path.is_empty():
 		if path.size() > 1:
-			# Set the second-to-last tile.
+			# Use the path's direction to determine the second-to-last tile's atlas coordinates.
 			var atlas_coords = Vector2i(-1, -1)
 			var to_last = Vector2i(path[-1].x - path[-2].x, path[-1].y - path[-2].y)
 			if path.size() > 2:
