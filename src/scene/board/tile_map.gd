@@ -4,10 +4,6 @@ extends TileMap
 
 ## Aliases for each layer's integer id.
 enum LAYER { BACKGROUND, DROP, PATH }
-## The local coordinates of the top-left tile of the in-bounds region.
-@export var inbound_top_left = Vector2i(0, 8)
-## The local coordinates of the bottom-right tile of the in-bounds region.
-@export var inbound_bottom_right = Vector2i(10, 18)
 var atlas = TileAtlas.new()
 ## An array of coordinates corresponding to tiles in the path layer.
 var path: Array
@@ -39,10 +35,10 @@ func path_append(coords: Vector2i) -> bool:
 	return false
 
 
-## Returns true if 'coords' is in bounds.
+## Returns true if the tile at coords is in bounds.
 func tile_is_in_bounds(coords: Vector2i) -> bool:
-	return coords.x >= inbound_top_left.x and coords.x <= inbound_bottom_right.x \
-			and coords.y >= inbound_top_left.y and coords.y <= inbound_bottom_right.y
+	var tile_data = self.get_cell_tile_data(LAYER.BACKGROUND, coords)
+	return tile_data and tile_data.get_custom_data_by_layer_id(atlas.tile_data.PATHABLE)
 
 
 ## Truncates the path such that it ends at 'index'.

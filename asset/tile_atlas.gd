@@ -13,6 +13,9 @@ const tiles = {
 	"OUT_WARNING": Vector2i(5, 0),
 	"OTHER": Vector2i(6, 0),
 }
+const tile_data = {
+	"PATHABLE": 0,
+}
 
 
 const path = {
@@ -30,8 +33,6 @@ const path = {
 	"HORIZONTAL": Vector2i(0, 3),
 	"VERTICAL": Vector2i(1, 3),
 }
-
-
 const anim = {
 	"SOURCE": 2,
 	"EMPTY": Vector2i(-1, -1),
