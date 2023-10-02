@@ -1,7 +1,8 @@
 ## This [TileMap] extension handles the drawing of tiles contained in the board scene.
 extends TileMap
 
-
+## Aliases for each integer return status.
+enum RETURN_STATUS { SUCCESS = 0, BLOCKED = 1, INVALID_ARGS = 2}
 ## Aliases for each layer's integer id.
 enum LAYER { BACKGROUND, DROP, PATH }
 var atlas = TileAtlas.new()
@@ -23,6 +24,20 @@ func _process(_delta):
 func clear_path() -> void:
 	self.clear_layer(LAYER.PATH)
 	path.clear()
+
+
+## Adds the pattern associated with 'pattern_id' to the drop layer at or above the tile map origin.
+## Returns a RETURN_STATUS integer value (0 is SUCCESS, non-zero is failure).
+func drop_add_pattern(pattern_id: int) -> int:
+	if pattern_id < 0 or pattern_id > self.tile_set.get_patterns_count() - 1:
+		return RETURN_STATUS.INVALID_ARGS
+	## Check for obstruction.
+	if self.get_cell_tile_data(LAYER.DROP, Vector2i(0, 0)):
+		return RETURN_STATUS.BLOCKED
+	var pattern = self.tile_set.get_pattern(pattern_id)
+	var height = pattern.get_size().y
+	self.set_pattern(LAYER.DROP, Vector2i(0, 1 - height), pattern)
+	return RETURN_STATUS.SUCCESS
 
 
 ## Adds 'coords' to the path layer.
