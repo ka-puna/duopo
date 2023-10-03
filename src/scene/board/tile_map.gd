@@ -81,63 +81,7 @@ func tile_is_pathable(coords: Vector2i) -> bool:
 				or coords.y == path[-1].y and abs(path[-1].x - coords.x) == 1
 
 
-## Updates the drawing of the last two tiles in the path layer.
+## Updates the drawing of the path layer.
 func _update_path_layer() -> void:
-	if not path.is_empty():
-		if path.size() > 1:
-			# Use the path's direction to determine the second-to-last tile's atlas coordinates.
-			var atlas_coords = Vector2i(-1, -1)
-			var to_last = Vector2i(path[-1].x - path[-2].x, path[-1].y - path[-2].y)
-			if path.size() > 2:
-				var to_second_last = Vector2i(path[-2].x - path[-3].x, path[-2].y - path[-3].y)
-				match to_second_last:
-					Vector2i(0, -1):
-						match to_last:
-							Vector2i(-1, 0):
-								atlas_coords = atlas.path.SW_CORNER
-							Vector2i(1, 0):
-								atlas_coords = atlas.path.SE_CORNER
-							_:
-								atlas_coords = atlas.path.VERTICAL
-					Vector2i(-1, 0):
-						match to_last:
-							Vector2i(0, -1):
-								atlas_coords = atlas.path.NE_CORNER
-							Vector2i(0, 1):
-								atlas_coords = atlas.path.SE_CORNER
-							_:
-								atlas_coords = atlas.path.HORIZONTAL
-					Vector2i(1, 0):
-						match to_last:
-							Vector2i(0, -1):
-								atlas_coords = atlas.path.NW_CORNER
-							Vector2i(0, 1):
-								atlas_coords = atlas.path.SW_CORNER
-							_:
-								atlas_coords = atlas.path.HORIZONTAL
-					Vector2i(0, 1):
-						match to_last:
-							Vector2i(-1, 0):
-								atlas_coords = atlas.path.NW_CORNER
-							Vector2i(1, 0):
-								atlas_coords = atlas.path.NE_CORNER
-							_:
-								atlas_coords = atlas.path.VERTICAL
-					_:
-						printerr("Invalid 3rd-to-2nd-last difference vector: ", to_second_last)
-			else:
-				match to_last:
-					Vector2i(0, -1):
-						atlas_coords = atlas.path.NORTH
-					Vector2i(-1, 0):
-						atlas_coords = atlas.path.WEST
-					Vector2i(1, 0):
-						atlas_coords = atlas.path.EAST
-					Vector2i(0, 1):
-						atlas_coords = atlas.path.SOUTH
-					_:
-						printerr("Invalid 2nd-to-last difference vector: ", to_last)
-
-			self.set_cell(2, path[-2], atlas.path.SOURCE, atlas_coords)
-
-		self.set_cell(2, path[-1], atlas.anim.SOURCE, atlas.anim.PATH_END)
+	set_cells_terrain_path(LAYER.PATH, path, atlas.terrains.PATH.SET, atlas.terrains.PATH.INDEX)
+	set_cell(LAYER.PATH, path[-1], atlas.anim.SOURCE, atlas.anim.PATH_END)
