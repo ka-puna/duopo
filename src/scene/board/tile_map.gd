@@ -40,6 +40,23 @@ func drop_add_pattern(pattern_id: int) -> int:
 	return RETURN_STATUS.SUCCESS
 
 
+## Moves tiles in the drop layer to the lowest row without obstruction by solid tiles.
+func drop_fast_fall():
+	var tiles = get_used_cells(LAYER.DROP)
+	# Sort tiles from top-to-bottom, then left-to-right.
+	tiles.sort_custom(func(a, b): return a.y > b.y or a.y == b.y and a.x < b.x)
+	for i in range(tiles.size()):
+		var tile_below = tiles[i] + Vector2i(0, 1)
+		# While the tile below is not solid, move the tile down.
+		while not tile_is_solid(LAYER.DROP, tile_below) \
+				and not tile_is_solid(LAYER.BACKGROUND, tile_below):
+			var atlas_coords = get_cell_atlas_coords(LAYER.DROP, tiles[i], false)
+			set_cell(LAYER.DROP, tiles[i], -1)
+			tiles[i] = tile_below
+			set_cell(LAYER.DROP, tiles[i], atlas.tiles.SOURCE, atlas_coords)
+			tile_below = tile_below + Vector2i(0, 1)
+
+
 ## Adds 'coords' to the path layer.
 ## Returns true if the operation is successful.
 func path_append(coords: Vector2i) -> bool:
@@ -54,6 +71,14 @@ func path_append(coords: Vector2i) -> bool:
 func tile_is_in_bounds(coords: Vector2i) -> bool:
 	var tile_data = self.get_cell_tile_data(LAYER.BACKGROUND, coords)
 	return tile_data and tile_data.get_custom_data_by_layer_id(atlas.tile_data.PATHABLE)
+
+
+## Returns true if the tile in 'layer' at 'coords' is solid.
+func tile_is_solid(layer: int, coords: Vector2i) -> bool:
+	var tile_data = get_cell_tile_data(layer, coords)
+	if tile_data:
+		return tile_data.get_custom_data_by_layer_id(atlas.tile_data.SOLID)
+	return false
 
 
 ## Truncates the path such that it ends at 'index'.

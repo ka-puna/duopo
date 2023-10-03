@@ -15,6 +15,7 @@ const tiles = {
 }
 const tile_data = {
 	"PATHABLE": 0,
+	"SOLID": 1,
 }
 const anim = {
 	"SOURCE": 2,
