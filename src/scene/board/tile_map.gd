@@ -54,7 +54,7 @@ func drop_fast_fall():
 			var atlas_coords = get_cell_atlas_coords(LAYER.DROP, tiles[i], false)
 			set_cell(LAYER.DROP, tiles[i], -1)
 			tiles[i] = tile_below
-			set_cell(LAYER.DROP, tiles[i], atlas.tiles.SOURCE, atlas_coords)
+			set_cell(LAYER.DROP, tiles[i], atlas.SOURCES.TILES, atlas_coords)
 			tile_below = tile_below + Vector2i(0, 1)
 
 
@@ -71,13 +71,13 @@ func path_append(coords: Vector2i) -> bool:
 ## Returns true if the tile at coords is in bounds.
 func tile_is_in_bounds(coords: Vector2i) -> bool:
 	var tile_data = get_cell_tile_data(LAYER.BACKGROUND, coords)
-	return tile_data and tile_data.get_custom_data_by_layer_id(atlas.tile_data.PATHABLE)
+	return tile_data and tile_data.get_custom_data("pathable")
 
 
 ## Returns true if the tile in 'layer' at 'coords' is solid.
 func tile_is_solid(layer: int, coords: Vector2i) -> bool:
 	var tile_data = get_cell_tile_data(layer, coords)
-	return tile_data and tile_data.get_custom_data_by_layer_id(atlas.tile_data.SOLID)
+	return tile_data and tile_data.get_custom_data("solid")
 
 
 ## Truncates the path such that it ends at 'index'.
@@ -108,6 +108,6 @@ func tile_is_pathable(coords: Vector2i) -> bool:
 
 ## Updates the drawing of the path layer.
 func _update_path_layer() -> void:
-	set_cells_terrain_path(LAYER.PATH, path, atlas.terrains.PATH.SET, atlas.terrains.PATH.INDEX)
+	set_cells_terrain_path(LAYER.PATH, path, atlas.TERRAINS.PATH.SET, atlas.TERRAINS.PATH.INDEX)
 	# Set the last tile to a special, animated tile.
-	set_cell(LAYER.PATH, path[-1], atlas.anim.SOURCE, atlas.anim.PATH_END)
+	set_cell(LAYER.PATH, path[-1], atlas.SOURCES.ANIM_PATH_END, atlas.ANIMS.BASE.PATH_END)
