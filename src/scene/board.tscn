@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://dxw75koeax6by"]
 
 [ext_resource type="TileSet" uid="uid://ogx4rbyatygf" path="res://asset/tile_atlas.tres" id="1_la55x"]
-[ext_resource type="Script" path="res://src/scene/board/tile_map.gd" id="2_863l1"]
+[ext_resource type="Script" path="res://src/node/tile_map.gd" id="2_863l1"]
 
 [node name="board" type="Node2D"]
 
