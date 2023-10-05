@@ -68,6 +68,23 @@ func path_append(coords: Vector2i) -> bool:
 	return false
 
 
+## Returns the coordinates of the tile at 'index', or Vector2i(-1, -1) if the index is invalid.
+func path_get(index: int) -> Vector2i:
+	if index < -path.size() or index >= path.size():
+		return Vector2i(-1, -1)
+	return path[index]
+
+
+## Returns true if the path layer contains 'coords'.
+func path_has(coords: Vector2i) -> bool:
+	return path.has(coords)
+
+
+## Returns true if the path layer is empty.
+func path_is_empty() -> bool:
+	return path.size() == 0
+
+
 ## Returns true if the tile at coords is in bounds.
 func tile_is_in_bounds(coords: Vector2i) -> bool:
 	var tile_data = get_cell_tile_data(LAYER.BACKGROUND, coords)
