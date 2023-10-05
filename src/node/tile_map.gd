@@ -44,7 +44,7 @@ func drop_add_pattern(pattern_id: int) -> int:
 ## Moves tiles in the drop layer to the lowest row without obstruction by solid tiles.
 func drop_fast_fall():
 	var tiles = get_used_cells(LAYER.DROP)
-	# Sort tile coordinates from top-to-bottom, then left-to-right.
+	# Sort tile coordinates from bottom-to-top, then left-to-right.
 	tiles.sort_custom(func(a, b): return a.y > b.y or a.y == b.y and a.x < b.x)
 	for i in range(tiles.size()):
 		var tile_below = tiles[i] + Vector2i(0, 1)
