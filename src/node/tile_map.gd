@@ -1,6 +1,10 @@
 ## This [TileMap] extension handles the drawing of tiles contained in the board scene.
 extends TileMap
 
+
+## Adjust the width of the drop layer to match width of the drop layer, then
+## adjust the tile_atlas.tres patterns and prime values of custom data layer "group".
+@export var drop_width = 9
 ## Aliases for each integer return status.
 enum RETURN_STATUS { SUCCESS = 0, BLOCKED = 1, INVALID_ARGS = 2 }
 ## Aliases for each layer's integer id.
@@ -18,6 +22,45 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
 	pass
+
+
+## Removes rows of tiles in the drop layer with matching tiles.
+## 'full_rows_only': If true, then only rows with a full set of tiles are cleared.
+## Returns a dictionary mapping tile atlas coordinates to the number of rows cleared.
+func clear_rows(full_rows_only = true) -> Dictionary:
+	# Maps atlas coordinates to row clears.
+	var counts = {}
+	# Maps atlas coordinates to group values.
+	var group_values = {}
+	var tiles = get_used_cells(LAYER.DROP)
+	# Sort tile coordinates from top-to-bottom, then left-to-right.
+	tiles.sort_custom(func(a, b): return a.y < b.y or a.y == b.y and a.x < b.x)
+	for i in range(0, tiles.size(), drop_width):
+		var is_matched = false
+		# Sum the group values of tiles in the row.
+		var total = 0
+		for j in range(0, drop_width):
+			var tile_atlas_coords = get_cell_atlas_coords(LAYER.DROP, tiles[i + j])
+			var tile_data = get_cell_tile_data(LAYER.DROP, tiles[i + j])
+			if tile_data:
+				var value = tile_data.get_custom_data("group")
+				total = total + value
+				# Store unique group values.
+				if value != 0 and not group_values.has(tile_atlas_coords):
+					counts[tile_atlas_coords] = 0
+					group_values[tile_atlas_coords] = value
+			elif full_rows_only:
+				break
+		for atlas_coords in group_values.keys():
+			# Match total with group values.
+			if total % group_values[atlas_coords] == 0:
+				is_matched = true
+				counts[atlas_coords] = counts[atlas_coords] + 1
+		if is_matched:
+			# Clear the row.
+			for j in range(0, drop_width):
+				set_cell(LAYER.DROP, tiles[i + j], -1)
+	return counts
 
 
 ## Clears the path.
