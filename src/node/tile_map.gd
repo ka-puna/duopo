@@ -71,18 +71,18 @@ func clear_path() -> void:
 	path.clear()
 
 
-## Adds the pattern associated with 'pattern_id' to the drop layer at or above the tile map origin.
+## Adds the pattern associated with 'pattern_id' to 'layer' at or above the tile map origin.
 ## Returns a RETURN_STATUS integer value.
 ## { SUCCESS = 0, BLOCKED = 1, INVALID_ARGS = 2}
-func drop_add_pattern(pattern_id: int) -> int:
+func add_pattern(layer: int, pattern_id: int) -> int:
 	if pattern_id < 0 or pattern_id > tile_set.get_patterns_count() - 1:
 		return RETURN_STATUS.INVALID_ARGS
 	## Check for obstruction.
-	if get_cell_tile_data(layers.drop, Vector2i(0, 0)):
+	if get_cell_tile_data(layer, Vector2i(0, 0)):
 		return RETURN_STATUS.BLOCKED
 	var pattern = tile_set.get_pattern(pattern_id)
 	var height = pattern.get_size().y
-	set_pattern(layers.drop, Vector2i(0, 1 - height), pattern)
+	set_pattern(layer, Vector2i(0, 1 - height), pattern)
 	return RETURN_STATUS.SUCCESS
 
 
@@ -106,7 +106,7 @@ func drop_fast_fall():
 ## Adds a tile at 'coords' to the path layer if it is a valid addition.
 ## Returns true if the operation is successful.
 func path_append(coords: Vector2i) -> bool:
-	if tile_is_pathable(coords):
+	if path_can_add(coords):
 		path.append(coords)
 		_update_path_layer()
 		return true
@@ -130,9 +130,9 @@ func path_is_empty() -> bool:
 	return path.size() == 0
 
 
-## Returns true if the tile at coords is in bounds.
-func tile_is_in_bounds(coords: Vector2i) -> bool:
-	var tile_data = get_cell_tile_data(layers.background, coords)
+## Returns true if the tile at 'coords' in layer' is pathable.
+func tile_is_pathable(layer: int, coords: Vector2i) -> bool:
+	var tile_data = get_cell_tile_data(layer, coords)
 	return tile_data and tile_data.get_custom_data("pathable")
 
 
@@ -155,8 +155,8 @@ func truncate_path(index: int):
 
 
 ## Returns true if the tile at 'coords' can be added to the path.
-func tile_is_pathable(coords: Vector2i) -> bool:
-	if not tile_is_in_bounds(coords):
+func path_can_add(coords: Vector2i) -> bool:
+	if not tile_is_pathable(layers.background, coords):
 		return false
 	elif path.is_empty():
 		return true
