@@ -1,4 +1,4 @@
-## TileAtlas stores constants for atlas sources, tiles, and terrains in tile_atlases.tres.
+## TileAtlas stores constants for atlas sources, tiles, and terrains in tile_atlas/*.tres resources.
 class_name TileAtlas
 
 
