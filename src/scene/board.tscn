@@ -3,7 +3,9 @@
 [ext_resource type="TileSet" uid="uid://ogx4rbyatygf" path="res://asset/tile_atlas.tres" id="1_la55x"]
 [ext_resource type="Script" path="res://src/node/tile_map.gd" id="2_863l1"]
 
-[node name="board" type="Node2D"]
+[node name="board" type="Control"]
+layout_mode = 3
+anchors_preset = 0
 
 [node name="tile_map" type="TileMap" parent="."]
 position = Vector2(16, 64)
