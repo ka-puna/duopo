@@ -1,13 +1,7 @@
 ## This [TileMap] extension handles the drawing of tiles contained in the board scene.
-extends TileMap
+extends "res://src/node/tile_map_base.gd"
 
 
-## Adjust this value to match the width of the play area in the board, then
-## adjust the tile_atlas.tres patterns and prime values of custom data layer "group".
-@export var drop_width = 9
-## Aliases for each integer return status.
-enum RETURN_STATUS { SUCCESS = 0, BLOCKED = 1, INVALID_ARGS = 2 }
-var atlas = TileAtlas.new()
 ## Maps layer names to indices.
 var layers = {}
 ## An array of coordinates corresponding to tiles in the path layer.
@@ -71,21 +65,6 @@ func clear_path() -> void:
 	path.clear()
 
 
-## Adds the pattern associated with 'pattern_id' to 'layer' at or above the tile map origin.
-## Returns a RETURN_STATUS integer value.
-## { SUCCESS = 0, BLOCKED = 1, INVALID_ARGS = 2}
-func add_pattern(layer: int, pattern_id: int) -> int:
-	if pattern_id < 0 or pattern_id > tile_set.get_patterns_count() - 1:
-		return RETURN_STATUS.INVALID_ARGS
-	## Check for obstruction.
-	if get_cell_tile_data(layer, Vector2i(0, 0)):
-		return RETURN_STATUS.BLOCKED
-	var pattern = tile_set.get_pattern(pattern_id)
-	var height = pattern.get_size().y
-	set_pattern(layer, Vector2i(0, 1 - height), pattern)
-	return RETURN_STATUS.SUCCESS
-
-
 ## Moves tiles in the drop layer to the lowest row without obstruction by solid tiles.
 func drop_fast_fall():
 	var tiles = get_used_cells(layers.drop)
@@ -113,6 +92,20 @@ func path_append(coords: Vector2i) -> bool:
 	return false
 
 
+## Returns true if the tile at 'coords' can be added to the path.
+func path_can_add(coords: Vector2i) -> bool:
+	if not tile_is_pathable(layers.background, coords):
+		return false
+	elif path.is_empty():
+		return true
+	elif path.has(coords):
+		return false
+	else:
+		# Check if the tile shares a side with the end of the path.
+		return coords.x == path[-1].x and abs(path[-1].y - coords.y) == 1 \
+				or coords.y == path[-1].y and abs(path[-1].x - coords.x) == 1
+
+
 ## Returns the coordinates of the tile at 'index', or Vector2i(-1, -1) if the index is invalid.
 func path_get(index: int) -> Vector2i:
 	if index < -path.size() or index >= path.size():
@@ -130,18 +123,6 @@ func path_is_empty() -> bool:
 	return path.size() == 0
 
 
-## Returns true if the tile at 'coords' in layer' is pathable.
-func tile_is_pathable(layer: int, coords: Vector2i) -> bool:
-	var tile_data = get_cell_tile_data(layer, coords)
-	return tile_data and tile_data.get_custom_data("pathable")
-
-
-## Returns true if the tile in 'layer' at 'coords' is solid.
-func tile_is_solid(layer: int, coords: Vector2i) -> bool:
-	var tile_data = get_cell_tile_data(layer, coords)
-	return tile_data and tile_data.get_custom_data("solid")
-
-
 ## Truncates the path such that it ends at 'index'.
 func truncate_path(index: int):
 	if index < -path.size() or index >= path.size():
@@ -152,20 +133,6 @@ func truncate_path(index: int):
 	# Truncate the path array.
 	path = path.slice(0, index + 1)
 	_update_path_layer()
-
-
-## Returns true if the tile at 'coords' can be added to the path.
-func path_can_add(coords: Vector2i) -> bool:
-	if not tile_is_pathable(layers.background, coords):
-		return false
-	elif path.is_empty():
-		return true
-	elif path.has(coords):
-		return false
-	else:
-		# Check if the tile shares a side with the end of the path.
-		return coords.x == path[-1].x and abs(path[-1].y - coords.y) == 1 \
-				or coords.y == path[-1].y and abs(path[-1].x - coords.x) == 1
 
 
 ## Updates the drawing of the path layer.
