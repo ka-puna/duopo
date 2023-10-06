@@ -1,5 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://03fnvm5r1yli"]
+[gd_scene load_steps=4 format=3 uid="uid://03fnvm5r1yli"]
 
+[ext_resource type="Script" path="res://src/scene/time_mode.gd" id="1_gyt65"]
 [ext_resource type="PackedScene" uid="uid://dxw75koeax6by" path="res://src/scene/board.tscn" id="1_xl38i"]
 [ext_resource type="TileSet" uid="uid://ogx4rbyatygf" path="res://asset/tile_atlas.tres" id="2_b540f"]
 
@@ -10,6 +11,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_gyt65")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 layout_mode = 1
@@ -38,3 +40,21 @@ offset_right = -88.0
 offset_bottom = -152.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="pause_game" type="Button" parent="."]
+self_modulate = Color(0, 0, 0, 1)
+layout_mode = 1
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 80.0
+offset_bottom = 48.0
+text = "❚❚"
+flat = true
+
+[node name="ButtonBG" type="TileMap" parent="pause_game"]
+show_behind_parent = true
+tile_set = ExtResource("2_b540f")
+format = 2
+layer_0/tile_data = PackedInt32Array(0, 65636, 0, 65536, 65636, 2, 1, 131172, 0, 65537, 131172, 2, 2, 131172, 0, 65538, 131172, 2, 3, 196708, 0, 65539, 196708, 2)
+
+[connection signal="pressed" from="pause_game" to="." method="_on_pause_game_pressed"]
