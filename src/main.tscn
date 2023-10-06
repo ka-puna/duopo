@@ -40,4 +40,28 @@ tile_set = ExtResource("2_j5xnm")
 format = 2
 layer_0/tile_data = PackedInt32Array(0, 65636, 0, 1, 131172, 0, 2, 131172, 0, 65538, 131172, 2, 65539, 131172, 2, 65540, 131172, 2, 65541, 131172, 2, 5, 131172, 0, 4, 131172, 0, 3, 131172, 0, 65536, 65636, 2, 65537, 131172, 2, 6, 131172, 0, 65542, 131172, 2, 7, 196708, 0, 65543, 196708, 2)
 
+[node name="time_mode" type="Button" parent="."]
+self_modulate = Color(0, 0, 0, 1)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.706
+anchor_right = 0.5
+anchor_bottom = 0.706
+offset_left = -64.0
+offset_top = 28.8
+offset_right = 64.0
+offset_bottom = 60.8
+grow_horizontal = 2
+text = "Time Mode
+"
+flat = true
+
+[node name="ButtonBG" type="TileMap" parent="time_mode"]
+show_behind_parent = true
+tile_set = ExtResource("2_j5xnm")
+format = 2
+layer_0/tile_data = PackedInt32Array(0, 65636, 0, 1, 131172, 0, 2, 131172, 0, 65538, 131172, 2, 65539, 131172, 2, 65540, 131172, 2, 65541, 131172, 2, 5, 131172, 0, 4, 131172, 0, 3, 131172, 0, 65536, 65636, 2, 65537, 131172, 2, 6, 131172, 0, 65542, 131172, 2, 7, 196708, 0, 65543, 196708, 2)
+
 [connection signal="pressed" from="quit_game" to="." method="_on_quit_game_pressed"]
+[connection signal="pressed" from="time_mode" to="." method="_on_time_mode_pressed"]

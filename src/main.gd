@@ -9,3 +9,7 @@ func _ready():
 
 func _on_quit_game_pressed():
 	get_tree().quit()
+
+
+func _on_time_mode_pressed():
+	get_tree().change_scene_to_file("res://src/scene/time_mode.tscn")
