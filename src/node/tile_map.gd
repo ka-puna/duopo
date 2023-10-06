@@ -22,10 +22,11 @@ func _process(_delta):
 
 ## Removes rows of tiles in the drop layer with matching tiles.
 ## 'full_rows_only': If true, then only rows with a full set of tiles are cleared.
-## Returns a dictionary mapping tile atlas coordinates to the number of rows cleared.
+## Returns a dictionary mapping tile atlas coordinates to the number of rows
+## cleared,and mapping Vector2i(-1, -1) to unique row count.
 func clear_rows(full_rows_only = true) -> Dictionary:
 	# Maps atlas coordinates to row clears.
-	var counts = {}
+	var counts = {Vector2i(-1, -1): 0}
 	# Maps atlas coordinates to group values.
 	var group_values = {}
 	var tiles = get_used_cells(layers.drop)
@@ -53,6 +54,7 @@ func clear_rows(full_rows_only = true) -> Dictionary:
 				is_matched = true
 				counts[atlas_coords] = counts[atlas_coords] + 1
 		if is_matched:
+			counts[Vector2i(-1, -1)] = counts[Vector2i(-1, -1)] + 1
 			# Clear the row.
 			for j in drop_width:
 				set_cell(layers.drop, tiles[i + j], -1)
