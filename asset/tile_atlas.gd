@@ -9,6 +9,8 @@ const SOURCES = {
 	"ANIM_PATH_END" = 2,
 	"ORANGE" = 100,
 }
+
+
 ## Tiles in the tiles source.
 const TILES = {
 	"BASE": {
@@ -25,13 +27,16 @@ const TILES = {
 		"NEUTRAL_SOLID": Vector2i(3, 0),
 	},
 }
+
+
 ## The first tile of anim_* tile sources.
 const ANIMS = {
 	"BASE": {
-
 		"PATH_END": Vector2i(0, 0),
 	},
 }
+
+
 ## The index and set IDs of terrains.
 const TERRAINS = {
 	"PATH": {

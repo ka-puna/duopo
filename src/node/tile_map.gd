@@ -2,20 +2,22 @@
 extends TileMap
 
 
-## Adjust the width of the drop layer to match width of the drop layer, then
+## Adjust this value to match the width of the play area in the board, then
 ## adjust the tile_atlas.tres patterns and prime values of custom data layer "group".
 @export var drop_width = 9
 ## Aliases for each integer return status.
 enum RETURN_STATUS { SUCCESS = 0, BLOCKED = 1, INVALID_ARGS = 2 }
-## Aliases for each layer's integer id.
-enum LAYER { BACKGROUND, DROP, PATH }
 var atlas = TileAtlas.new()
+## Maps layer names to indices.
+var layers = {}
 ## An array of coordinates corresponding to tiles in the path layer.
 var path: Array
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	for i in get_layers_count():
+		layers[get_layer_name(i)] = i
 	path = []
 
 
@@ -32,16 +34,16 @@ func clear_rows(full_rows_only = true) -> Dictionary:
 	var counts = {}
 	# Maps atlas coordinates to group values.
 	var group_values = {}
-	var tiles = get_used_cells(LAYER.DROP)
+	var tiles = get_used_cells(layers.drop)
 	# Sort tile coordinates from top-to-bottom, then left-to-right.
 	tiles.sort_custom(func(a, b): return a.y < b.y or a.y == b.y and a.x < b.x)
 	for i in range(0, tiles.size(), drop_width):
 		var is_matched = false
 		# Sum the group values of tiles in the row.
 		var total = 0
-		for j in range(0, drop_width):
-			var tile_atlas_coords = get_cell_atlas_coords(LAYER.DROP, tiles[i + j])
-			var tile_data = get_cell_tile_data(LAYER.DROP, tiles[i + j])
+		for j in drop_width:
+			var tile_atlas_coords = get_cell_atlas_coords(layers.drop, tiles[i + j])
+			var tile_data = get_cell_tile_data(layers.drop, tiles[i + j])
 			if tile_data:
 				var value = tile_data.get_custom_data("group")
 				total = total + value
@@ -58,14 +60,14 @@ func clear_rows(full_rows_only = true) -> Dictionary:
 				counts[atlas_coords] = counts[atlas_coords] + 1
 		if is_matched:
 			# Clear the row.
-			for j in range(0, drop_width):
-				set_cell(LAYER.DROP, tiles[i + j], -1)
+			for j in drop_width:
+				set_cell(layers.drop, tiles[i + j], -1)
 	return counts
 
 
 ## Clears the path.
 func clear_path() -> void:
-	clear_layer(LAYER.PATH)
+	clear_layer(layers.path)
 	path.clear()
 
 
@@ -76,28 +78,28 @@ func drop_add_pattern(pattern_id: int) -> int:
 	if pattern_id < 0 or pattern_id > tile_set.get_patterns_count() - 1:
 		return RETURN_STATUS.INVALID_ARGS
 	## Check for obstruction.
-	if get_cell_tile_data(LAYER.DROP, Vector2i(0, 0)):
+	if get_cell_tile_data(layers.drop, Vector2i(0, 0)):
 		return RETURN_STATUS.BLOCKED
 	var pattern = tile_set.get_pattern(pattern_id)
 	var height = pattern.get_size().y
-	set_pattern(LAYER.DROP, Vector2i(0, 1 - height), pattern)
+	set_pattern(layers.drop, Vector2i(0, 1 - height), pattern)
 	return RETURN_STATUS.SUCCESS
 
 
 ## Moves tiles in the drop layer to the lowest row without obstruction by solid tiles.
 func drop_fast_fall():
-	var tiles = get_used_cells(LAYER.DROP)
+	var tiles = get_used_cells(layers.drop)
 	# Sort tile coordinates from bottom-to-top, then left-to-right.
 	tiles.sort_custom(func(a, b): return a.y > b.y or a.y == b.y and a.x < b.x)
-	for i in range(tiles.size()):
+	for i in tiles.size():
 		var tile_below = tiles[i] + Vector2i(0, 1)
 		# While the tile below is not solid, move the tile down.
-		while not tile_is_solid(LAYER.DROP, tile_below) \
-				and not tile_is_solid(LAYER.BACKGROUND, tile_below):
-			var atlas_coords = get_cell_atlas_coords(LAYER.DROP, tiles[i], false)
-			set_cell(LAYER.DROP, tiles[i], -1)
+		while not tile_is_solid(layers.drop, tile_below) \
+				and not tile_is_solid(layers.background, tile_below):
+			var atlas_coords = get_cell_atlas_coords(layers.drop, tiles[i], false)
+			set_cell(layers.drop, tiles[i], -1)
 			tiles[i] = tile_below
-			set_cell(LAYER.DROP, tiles[i], atlas.SOURCES.TILES, atlas_coords)
+			set_cell(layers.drop, tiles[i], atlas.SOURCES.TILES, atlas_coords)
 			tile_below = tile_below + Vector2i(0, 1)
 
 
@@ -130,7 +132,7 @@ func path_is_empty() -> bool:
 
 ## Returns true if the tile at coords is in bounds.
 func tile_is_in_bounds(coords: Vector2i) -> bool:
-	var tile_data = get_cell_tile_data(LAYER.BACKGROUND, coords)
+	var tile_data = get_cell_tile_data(layers.background, coords)
 	return tile_data and tile_data.get_custom_data("pathable")
 
 
@@ -142,7 +144,7 @@ func tile_is_solid(layer: int, coords: Vector2i) -> bool:
 
 ## Truncates the path such that it ends at 'index'.
 func truncate_path(index: int):
-	if not index in range(path.size()):
+	if index < -path.size() or index >= path.size():
 		return
 	# Erase cells from the path layer.
 	for i in path.slice(index + 1).size():
@@ -168,6 +170,6 @@ func tile_is_pathable(coords: Vector2i) -> bool:
 
 ## Updates the drawing of the path layer.
 func _update_path_layer() -> void:
-	set_cells_terrain_path(LAYER.PATH, path, atlas.TERRAINS.PATH.SET, atlas.TERRAINS.PATH.INDEX)
+	set_cells_terrain_path(layers.path, path, atlas.TERRAINS.PATH.SET, atlas.TERRAINS.PATH.INDEX)
 	# Set the last tile to a special, animated tile.
-	set_cell(LAYER.PATH, path[-1], atlas.SOURCES.ANIM_PATH_END, atlas.ANIMS.BASE.PATH_END)
+	set_cell(layers.path, path[-1], atlas.SOURCES.ANIM_PATH_END, atlas.ANIMS.BASE.PATH_END)

@@ -14,8 +14,8 @@ func _init(init_tile_map: TileMap):
 func get_drop_layer_self_map() -> Callable:
 	var callable = func(self_map):
 		for coords in tile_map.path:
-			var old_atlas = tile_map.get_cell_atlas_coords(tile_map.LAYER.DROP, coords)
+			var old_atlas = tile_map.get_cell_atlas_coords(tile_map.layers.drop, coords)
 			if old_atlas in self_map:
-				tile_map.set_cell(tile_map.LAYER.DROP, coords, \
+				tile_map.set_cell(tile_map.layers.drop, coords, \
 						tile_map.atlas.SOURCES.TILES, self_map[old_atlas])
 	return callable
