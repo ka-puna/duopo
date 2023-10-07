@@ -1,13 +1,9 @@
 [gd_scene load_steps=3 format=3 uid="uid://dxw75koeax6by"]
 
 [ext_resource type="TileSet" uid="uid://ogx4rbyatygf" path="res://asset/tile_atlas/time_mode.tres" id="1_la55x"]
-[ext_resource type="Script" path="res://src/node/tile_map_pathable.gd" id="2_dvfgw"]
+[ext_resource type="Script" path="res://src/scene/tile_map_pathable.gd" id="2_hnrw0"]
 
-[node name="board" type="Control"]
-layout_mode = 3
-anchors_preset = 0
-
-[node name="tile_map_pathable" type="TileMap" parent="."]
+[node name="tile_map_pathable" type="TileMap"]
 position = Vector2(16, 64)
 tile_set = ExtResource("1_la55x")
 format = 2
@@ -27,4 +23,4 @@ layer_2/y_sort_enabled = false
 layer_2/y_sort_origin = 0
 layer_2/z_index = 2
 layer_2/tile_data = PackedInt32Array()
-script = ExtResource("2_dvfgw")
+script = ExtResource("2_hnrw0")
