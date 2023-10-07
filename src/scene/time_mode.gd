@@ -15,15 +15,15 @@ func _on_pause_game_pressed():
 	get_tree().paused = true
 	# Instantiate ahd connects the pause menu.
 	var pause_menu = preload("res://src/scene/pause_menu.tscn").instantiate()
-	pause_menu.unpause_game.connect(_on_unpause_game)
-	pause_menu.quit_game.connect(_on_quit_game)
+	pause_menu.play_button.connect(_unpause_game)
+	pause_menu.cross_button.connect(_quit_game)
 	add_child(pause_menu)
 
 
-func _on_quit_game():
+func _quit_game():
 	get_tree().quit()
 
 
-func _on_unpause_game():
+func _unpause_game():
 	remove_child($pause_menu)
 	get_tree().paused = false

@@ -1,8 +1,8 @@
 extends Control
 
 
-signal quit_game
-signal unpause_game
+signal cross_button
+signal play_button
 
 
 var display_data
@@ -26,11 +26,12 @@ func set_display_data(new_data: Dictionary) -> void:
 
 func _on_animation_player_animation_finished(anim_name):
 	if anim_name == "slide_out":
-		unpause_game.emit()
-
-func _on_quit_game_pressed():
-	quit_game.emit()
+		play_button.emit()
 
 
-func _on_resume_game_pressed():
+func _on_cross_button_pressed():
+	cross_button.emit()
+
+
+func _on_play_button_pressed():
 	$AnimationPlayer.play("slide_out")

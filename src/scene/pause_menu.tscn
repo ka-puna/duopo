@@ -170,7 +170,7 @@ grow_vertical = 2
 [node name="display_data" parent="Group" instance=ExtResource("3_sa70x")]
 layout_mode = 1
 
-[node name="quit_game" type="Button" parent="Group"]
+[node name="cross_button" type="Button" parent="Group"]
 self_modulate = Color(0, 0, 0, 1)
 layout_mode = 1
 anchors_preset = 7
@@ -188,13 +188,13 @@ text = "✖
 "
 flat = true
 
-[node name="ButtonBG" type="TileMap" parent="Group/quit_game"]
+[node name="ButtonBG" type="TileMap" parent="Group/cross_button"]
 show_behind_parent = true
 tile_set = ExtResource("3_f22oi")
 format = 2
 layer_0/tile_data = PackedInt32Array(0, 65636, 0, 65536, 65636, 2, 1, 131172, 0, 65537, 131172, 2, 2, 131172, 0, 65538, 131172, 2, 3, 131172, 0, 65539, 131172, 2, 4, 131172, 0, 65540, 131172, 2, 5, 196708, 0, 65541, 196708, 2)
 
-[node name="resume_game" type="Button" parent="Group"]
+[node name="play_button" type="Button" parent="Group"]
 self_modulate = Color(0, 0, 0, 1)
 layout_mode = 1
 anchors_preset = 7
@@ -211,12 +211,12 @@ grow_vertical = 0
 text = "▶"
 flat = true
 
-[node name="ButtonBG" type="TileMap" parent="Group/resume_game"]
+[node name="ButtonBG" type="TileMap" parent="Group/play_button"]
 show_behind_parent = true
 tile_set = ExtResource("3_f22oi")
 format = 2
 layer_0/tile_data = PackedInt32Array(0, 65636, 0, 65536, 65636, 2, 1, 131172, 0, 65537, 131172, 2, 2, 131172, 0, 65538, 131172, 2, 3, 131172, 0, 65539, 131172, 2, 4, 131172, 0, 65540, 131172, 2, 5, 196708, 0, 65541, 196708, 2)
 
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
-[connection signal="pressed" from="Group/quit_game" to="." method="_on_quit_game_pressed"]
-[connection signal="pressed" from="Group/resume_game" to="." method="_on_resume_game_pressed"]
+[connection signal="pressed" from="Group/cross_button" to="." method="_on_cross_button_pressed"]
+[connection signal="pressed" from="Group/play_button" to="." method="_on_play_button_pressed"]
