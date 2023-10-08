@@ -33,13 +33,32 @@ func _process(delta):
 		cycle_time = 0
 
 
+## Opens the pause menu, with options to restart or quit the game.
+func game_over():
+	get_tree().paused = true
+	var pause_menu = _open_pause_menu(restart_game, _quit_game)
+	add_child(pause_menu)
+
+
+## Restarts the time mode game.
+func restart_game():
+	get_tree().reload_current_scene()
+	get_tree().paused = false
+
+
+## Opens the pause menu and connects its signals to the given Callables.
+## Returns the pause menu node.
+func _open_pause_menu(play_button_callback: Callable, cross_button_callback: Callable) -> Node:
+	var pause_menu = preload("res://src/scene/pause_menu.tscn").instantiate()
+	pause_menu.play_button.connect(play_button_callback)
+	pause_menu.cross_button.connect(cross_button_callback)
+	pause_menu.z_index = RenderingServer.CANVAS_ITEM_Z_MAX
+	return pause_menu
+
+
 func _on_pause_game_pressed():
 	get_tree().paused = true
-	# Instantiate ahd connects the pause menu.
-	var pause_menu = preload("res://src/scene/pause_menu.tscn").instantiate()
-	pause_menu.play_button.connect(_unpause_game)
-	pause_menu.cross_button.connect(_quit_game)
-	pause_menu.z_index = RenderingServer.CANVAS_ITEM_Z_MAX
+	var pause_menu = _open_pause_menu(_unpause_game, _quit_game)
 	add_child(pause_menu)
 
 

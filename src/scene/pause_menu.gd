@@ -6,13 +6,16 @@ signal play_button
 
 
 var display_data
+var use_enter_anim = true
+var use_exit_anim = true
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	grab_focus()
 	display_data = $Group/display_data
-	$AnimationPlayer.play("slide_in")
+	if use_enter_anim:
+		$AnimationPlayer.play("enter")
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -26,7 +29,7 @@ func set_display_data(new_data: Dictionary) -> void:
 
 
 func _on_animation_player_animation_finished(anim_name):
-	if anim_name == "slide_out":
+	if anim_name == "exit":
 		play_button.emit()
 
 
@@ -35,4 +38,7 @@ func _on_cross_button_pressed():
 
 
 func _on_play_button_pressed():
-	$AnimationPlayer.play("slide_out")
+	if use_exit_anim:
+		$AnimationPlayer.play("exit")
+	else:
+		play_button.emit()
