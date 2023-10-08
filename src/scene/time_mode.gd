@@ -1,6 +1,10 @@
 extends Control
 
 
+var PauseMenu = preload("res://src/scene/pause_menu.tscn")
+var TileMapCommand = preload("res://src/node/tile_map/tile_map_command.gd")
+
+
 ## The period between drops in seconds.
 @export var cycle_period = 30
 var board: TileMapPathable
@@ -18,7 +22,7 @@ func _ready():
 	tile_set = $board.tile_set
 	layers = $board.layers
 	atlas = $board.atlas
-	commander = preload("res://src/node/tile_map/tile_map_command.gd").new(board)
+	commander = TileMapCommand.new(board)
 	drop = commander.get_func_drop_layer()
 	cycle_time = 0
 
@@ -51,7 +55,7 @@ func restart_game():
 ## Opens the pause menu and connects its signals to the given Callables.
 ## Returns the pause menu node.
 func _open_pause_menu(play_button_callback: Callable, cross_button_callback: Callable) -> Node:
-	var pause_menu = preload("res://src/scene/pause_menu.tscn").instantiate()
+	var pause_menu = PauseMenu.instantiate()
 	pause_menu.play_button.connect(play_button_callback)
 	pause_menu.cross_button.connect(cross_button_callback)
 	pause_menu.z_index = RenderingServer.CANVAS_ITEM_Z_MAX
