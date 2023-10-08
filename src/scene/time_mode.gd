@@ -27,8 +27,10 @@ func _ready():
 func _process(delta):
 	cycle_time = cycle_time + delta
 	if cycle_time >= cycle_period:
-		# Add a random pattern to the board.
-		board.add_pattern(layers.drop, randi_range(0, tile_set.get_patterns_count()))
+		# Add a random pattern to the board. If unable to, end the game.
+		var pattern = randi_range(0, tile_set.get_patterns_count())
+		if board.add_pattern(layers.drop, pattern) != board.RETURN_STATUS.SUCCESS:
+			game_over()
 		drop.call(layers.drop)
 		cycle_time = 0
 
