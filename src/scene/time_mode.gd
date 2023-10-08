@@ -17,6 +17,7 @@ func _on_pause_game_pressed():
 	var pause_menu = preload("res://src/scene/pause_menu.tscn").instantiate()
 	pause_menu.play_button.connect(_unpause_game)
 	pause_menu.cross_button.connect(_quit_game)
+	pause_menu.z_index = RenderingServer.CANVAS_ITEM_Z_MAX
 	add_child(pause_menu)
 
 

@@ -10,6 +10,7 @@ var display_data
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	grab_focus()
 	display_data = $Group/display_data
 	$AnimationPlayer.play("slide_in")
 
