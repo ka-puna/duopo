@@ -1,4 +1,5 @@
 ## This [TileMap] subclass maintains a path of connected tiles.
+class_name TileMapPathable
 extends "res://src/node/tile_map.gd"
 
 
