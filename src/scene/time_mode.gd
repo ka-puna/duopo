@@ -53,6 +53,11 @@ func _input(event):
 					return
 				elif mouse_coords == board.path_get(-1):
 					effect.call(layers.drop)
+					var result = board.match_rows(layers.drop)
+					var matched_tiles = result[Vector2i(-1, -2)]
+					if not matched_tiles.is_empty():
+						board.clear_tiles(layers.drop, matched_tiles)
+						drop.call(layers.drop)
 					board.clear_path()
 				elif board.path_has(mouse_coords):
 					board.truncate_path(board.path_find(mouse_coords))
