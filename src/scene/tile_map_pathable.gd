@@ -4,14 +4,13 @@ extends "res://src/node/tile_map_match.gd"
 
 
 ## An array of coordinates corresponding to tiles in the path layer.
-var path: Array
+@onready var path = []
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	for i in get_layers_count():
 		layers[get_layer_name(i)] = i
-	path = []
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

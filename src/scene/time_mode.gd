@@ -7,26 +7,14 @@ var TileMapCommand = preload("res://src/node/tile_map/tile_map_command.gd")
 
 ## The period between drops in seconds.
 @export var cycle_period = 30
-var board: TileMapPathable
-var tile_set: TileSet
-var layers: Dictionary
-var atlas: TileAtlas
-var commander
-var drop: Callable
-var path_effect: Callable
-var cycle_time
-
-
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	board = $board
-	tile_set = $board.tile_set
-	layers = $board.layers
-	atlas = $board.atlas
-	commander = TileMapCommand.new(board)
-	drop = commander.get_drop()
-	path_effect = commander.get_path_map(atlas.TILES_SELF_MAPPING)
-	cycle_time = 0
+@onready var board: TileMapPathable = $board
+@onready var tile_set: TileSet = $board.tile_set
+@onready var layers: Dictionary = $board.layers
+@onready var atlas: TileAtlas = $board.atlas
+@onready var commander = TileMapCommand.new(board)
+@onready var drop: Callable = commander.get_drop()
+@onready var path_effect: Callable = commander.get_path_map(atlas.TILES_SELF_MAPPING)
+@onready var cycle_time = 0
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

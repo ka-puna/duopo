@@ -5,7 +5,7 @@ signal cross_button
 signal play_button
 
 
-var display_data
+@onready var display_data = $Group/display_data
 var use_enter_anim = true
 var use_exit_anim = true
 
@@ -13,7 +13,6 @@ var use_exit_anim = true
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	grab_focus()
-	display_data = $Group/display_data
 	if use_enter_anim:
 		$AnimationPlayer.play("enter")
 
