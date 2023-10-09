@@ -33,12 +33,9 @@ func _ready():
 func _process(delta):
 	cycle_time = cycle_time + delta
 	if cycle_time >= cycle_period:
-		# Add a random pattern to the board. If unable to, end the game.
-		var pattern = randi_range(0, tile_set.get_patterns_count())
-		if board.add_pattern(layers.drop, pattern) != board.RETURN_STATUS.SUCCESS:
+		var pattern = get_next_pattern()
+		if drop_pattern(pattern) != board.RETURN_STATUS.SUCCESS:
 			game_over()
-		drop.call(layers.drop)
-		cycle_time = 0
 
 
 # Called when there is an input event.
@@ -82,11 +79,26 @@ func _input(event):
 										break
 
 
+## Adds the pattern associated with 'id' to the board.
+## Returns a board.RETURN_STATUS value.
+func drop_pattern(id: int) -> int:
+	var status = board.add_pattern(layers.drop, id)
+	if status == board.RETURN_STATUS.SUCCESS:
+		drop.call(layers.drop)
+		cycle_time = 0
+	return status
+
+
 ## Opens the pause menu, with options to restart or quit the game.
 func game_over():
 	get_tree().paused = true
 	var pause_menu = _open_pause_menu(restart_game, _quit_game)
 	add_child(pause_menu)
+
+
+## Returns the index of next pattern to add to the drop layer.
+func get_next_pattern() -> int:
+	return randi_range(0, tile_set.get_patterns_count())
 
 
 ## Restarts the time mode game.
