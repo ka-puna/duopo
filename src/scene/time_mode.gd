@@ -24,8 +24,8 @@ func _ready():
 	layers = $board.layers
 	atlas = $board.atlas
 	commander = TileMapCommand.new(board)
-	drop = commander.get_func_drop_layer()
-	effect = commander.get_func_self_map_layer(atlas.TILES_SELF_MAPPING)
+	drop = commander.get_drop()
+	effect = commander.get_path_map(atlas.TILES_SELF_MAPPING)
 	cycle_time = 0
 
 

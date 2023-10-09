@@ -10,21 +10,21 @@ func _init(init_tile_map: TileMap):
 
 
 ## Returns a Callable:
-## Changes tiles in 'layer' according to a ''self_map'' dictionary mapping the
-## set of atlas coordinates to itself.
-func get_func_self_map_layer(self_map: Dictionary) -> Callable:
-	var callable = func(layer: int):
+## Changes tiles in the path and 'layer' according to a ''self_map'' dictionary
+## mapping the set of atlas coordinates to itself.
+func get_path_map(self_map: Dictionary) -> Callable:
+	var path_map = func(layer: int):
 		for coords in tile_map.path:
 			var old_atlas = tile_map.get_cell_atlas_coords(layer, coords)
 			if old_atlas in self_map:
 				tile_map.set_cell(layer, coords, \
 						tile_map.atlas.SOURCES.TILES, self_map[old_atlas])
-	return callable
+	return path_map
 
 ## Returns a Callable:
 ## Moves tiles in 'layer' to the lowest row without obstruction by solid tiles.
-func get_func_drop_layer() -> Callable:
-	var callable = func(layer: int):
+func get_drop() -> Callable:
+	var drop = func(layer: int):
 		var tiles = tile_map.get_used_cells(layer)
 		# Sort tile coordinates from bottom-to-top, then left-to-right.
 		tiles.sort_custom(func(a, b): return a.y > b.y or a.y == b.y and a.x < b.x)
@@ -38,4 +38,4 @@ func get_func_drop_layer() -> Callable:
 				tiles[i] = tile_below
 				tile_map.set_cell(layer, tiles[i], tile_map.atlas.SOURCES.TILES, atlas_coords)
 				tile_below = tile_below + Vector2i(0, 1)
-	return callable
+	return drop
