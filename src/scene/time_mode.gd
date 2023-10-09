@@ -39,6 +39,30 @@ func _process(delta):
 		cycle_time = 0
 
 
+# Called when there is an input event.
+func _input(event):
+	if event is InputEventMouseButton:
+		var mouse_coords = board.local_to_map(board.get_local_mouse_position())
+		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+			# Check if tile is within bounds.
+			if board.get_cell_tile_data(board.layers.background, mouse_coords):
+				if board.path_can_append(mouse_coords):
+					board.path_append(mouse_coords)
+					return
+				if not board.path_is_empty():
+					var path_end = board.path_get(-1)
+					if mouse_coords.x == path_end.x or mouse_coords.y == path_end.y:
+						# Extend path through shared column or row.
+						var difference = mouse_coords - path_end
+						var direction = sign(difference)
+						for i in range(1, difference.length() + 1):
+							var coords = path_end + i * direction
+							if board.path_can_append(coords):
+								board.path_append(coords)
+							else:
+								break
+
+
 ## Opens the pause menu, with options to restart or quit the game.
 func game_over():
 	get_tree().paused = true
