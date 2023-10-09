@@ -25,18 +25,14 @@ func clear_path() -> void:
 	path.clear()
 
 
-## Adds a tile at 'coords' to the path layer if it is a valid addition.
-## Returns true if the operation is successful.
-func path_append(coords: Vector2i) -> bool:
-	if path_can_add(coords):
-		path.append(coords)
-		_update_path_layer()
-		return true
-	return false
+## Adds a tile at 'coords' to the path layer.
+func path_append(coords: Vector2i) -> void:
+	path.append(coords)
+	_update_path_layer()
 
 
-## Returns true if the tile at 'coords' can be added to the path.
-func path_can_add(coords: Vector2i) -> bool:
+## Returns true if the tile at 'coords' can be appended to the path.
+func path_can_append(coords: Vector2i) -> bool:
 	if not tile_is_pathable(layers.background, coords):
 		return false
 	elif path.is_empty():
