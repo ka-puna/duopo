@@ -2,10 +2,10 @@
 
 
 ## The target instance.
-var tile_map: TileMap
+var tile_map: TileMapCustom
 
 
-func _init(init_tile_map: TileMap):
+func _init(init_tile_map: TileMapCustom):
 	tile_map = init_tile_map
 
 

@@ -1,4 +1,5 @@
 ## The base class for custom tile_maps using the tile_atlas/*.tres resource.
+class_name TileMapCustom
 extends TileMap
 
 

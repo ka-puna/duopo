@@ -1,5 +1,5 @@
 ## This [TileMap] extension has a width variable and a method to find rows of matching tiles.
-extends "res://src/node/tile_map.gd"
+extends TileMapCustom
 
 
 ## Adjust this value to match the width of the play area in the board, then
