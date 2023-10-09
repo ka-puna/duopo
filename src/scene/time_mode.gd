@@ -49,7 +49,8 @@ func _input(event):
 				MOUSE_BUTTON_MASK_RIGHT:
 					# If clicked tile is at the end of the path.
 					if clicked_tile == board.path_get(-1):
-						board.clear_path()
+						if event is InputEventMouseButton and event.pressed:
+							board.clear_path()
 					elif board.path_has(clicked_tile):
 						board.truncate_path(board.path_find(clicked_tile))
 				MOUSE_BUTTON_MASK_LEFT:
