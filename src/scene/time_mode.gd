@@ -13,7 +13,7 @@ var layers: Dictionary
 var atlas: TileAtlas
 var commander
 var drop: Callable
-var effect: Callable
+var path_effect: Callable
 var cycle_time
 
 
@@ -25,7 +25,7 @@ func _ready():
 	atlas = $board.atlas
 	commander = TileMapCommand.new(board)
 	drop = commander.get_drop()
-	effect = commander.get_path_map(atlas.TILES_SELF_MAPPING)
+	path_effect = commander.get_path_map(atlas.TILES_SELF_MAPPING)
 	cycle_time = 0
 
 
@@ -53,7 +53,7 @@ func _input(event):
 				elif event is InputEventMouseButton and event.pressed:
 					# If clicked tile is at the end of the path.
 					if clicked_tile == board.path_get(-1):
-						effect.call(layers.drop)
+						path_effect.call(layers.drop)
 						var result = board.match_rows(layers.drop)
 						var matched_tiles = result[Vector2i(-1, -2)]
 						if not matched_tiles.is_empty():
