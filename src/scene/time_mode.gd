@@ -54,7 +54,8 @@ func _input(event):
 					elif board.path_has(clicked_tile):
 						board.truncate_path(board.path_find(clicked_tile))
 				MOUSE_BUTTON_MASK_LEFT:
-					if board.path_can_append(clicked_tile):
+					if board.path_can_append(clicked_tile) and \
+							not board.path_is_empty():
 						board.path_append(clicked_tile)
 					elif event is InputEventMouseButton and event.pressed:
 						# If clicked tile is at the end of the path.
@@ -66,7 +67,10 @@ func _input(event):
 								board.clear_tiles(layers.drop, matched_tiles)
 								drop.call(layers.drop)
 							board.clear_path()
-						elif not board.path_is_empty():
+						elif board.path_is_empty():
+							if board.path_can_append(clicked_tile):
+								board.path_append(clicked_tile)
+						else:
 							var path_end = board.path_get(-1)
 							if clicked_tile.x == path_end.x or clicked_tile.y == path_end.y:
 								# Extend path through shared column or row.
