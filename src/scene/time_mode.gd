@@ -62,7 +62,7 @@ func _input(event):
 						board.clear_path()
 					elif board.path_has(clicked_tile):
 						board.truncate_path(board.path_find(clicked_tile))
-					if not board.path_is_empty():
+					elif not board.path_is_empty():
 						var path_end = board.path_get(-1)
 						if clicked_tile.x == path_end.x or clicked_tile.y == path_end.y:
 							# Extend path through shared column or row.
