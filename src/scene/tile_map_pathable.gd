@@ -45,6 +45,11 @@ func path_can_append(coords: Vector2i) -> bool:
 				or coords.y == path[-1].y and abs(path[-1].x - coords.x) == 1
 
 
+## Returns the path index of a tile at 'coords', or -1 if the index is invalid.
+func path_find(coords: Vector2i) -> int:
+	return path.find(coords)
+
+
 ## Returns the coordinates of the tile at 'index', or Vector2i(-1, -1) if the index is invalid.
 func path_get(index: int) -> Vector2i:
 	if index < -path.size() or index >= path.size():
