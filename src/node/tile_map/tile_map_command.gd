@@ -10,10 +10,10 @@ func _init(init_tile_map: TileMap):
 
 
 ## Returns a Callable:
-## Changes drop layer tiles according to a dictionary mapping the set of
-## atlas coordinates to itself.
-func get_func_self_map_layer() -> Callable:
-	var callable = func(layer: int, self_map: Dictionary):
+## Changes tiles in 'layer' according to a ''self_map'' dictionary mapping the
+## set of atlas coordinates to itself.
+func get_func_self_map_layer(self_map: Dictionary) -> Callable:
+	var callable = func(layer: int):
 		for coords in tile_map.path:
 			var old_atlas = tile_map.get_cell_atlas_coords(layer, coords)
 			if old_atlas in self_map:

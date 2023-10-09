@@ -10,9 +10,10 @@ var TileMapCommand = preload("res://src/node/tile_map/tile_map_command.gd")
 var board: TileMapPathable
 var tile_set: TileSet
 var layers: Dictionary
-var atlas
+var atlas: TileAtlas
 var commander
 var drop: Callable
+var effect: Callable
 var cycle_time
 
 
@@ -24,6 +25,7 @@ func _ready():
 	atlas = $board.atlas
 	commander = TileMapCommand.new(board)
 	drop = commander.get_func_drop_layer()
+	effect = commander.get_func_self_map_layer(atlas.TILES_SELF_MAPPING)
 	cycle_time = 0
 
 
@@ -49,6 +51,9 @@ func _input(event):
 				if board.path_can_append(mouse_coords):
 					board.path_append(mouse_coords)
 					return
+				elif mouse_coords == board.path_get(-1):
+					effect.call(layers.drop)
+					board.clear_path()
 				elif board.path_has(mouse_coords):
 					board.truncate_path(board.path_find(mouse_coords))
 				if not board.path_is_empty():

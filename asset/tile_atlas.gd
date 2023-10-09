@@ -29,6 +29,13 @@ const TILES = {
 }
 
 
+## A self-mapping for TILES.
+const TILES_SELF_MAPPING = {
+		TILES.BASE.BLACK: TILES.BASE.WHITE,
+		TILES.BASE.WHITE: TILES.BASE.BLACK,
+}
+
+
 ## The first tile of anim_* tile sources.
 const ANIMS = {
 	"BASE": {
