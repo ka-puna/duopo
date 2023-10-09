@@ -45,15 +45,14 @@ func _process(delta):
 func _input(event):
 	if event is InputEventMouse:
 		var clicked_tile = board.local_to_map(board.get_local_mouse_position())
-		# Check if tile is within bounds.
+		# If tile is within bounds.
 		if board.get_cell_tile_data(board.layers.background, clicked_tile):
 			if event.get_button_mask() == MOUSE_BUTTON_MASK_LEFT:
-				if event is InputEventMouseButton and event.pressed:
-					if board.path_can_append(clicked_tile):
-						board.path_append(clicked_tile)
-						return
-					# Check if clicked tile is at the end of the path.
-					elif clicked_tile == board.path_get(-1):
+				if board.path_can_append(clicked_tile):
+					board.path_append(clicked_tile)
+				elif event is InputEventMouseButton and event.pressed:
+					# If clicked tile is at the end of the path.
+					if clicked_tile == board.path_get(-1):
 						effect.call(layers.drop)
 						var result = board.match_rows(layers.drop)
 						var matched_tiles = result[Vector2i(-1, -2)]
