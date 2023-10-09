@@ -4,9 +4,9 @@
 [ext_resource type="TileSet" uid="uid://cny47qhsswbse" path="res://asset/tile_atlas/menu.tres" id="3_f22oi"]
 [ext_resource type="PackedScene" uid="uid://b6whumsrxtw0b" path="res://src/scene/display_data.tscn" id="3_sa70x"]
 
-[sub_resource type="Animation" id="Animation_vbl6t"]
-resource_name = "exit"
-length = 0.4
+[sub_resource type="Animation" id="Animation_shis3"]
+resource_name = "RESET"
+length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -14,10 +14,10 @@ tracks/0/path = NodePath("BGLeft:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0.05, 0.4),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(0, 0), Vector2(-320, 0)]
+"values": [Vector2(0, 0)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -26,10 +26,10 @@ tracks/1/path = NodePath("BGRight:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0.05, 0.4),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(320, 0), Vector2(640, 0)]
+"values": [Vector2(320, 0)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -41,7 +41,7 @@ tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [false]
+"values": [true]
 }
 
 [sub_resource type="Animation" id="Animation_71beg"]
@@ -84,9 +84,9 @@ tracks/2/keys = {
 "values": [false, true]
 }
 
-[sub_resource type="Animation" id="Animation_shis3"]
-resource_name = "RESET"
-length = 0.001
+[sub_resource type="Animation" id="Animation_vbl6t"]
+resource_name = "exit"
+length = 0.4
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -94,10 +94,10 @@ tracks/0/path = NodePath("BGLeft:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0.05, 0.4),
+"transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(0, 0)]
+"values": [Vector2(0, 0), Vector2(-320, 0)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -106,10 +106,10 @@ tracks/1/path = NodePath("BGRight:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0.05, 0.4),
+"transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(320, 0)]
+"values": [Vector2(320, 0), Vector2(640, 0)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -121,7 +121,7 @@ tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [true]
+"values": [false]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_qcoxe"]
