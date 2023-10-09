@@ -49,6 +49,8 @@ func _input(event):
 				if board.path_can_append(mouse_coords):
 					board.path_append(mouse_coords)
 					return
+				elif board.path_has(mouse_coords):
+					board.truncate_path(board.path_find(mouse_coords))
 				if not board.path_is_empty():
 					var path_end = board.path_get(-1)
 					if mouse_coords.x == path_end.x or mouse_coords.y == path_end.y:
