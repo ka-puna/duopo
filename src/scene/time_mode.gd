@@ -47,33 +47,39 @@ func _input(event):
 		var clicked_tile = board.local_to_map(board.get_local_mouse_position())
 		# If tile is within bounds.
 		if board.get_cell_tile_data(board.layers.background, clicked_tile):
-			if event.get_button_mask() == MOUSE_BUTTON_MASK_LEFT:
-				if board.path_can_append(clicked_tile):
-					board.path_append(clicked_tile)
-				elif event is InputEventMouseButton and event.pressed:
+			var button_mask = event.get_button_mask()
+			match button_mask:
+				MOUSE_BUTTON_MASK_RIGHT:
 					# If clicked tile is at the end of the path.
 					if clicked_tile == board.path_get(-1):
-						path_effect.call(layers.drop)
-						var result = board.match_rows(layers.drop)
-						var matched_tiles = result[Vector2i(-1, -2)]
-						if not matched_tiles.is_empty():
-							board.clear_tiles(layers.drop, matched_tiles)
-							drop.call(layers.drop)
 						board.clear_path()
-					elif board.path_has(clicked_tile):
-						board.truncate_path(board.path_find(clicked_tile))
-					elif not board.path_is_empty():
-						var path_end = board.path_get(-1)
-						if clicked_tile.x == path_end.x or clicked_tile.y == path_end.y:
-							# Extend path through shared column or row.
-							var difference = clicked_tile - path_end
-							var direction = sign(difference)
-							for i in range(1, difference.length() + 1):
-								var tile = path_end + i * direction
-								if board.path_can_append(tile):
-									board.path_append(tile)
-								else:
-									break
+				MOUSE_BUTTON_MASK_LEFT:
+					if board.path_can_append(clicked_tile):
+						board.path_append(clicked_tile)
+					elif event is InputEventMouseButton and event.pressed:
+						# If clicked tile is at the end of the path.
+						if clicked_tile == board.path_get(-1):
+							path_effect.call(layers.drop)
+							var result = board.match_rows(layers.drop)
+							var matched_tiles = result[Vector2i(-1, -2)]
+							if not matched_tiles.is_empty():
+								board.clear_tiles(layers.drop, matched_tiles)
+								drop.call(layers.drop)
+							board.clear_path()
+						elif board.path_has(clicked_tile):
+							board.truncate_path(board.path_find(clicked_tile))
+						elif not board.path_is_empty():
+							var path_end = board.path_get(-1)
+							if clicked_tile.x == path_end.x or clicked_tile.y == path_end.y:
+								# Extend path through shared column or row.
+								var difference = clicked_tile - path_end
+								var direction = sign(difference)
+								for i in range(1, difference.length() + 1):
+									var tile = path_end + i * direction
+									if board.path_can_append(tile):
+										board.path_append(tile)
+									else:
+										break
 
 
 ## Opens the pause menu, with options to restart or quit the game.
