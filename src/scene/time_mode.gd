@@ -108,6 +108,11 @@ func restart_game():
 	get_tree().paused = false
 
 
+func _on_drop_pattern_pressed():
+	var pattern = get_next_pattern()
+	drop_pattern(pattern)
+
+
 ## Opens the pause menu and connects its signals to the given Callables.
 ## Returns the pause menu node.
 func _open_pause_menu(play_button_callback: Callable, cross_button_callback: Callable) -> Node:

@@ -46,4 +46,20 @@ tile_set = ExtResource("2_it1s3")
 format = 2
 layer_0/tile_data = PackedInt32Array(0, 65636, 0, 65536, 65636, 2, 1, 131172, 0, 65537, 131172, 2, 2, 131172, 0, 65538, 131172, 2, 3, 196708, 0, 65539, 196708, 2)
 
+[node name="drop_pattern" type="Button" parent="."]
+self_modulate = Color(0, 0, 0, 1)
+offset_left = 152.0
+offset_top = 424.0
+offset_right = 216.0
+offset_bottom = 456.0
+text = "▼"
+flat = true
+
+[node name="ButtonBG" type="TileMap" parent="drop_pattern"]
+show_behind_parent = true
+tile_set = ExtResource("2_it1s3")
+format = 2
+layer_0/tile_data = PackedInt32Array(0, 65636, 0, 65536, 65636, 2, 1, 131172, 0, 65537, 131172, 2, 2, 131172, 0, 65538, 131172, 2, 3, 196708, 0, 65539, 196708, 2)
+
 [connection signal="pressed" from="pause_game" to="." method="_on_pause_game_pressed"]
+[connection signal="pressed" from="drop_pattern" to="." method="_on_drop_pattern_pressed"]
