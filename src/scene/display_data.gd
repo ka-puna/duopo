@@ -4,7 +4,7 @@ extends Control
 signal quit_game
 
 
-var data = {}
+var data = {}: set = set_data
 
 
 # Called when the node enters the scene tree for the first time.
@@ -15,6 +15,7 @@ func _ready():
 ## Set the data to display.
 func set_data(new_data: Dictionary) -> void:
 	data = new_data
+	update_data_label()
 
 
 ## Update data_label text to reflect data.
