@@ -1,3 +1,4 @@
+## The main scene for the time mode of play.
 extends Control
 
 
@@ -81,7 +82,7 @@ func _input(event):
 
 
 ## Adds the pattern associated with 'id' to the board.
-## Returns a board.RETURN_STATUS value.
+## Returns a [enum TileMapCustom.RETURN_STATUS] value.
 func drop_pattern(id: int) -> int:
 	var status = board.add_pattern(layers.drop, id)
 	if status == board.RETURN_STATUS.SUCCESS:

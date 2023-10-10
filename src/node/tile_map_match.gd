@@ -9,10 +9,10 @@ extends TileMapCustom
 
 ## Reports the number of rows of tiles in 'layer' with matching tiles,
 ## and the coordinates of matched tiles.
-## 'full_rows_only': If true, then only rows with a full set of tiles are reported.
+## 'full_rows_only': (default=true) Only rows with a full set of tiles are reported.
 ## Returns a dictionary mapping:
-## 1. tile atlas coordinates to the number of rows cleared,
-## 2. Vector2i(-1, -1) to unique row count,
+## 1. tile atlas coordinates to the number of rows matched.
+## 2. Vector2i(-1, -1) to unique row count.
 ## 3. Vector2i(-1, -2) to an array of matched tile coordinates.
 func match_rows(layer: int, full_rows_only = true) -> Dictionary:
 	# Maps atlas coordinates to row clears.
@@ -28,25 +28,25 @@ func match_rows(layer: int, full_rows_only = true) -> Dictionary:
 		# Sum the group values of tiles in the row.
 		var total = 0
 		for j in drop_width:
-			var tile_atlas_coords = get_cell_atlas_coords(layer, tiles[i + j])
+			var tile_type = get_cell_atlas_coords(layer, tiles[i + j])
 			var tile_data = get_cell_tile_data(layer, tiles[i + j])
 			if tile_data:
 				var value = tile_data.get_custom_data("group")
 				total = total + value
 				# Store unique group values.
-				if value != 0 and not group_values.has(tile_atlas_coords):
-					counts[tile_atlas_coords] = 0
-					group_values[tile_atlas_coords] = value
+				if value != 0 and not group_values.has(tile_type):
+					counts[tile_type] = 0
+					group_values[tile_type] = value
 			elif full_rows_only:
 				total = 0
 				break
 		if total <= 0:
 			continue
-		for atlas_coords in group_values.keys():
+		for tile_type in group_values.keys():
 			# Match total with group values.
-			if total % group_values[atlas_coords] == 0:
+			if total % group_values[tile_type] == 0:
 				is_matched = true
-				counts[atlas_coords] = counts[atlas_coords] + 1
+				counts[tile_type] = counts[tile_type] + 1
 		if is_matched:
 			counts[Vector2i(-1, -1)] = counts[Vector2i(-1, -1)] + 1
 			# Add the row to the array.

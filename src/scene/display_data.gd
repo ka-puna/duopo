@@ -1,3 +1,4 @@
+## The display_data scene displays a dictionary as line-separated strings.
 extends Control
 
 

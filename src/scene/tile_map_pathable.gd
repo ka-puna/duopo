@@ -1,4 +1,4 @@
-## This [TileMap] subclass maintains a path of connected tiles.
+## This [TileMapCustom] subclass maintains a path of connected tiles.
 class_name TileMapPathable
 extends "res://src/node/tile_map_match.gd"
 
@@ -24,29 +24,29 @@ func clear_path() -> void:
 	path.clear()
 
 
-## Adds a tile at 'coords' to the path layer.
-func path_append(coords: Vector2i) -> void:
-	path.append(coords)
+## Adds 'tile' to the path layer.
+func path_append(tile: Vector2i) -> void:
+	path.append(tile)
 	_update_path_layer()
 
 
-## Returns true if the tile at 'coords' can be appended to the path.
-func path_can_append(coords: Vector2i) -> bool:
-	if not tile_is_pathable(layers.background, coords):
+## Returns true if tile' can be appended to the path.
+func path_can_append(tile: Vector2i) -> bool:
+	if not tile_is_pathable(layers.background, tile):
 		return false
 	elif path.is_empty():
 		return true
-	elif path.has(coords):
+	elif path.has(tile):
 		return false
 	else:
-		# Check if the tile shares a side with the end of the path.
-		return coords.x == path[-1].x and abs(path[-1].y - coords.y) == 1 \
-				or coords.y == path[-1].y and abs(path[-1].x - coords.x) == 1
+		# Return true if the tile shares a side with the end of the path.
+		return tile.x == path[-1].x and abs(path[-1].y - tile.y) == 1 \
+				or tile.y == path[-1].y and abs(path[-1].x - tile.x) == 1
 
 
-## Returns the path index of a tile at 'coords', or -1 if the index is invalid.
-func path_find(coords: Vector2i) -> int:
-	return path.find(coords)
+## Returns the path index of a tile at 'tile', or -1 if the index is invalid.
+func path_find(tile: Vector2i) -> int:
+	return path.find(tile)
 
 
 ## Returns the coordinates of the tile at 'index', or Vector2i(-1, -1) if the index is invalid.
@@ -56,9 +56,9 @@ func path_get(index: int) -> Vector2i:
 	return path[index]
 
 
-## Returns true if the path layer contains 'coords'.
-func path_has(coords: Vector2i) -> bool:
-	return path.has(coords)
+## Returns true if the path layer contains 'tile'.
+func path_has(tile: Vector2i) -> bool:
+	return path.has(tile)
 
 
 ## Returns true if the path layer is empty.

@@ -2,7 +2,7 @@
 class_name TileAtlas
 
 
-## Tile atlas source IDs.
+## The source_ids for tile atlases.
 const SOURCES = {
 	"TILES" = 0,
 	"PATH" = 1,
@@ -11,7 +11,7 @@ const SOURCES = {
 }
 
 
-## Tiles in the tiles source.
+## Tiles in source "tiles".
 const TILES = {
 	"BASE": {
 		"BLACK": Vector2i(0, 0),
@@ -19,17 +19,17 @@ const TILES = {
 		"RAINBOW": Vector2i(2, 0),
 		"GRAY": Vector2i(3, 0),
 		"GRAY_X": Vector2i(4, 0),
-		"GRAY_W_RED_X": Vector2i(5, 0),
+		"GRAY_RED_X": Vector2i(5, 0),
 		"GRAY_CIRCLE": Vector2i(6, 0),
 		"ORANGE": Vector2i(7, 0),
 	},
 	"ALT_1": {
-		"NEUTRAL_SOLID": Vector2i(3, 0),
+		"GRAY_SOLID": Vector2i(3, 0),
 	},
 }
 
 
-## A self-mapping for TILES.
+## A self-mapping for source "tiles".
 const TILES_SELF_MAPPING = {
 		TILES.BASE.BLACK: TILES.BASE.WHITE,
 		TILES.BASE.WHITE: TILES.BASE.BLACK,
@@ -44,7 +44,7 @@ const ANIMS = {
 }
 
 
-## The index and set IDs of terrains.
+## The index and set ids of terrains.
 const TERRAINS = {
 	"PATH": {
 		"INDEX": 0,
