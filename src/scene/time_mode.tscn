@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://03fnvm5r1yli"]
+[gd_scene load_steps=5 format=3 uid="uid://03fnvm5r1yli"]
 
 [ext_resource type="Script" path="res://src/scene/time_mode.gd" id="1_gyt65"]
 [ext_resource type="PackedScene" uid="uid://dxw75koeax6by" path="res://src/scene/tile_map_pathable.tscn" id="1_xl38i"]
 [ext_resource type="TileSet" uid="uid://cny47qhsswbse" path="res://asset/tile_atlas/menu.tres" id="2_it1s3"]
+[ext_resource type="PackedScene" uid="uid://dh5wo0og686ie" path="res://src/scene/preview_pattern.tscn" id="4_wihjq"]
 
 [node name="time_mode" type="Control"]
 layout_mode = 3
@@ -30,6 +31,18 @@ layer_0/tile_data = PackedInt32Array(589838, 65636, 0, 655374, 65636, 1, 720910,
 [node name="board" parent="." instance=ExtResource("1_xl38i")]
 position = Vector2(248, 152)
 
+[node name="preview_pattern" parent="." instance=ExtResource("4_wihjq")]
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 248.0
+offset_top = 40.0
+offset_right = 392.0
+offset_bottom = 104.0
+grow_horizontal = 1
+grow_vertical = 1
+tile_map_y_position = 48
+
 [node name="pause_game" type="Button" parent="."]
 self_modulate = Color(0, 0, 0, 1)
 layout_mode = 1
@@ -48,6 +61,7 @@ layer_0/tile_data = PackedInt32Array(0, 65636, 0, 65536, 65636, 2, 1, 131172, 0,
 
 [node name="drop_pattern" type="Button" parent="."]
 self_modulate = Color(0, 0, 0, 1)
+layout_mode = 0
 offset_left = 152.0
 offset_top = 424.0
 offset_right = 216.0

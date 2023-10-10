@@ -5,22 +5,30 @@ var PauseMenu = preload("res://src/scene/pause_menu.tscn")
 var TileMapCommand = preload("res://src/node/tile_map/tile_map_command.gd")
 
 
-## The period between drops in seconds.
-@export var cycle_period = 30
+## The period between drops in units such as seconds.
+@export var cycle_period = 30: set = set_cycle_period
 @onready var board: TileMapPathable = $board
 @onready var tile_set: TileSet = $board.tile_set
 @onready var layers: Dictionary = $board.layers
 @onready var atlas: TileAtlas = $board.atlas
+@onready var preview: PreviewPattern = $preview_pattern
 @onready var commander = TileMapCommand.new(board)
 @onready var drop: Callable = commander.get_drop()
 @onready var path_effect: Callable = commander.get_path_map(atlas.TILES_SELF_MAPPING)
-@onready var cycle_time = 0
+@onready var cycle_value = 0: set = set_cycle_value
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	preview.init(tile_set, cycle_period)
+	var pattern = get_new_pattern()
+	preview.set_pattern_id(pattern)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	cycle_time = cycle_time + delta
-	if cycle_time >= cycle_period:
+	set_cycle_value(cycle_value + delta)
+	if cycle_value >= cycle_period:
 		var pattern = get_next_pattern()
 		if drop_pattern(pattern) != board.RETURN_STATUS.SUCCESS:
 			game_over()
@@ -78,7 +86,7 @@ func drop_pattern(id: int) -> int:
 	var status = board.add_pattern(layers.drop, id)
 	if status == board.RETURN_STATUS.SUCCESS:
 		drop.call(layers.drop)
-		cycle_time = 0
+		cycle_value = 0
 	return status
 
 
@@ -89,15 +97,35 @@ func game_over():
 	add_child(pause_menu)
 
 
+## Returns a new pattern. 
+func get_new_pattern() -> int:
+	return randi_range(0, tile_set.get_patterns_count())
+
+
 ## Returns the index of next pattern to add to the drop layer.
 func get_next_pattern() -> int:
-	return randi_range(0, tile_set.get_patterns_count())
+	var next_pattern = preview.get_pattern_id()
+	var new_pattern = get_new_pattern()
+	preview.set_pattern_id(new_pattern)
+	return next_pattern
 
 
 ## Restarts the time mode game.
 func restart_game():
 	get_tree().reload_current_scene()
 	get_tree().paused = false
+
+
+func set_cycle_period(value: float):
+	cycle_period = value
+	preview.progress_bar_set_max_value(value)
+
+
+## Set the cycle time.
+func set_cycle_value(value: float):
+	var v = clamp(value, 0, cycle_period)
+	cycle_value = v
+	preview.progress_bar_set_value_inverse(v)
 
 
 func _on_drop_pattern_pressed():
