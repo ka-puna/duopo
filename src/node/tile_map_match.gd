@@ -38,7 +38,10 @@ func match_rows(layer: int, full_rows_only = true) -> Dictionary:
 					counts[tile_atlas_coords] = 0
 					group_values[tile_atlas_coords] = value
 			elif full_rows_only:
+				total = 0
 				break
+		if total <= 0:
+			continue
 		for atlas_coords in group_values.keys():
 			# Match total with group values.
 			if total % group_values[atlas_coords] == 0:
