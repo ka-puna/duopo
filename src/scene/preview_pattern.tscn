@@ -1,0 +1,39 @@
+[gd_scene load_steps=5 format=3 uid="uid://dh5wo0og686ie"]
+
+[ext_resource type="Script" path="res://src/scene/preview_pattern.gd" id="1_hiqg3"]
+[ext_resource type="Script" path="res://src/node/tile_map_custom.gd" id="2_iu5rg"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vt34b"]
+bg_color = Color(0, 0, 0, 0)
+draw_center = false
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ib282"]
+bg_color = Color(0, 0, 0, 0.3)
+corner_detail = 1
+
+[node name="display_pattern" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_hiqg3")
+
+[node name="tile_map" type="TileMap" parent="."]
+format = 2
+script = ExtResource("2_iu5rg")
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_vt34b")
+theme_override_styles/fill = SubResource("StyleBoxFlat_ib282")
+value = 100.0
+fill_mode = 1
+show_percentage = false
