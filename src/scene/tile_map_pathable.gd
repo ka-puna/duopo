@@ -5,6 +5,12 @@ extends "res://src/node/tile_map_match.gd"
 
 ## An array of coordinates corresponding to tiles in the path layer.
 @onready var path = []
+const TERRAINS = {
+	"PATH": {
+		"SET": 0,
+		"INDEX": 0,
+	},
+}
 
 
 # Called when the node enters the scene tree for the first time.
@@ -80,6 +86,6 @@ func truncate_path(index: int):
 
 ## Updates the drawing of the path layer.
 func _update_path_layer() -> void:
-	set_cells_terrain_path(layers.path, path, atlas.TERRAINS.PATH.SET, atlas.TERRAINS.PATH.INDEX)
+	set_cells_terrain_path(layers.path, path, TERRAINS.PATH.SET, TERRAINS.PATH.INDEX)
 	# Set the last tile to a special, animated tile.
 	set_cell(layers.path, path[-1], atlas.SOURCES.ANIM_PATH_END, atlas.ANIMS.BASE.PATH_END)

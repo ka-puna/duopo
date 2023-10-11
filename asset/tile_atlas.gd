@@ -1,4 +1,4 @@
-## TileAtlas stores constants for atlas sources, tiles, and terrains in tile_atlas/*.tres resources.
+## TileAtlas stores constants for atlas sources, and tiles in tile_atlas/*.tres resources.
 class_name TileAtlas
 
 
@@ -41,13 +41,4 @@ const ANIMS = {
 	"BASE": {
 		"PATH_END": Vector2i(0, 0),
 	},
-}
-
-
-## The index and set ids of terrains.
-const TERRAINS = {
-	"PATH": {
-		"INDEX": 0,
-		"SET": 0,
-	}
 }
