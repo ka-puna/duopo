@@ -93,6 +93,7 @@ func game_over():
 	get_tree().paused = true
 	var pause_menu = _open_pause_menu(restart_game, _quit_game)
 	add_child(pause_menu)
+	pause_menu.set_display_data(get_stats())
 
 
 ## Returns a new pattern. 
@@ -145,6 +146,7 @@ func _on_pause_game_pressed():
 	get_tree().paused = true
 	var pause_menu = _open_pause_menu(_unpause_game, _quit_game)
 	add_child(pause_menu)
+	pause_menu.set_display_data(get_stats())
 
 
 func _quit_game():
@@ -160,6 +162,14 @@ func _score_board():
 		board.clear_tiles(layers.drop, matched_tiles)
 		drop.call([layers.drop, layers.background])
 		score += matched_rows**2 * 100
+
+
+## Returns a dictionary of game statistics.
+func get_stats() -> Dictionary:
+	var stats = {
+		"Score": score,
+	}
+	return stats
 
 
 func _unpause_game():
