@@ -1,10 +1,17 @@
-[gd_scene load_steps=6 format=3 uid="uid://03fnvm5r1yli"]
+[gd_scene load_steps=8 format=3 uid="uid://03fnvm5r1yli"]
 
 [ext_resource type="Script" path="res://src/scene/time_mode.gd" id="1_gyt65"]
 [ext_resource type="Theme" uid="uid://ryxtl4aw764c" path="res://menu_theme.tres" id="1_lihoc"]
 [ext_resource type="PackedScene" uid="uid://dxw75koeax6by" path="res://src/scene/tile_map_pathable.tscn" id="1_xl38i"]
 [ext_resource type="TileSet" uid="uid://cny47qhsswbse" path="res://asset/tile_atlas/menu.tres" id="2_it1s3"]
 [ext_resource type="PackedScene" uid="uid://dh5wo0og686ie" path="res://src/scene/preview_pattern.tscn" id="4_wihjq"]
+[ext_resource type="FontFile" uid="uid://clpy5fbiwggfj" path="res://asset/JetBrainsMono.ttf" id="6_lo3lp"]
+
+[sub_resource type="FontVariation" id="FontVariation_c87ds"]
+base_font = ExtResource("6_lo3lp")
+variation_opentype = {
+2003265652: 800
+}
 
 [node name="time_mode" type="Control"]
 layout_mode = 3
@@ -58,7 +65,8 @@ offset_left = 16.0
 offset_top = 16.0
 offset_right = 80.0
 offset_bottom = 48.0
-text = "❚❚"
+theme_override_fonts/font = SubResource("FontVariation_c87ds")
+text = "||"
 flat = true
 
 [node name="ButtonBG" type="TileMap" parent="pause_game"]
