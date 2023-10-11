@@ -1,5 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://dd1ltsn8x10nt"]
+[gd_scene load_steps=4 format=3 uid="uid://dd1ltsn8x10nt"]
 
+[ext_resource type="Theme" uid="uid://ryxtl4aw764c" path="res://menu_theme.tres" id="1_4vuqe"]
 [ext_resource type="Script" path="res://src/main.gd" id="1_dqgsu"]
 [ext_resource type="TileSet" uid="uid://cny47qhsswbse" path="res://asset/tile_atlas/menu.tres" id="3_t7p15"]
 
@@ -10,6 +11,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_4vuqe")
 script = ExtResource("1_dqgsu")
 
 [node name="TitleBG" type="TileMap" parent="."]

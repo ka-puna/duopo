@@ -1,7 +1,15 @@
-[gd_scene load_steps=3 format=3 uid="uid://b6whumsrxtw0b"]
+[gd_scene load_steps=6 format=3 uid="uid://b6whumsrxtw0b"]
 
 [ext_resource type="Script" path="res://src/scene/display_data.gd" id="1_wnswa"]
 [ext_resource type="TileSet" uid="uid://cny47qhsswbse" path="res://asset/tile_atlas/menu.tres" id="2_jo1ee"]
+[ext_resource type="Theme" uid="uid://ryxtl4aw764c" path="res://menu_theme.tres" id="3_xcn8c"]
+[ext_resource type="FontFile" uid="uid://clpy5fbiwggfj" path="res://asset/JetBrainsMono.ttf" id="4_83ndi"]
+
+[sub_resource type="FontVariation" id="FontVariation_mluhu"]
+base_font = ExtResource("4_83ndi")
+variation_opentype = {
+2003265652: 700
+}
 
 [node name="display_data" type="Control"]
 layout_mode = 3
@@ -10,6 +18,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("3_xcn8c")
 script = ExtResource("1_wnswa")
 
 [node name="TextBG" type="TileMap" parent="."]
@@ -29,6 +38,7 @@ anchor_bottom = 0.4
 offset_right = 40.0
 offset_bottom = 115.0
 theme_override_colors/default_color = Color(0, 0, 0, 1)
+theme_override_fonts/bold_font = SubResource("FontVariation_mluhu")
 bbcode_enabled = true
 text = "[i]PLACEHOLDER TEXT[/i]
 [b]Round Time:[/b] 1:53
