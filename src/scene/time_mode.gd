@@ -4,6 +4,7 @@ extends CycleModeBase
 
 @onready var run_time = 0
 @onready var score = 0
+@onready var lines_cleared = 0
 
 
 # Called when the node enters the scene tree for the first time.
@@ -34,6 +35,7 @@ func get_stats() -> Dictionary:
 	var stats = {
 		"Play Time": "%d:%02d" % [run_time / 60, int(run_time) % 60],
 		"Score": score,
+		"Lines Cleared": lines_cleared,
 	}
 	return stats
 
@@ -42,4 +44,5 @@ func score_board() -> Dictionary:
 	var result = super()
 	var matched_rows = result[Vector2i(-1, -1)]
 	score += matched_rows**2 * 100
+	lines_cleared += matched_rows
 	return result
