@@ -26,8 +26,7 @@ func _process(delta):
 	run_time += delta
 	set_cycle_value(cycle_value + delta)
 	if cycle_value >= cycle_period:
-		var pattern = get_next_pattern()
-		if drop_pattern(pattern) != board.RETURN_STATUS.SUCCESS:
+		if not drop_pattern():
 			game_over()
 
 

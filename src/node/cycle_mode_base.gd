@@ -65,14 +65,18 @@ func _input(event):
 							board.truncate_path(-2)
 
 
-## Adds the pattern associated with 'id' to the board.
-## Returns a [enum TileMapCustom.RETURN_STATUS] value.
-func drop_pattern(id: int) -> int:
-	var status = board.add_pattern(layers.drop, id)
+## Adds and drops the preview pattern to the board, resets the cycle value, and
+## updates the pattern preview.
+## Returns true if successful.
+func drop_pattern() -> bool:
+	var pattern_id = preview.get_pattern_id()
+	var status = board.add_pattern(layers.drop, pattern_id)
 	if status == board.RETURN_STATUS.SUCCESS:
 		drop.call([layers.drop, layers.background])
 		cycle_value = 0
-	return status
+		update_preview()
+		return true
+	return false
 
 
 ## Opens the pause menu, with options to restart or quit the game.
@@ -88,17 +92,15 @@ func get_new_pattern() -> int:
 	return randi_range(0, tile_set.get_patterns_count())
 
 
-## Returns the index of next pattern to add to the drop layer.
-func get_next_pattern() -> int:
-	var next_pattern = preview.get_pattern_id()
-	var new_pattern = get_new_pattern()
-	preview.set_pattern_id(new_pattern)
-	return next_pattern
-
-
 ## Returns a dictionary with human-readable keys and values.
 func get_stats() -> Dictionary:
 	return {}
+
+
+## Updates the preview pattern.
+func update_preview():
+	var new_pattern = get_new_pattern()
+	preview.set_pattern_id(new_pattern)
 
 
 ## Restarts the game mode.
@@ -131,8 +133,7 @@ func set_cycle_value(value: float):
 
 
 func _on_drop_pattern_pressed():
-	var pattern = get_next_pattern()
-	drop_pattern(pattern)
+	drop_pattern()
 
 
 ## Opens the pause menu and connects its signals to the given Callables.
