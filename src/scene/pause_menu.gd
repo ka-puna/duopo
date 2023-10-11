@@ -23,8 +23,8 @@ func _process(_delta):
 
 
 ## Set the data to display.
-func set_display_data(new_data: Dictionary) -> void:
-	display_data.data = new_data
+func set_display_data(data: Dictionary) -> void:
+	display_data.update_text(data)
 
 
 func _on_animation_player_animation_finished(anim_name):
