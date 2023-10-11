@@ -25,5 +25,5 @@ func update_data_label() -> void:
 		$data_label.text = ""
 		return
 	for key in data.keys():
-		var string = "[b]" + key + ":[/b] " + str(data[key]) + "\n"
+		var string = "[b]%-24s[/b] %s" % [key + ":", data[key]] + "\n"
 		$data_label.append_text(string)
