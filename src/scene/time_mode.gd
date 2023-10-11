@@ -52,30 +52,33 @@ func _input(event):
 					elif board.path_has(clicked_tile):
 						board.truncate_path(board.path_find(clicked_tile))
 				MOUSE_BUTTON_MASK_LEFT:
-					if board.path_can_append(clicked_tile) and \
-							not board.path_is_empty():
-						board.path_append(clicked_tile)
-					elif event is InputEventMouseButton and event.pressed:
-						# If clicked tile is at the end of the path.
-						if clicked_tile == board.path_get(-1):
-							path_effect.call(layers.drop)
-							_score_board()
-							board.clear_path()
-						elif board.path_is_empty():
-							if board.path_can_append(clicked_tile):
-								board.path_append(clicked_tile)
-						else:
-							var path_end = board.path_get(-1)
-							if clicked_tile.x == path_end.x or clicked_tile.y == path_end.y:
-								# Extend path through shared column or row.
-								var difference = clicked_tile - path_end
-								var direction = sign(difference)
-								for i in range(1, difference.length() + 1):
-									var tile = path_end + i * direction
-									if board.path_can_append(tile):
-										board.path_append(tile)
-									else:
-										break
+					if event is InputEventMouseButton:
+						if event.pressed:
+							# If clicked tile is at the end of the path.
+							if clicked_tile == board.path_get(-1):
+								path_effect.call(layers.drop)
+								_score_board()
+								board.clear_path()
+							elif board.path_is_empty():
+								if board.path_can_append(clicked_tile):
+									board.path_append(clicked_tile)
+							else:
+								var path_end = board.path_get(-1)
+								if clicked_tile.x == path_end.x or clicked_tile.y == path_end.y:
+									# Extend path through shared column or row.
+									var difference = clicked_tile - path_end
+									var direction = sign(difference)
+									for i in range(1, difference.length() + 1):
+										var tile = path_end + i * direction
+										if board.path_can_append(tile):
+											board.path_append(tile)
+										else:
+											break
+					elif not board.path_is_empty():
+						if board.path_can_append(clicked_tile):
+							board.path_append(clicked_tile)
+						elif clicked_tile == board.path_get(-2):
+							board.truncate_path(-2)
 
 
 ## Adds the pattern associated with 'id' to the board.
