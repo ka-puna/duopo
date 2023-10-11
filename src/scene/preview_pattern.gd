@@ -30,9 +30,12 @@ func get_pattern_id():
 
 ## Set the id of the displayed pattern to 'id'.
 func set_pattern_id(id: int):
+	var previous_pattern_id = pattern_id
 	tile_map.clear()
 	if id == -1 or tile_map.add_pattern(0, id) == tile_map.RETURN_STATUS.SUCCESS:
 		pattern_id = id
+	else:
+		tile_map.add_pattern(0, previous_pattern_id)
 
 
 ## Sets the tile map's relative y-position to 'y'.
