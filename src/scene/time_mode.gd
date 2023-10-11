@@ -58,11 +58,7 @@ func _input(event):
 						# If clicked tile is at the end of the path.
 						if clicked_tile == board.path_get(-1):
 							path_effect.call(layers.drop)
-							var result = board.match_rows(layers.drop)
-							var matched_tiles = result[Vector2i(-1, -2)]
-							if not matched_tiles.is_empty():
-								board.clear_tiles(layers.drop, matched_tiles)
-								drop.call([layers.drop, layers.background])
+							_score_board()
 							board.clear_path()
 						elif board.path_is_empty():
 							if board.path_can_append(clicked_tile):
@@ -152,6 +148,14 @@ func _on_pause_game_pressed():
 
 func _quit_game():
 	get_tree().quit()
+
+
+func _score_board():
+	var result = board.match_rows(layers.drop)
+	var matched_tiles = result[Vector2i(-1, -2)]
+	if not matched_tiles.is_empty():
+		board.clear_tiles(layers.drop, matched_tiles)
+		drop.call([layers.drop, layers.background])
 
 
 func _unpause_game():
