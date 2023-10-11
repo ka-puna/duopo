@@ -40,14 +40,13 @@ offset_bottom = 115.0
 theme_override_colors/default_color = Color(0, 0, 0, 1)
 theme_override_fonts/bold_font = SubResource("FontVariation_mluhu")
 bbcode_enabled = true
-text = "[i]PLACEHOLDER TEXT[/i]
+text = "[i]TEXT MAY NOT MATCH GAME.[/i]
 [b]Round Time:[/b] 1:53
 [b]Score:[/b] 1,900
 [b]Level:[/b] 2
 [b]Rows Cleared:[/b] 30
-[b]Number of Lines:[/b] 11
-[b]Number of Words:[/b] 42
 [b]The answer to life, the universe, and everything:[/b] 42
-[b]Number of Characters:[/b] 226
-[b]Number of Numbers:[/b] 10
-[b]The nice number:[/b] 69"
+[b]Number of Lines:[/b] 10
+[b]Number of Words:[/b] 42
+[b]Number of Characters:[/b] 219
+[b]Number of Digits:[/b] 21"

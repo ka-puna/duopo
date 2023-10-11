@@ -194,8 +194,7 @@ offset_right = 48.0
 offset_bottom = -16.0
 grow_horizontal = 2
 grow_vertical = 0
-text = "✖
-"
+text = "×"
 flat = true
 
 [node name="ButtonBG" type="TileMap" parent="Group/cross_button"]
