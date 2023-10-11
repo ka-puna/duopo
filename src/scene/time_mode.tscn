@@ -83,5 +83,11 @@ tile_set = ExtResource("2_it1s3")
 format = 2
 layer_0/tile_data = PackedInt32Array(0, 65636, 0, 65536, 65636, 2, 1, 131172, 0, 65537, 131172, 2, 2, 131172, 0, 65538, 131172, 2, 3, 196708, 0, 65539, 196708, 2)
 
+[node name="Line2D" type="Line2D" parent="."]
+z_index = 1
+points = PackedVector2Array(232, 296, 408, 296)
+width = 2.0
+default_color = Color(1, 0.639216, 0.129412, 1)
+
 [connection signal="pressed" from="pause_game" to="." method="_on_pause_game_pressed"]
 [connection signal="pressed" from="drop_pattern" to="." method="_on_drop_pattern_pressed"]
