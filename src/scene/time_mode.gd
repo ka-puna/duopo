@@ -17,6 +17,7 @@ var TileMapCommand = preload("res://src/node/tile_map/tile_map_command.gd")
 @onready var drop: Callable = commander.get_drop()
 @onready var path_effect: Callable = commander.get_path_map(atlas.TILES_SELF_MAPPING)
 @onready var cycle_value = 0: set = set_cycle_value
+@onready var run_time = 0
 @onready var score = 0
 
 
@@ -29,6 +30,7 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+	run_time += delta
 	set_cycle_value(cycle_value + delta)
 	if cycle_value >= cycle_period:
 		var pattern = get_next_pattern()
@@ -170,6 +172,7 @@ func _score_board():
 ## Returns a dictionary of game statistics.
 func get_stats() -> Dictionary:
 	var stats = {
+		"Play Time": "%d:%02d" % [run_time / 60, int(run_time) % 60],
 		"Score": score,
 	}
 	return stats
