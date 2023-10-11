@@ -17,6 +17,7 @@ var TileMapCommand = preload("res://src/node/tile_map/tile_map_command.gd")
 @onready var drop: Callable = commander.get_drop()
 @onready var path_effect: Callable = commander.get_path_map(atlas.TILES_SELF_MAPPING)
 @onready var cycle_value = 0: set = set_cycle_value
+@onready var score = 0
 
 
 # Called when the node enters the scene tree for the first time.
@@ -150,12 +151,15 @@ func _quit_game():
 	get_tree().quit()
 
 
+## Clears and scores matched rows in the drop layer.
 func _score_board():
 	var result = board.match_rows(layers.drop)
 	var matched_tiles = result[Vector2i(-1, -2)]
+	var matched_rows = result[Vector2i(-1, -1)]
 	if not matched_tiles.is_empty():
 		board.clear_tiles(layers.drop, matched_tiles)
 		drop.call([layers.drop, layers.background])
+		score += matched_rows**2 * 100
 
 
 func _unpause_game():
