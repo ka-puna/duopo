@@ -62,7 +62,7 @@ func _input(event):
 							var matched_tiles = result[Vector2i(-1, -2)]
 							if not matched_tiles.is_empty():
 								board.clear_tiles(layers.drop, matched_tiles)
-								drop.call(layers.drop)
+								drop.call([layers.drop, layers.background])
 							board.clear_path()
 						elif board.path_is_empty():
 							if board.path_can_append(clicked_tile):
@@ -86,7 +86,7 @@ func _input(event):
 func drop_pattern(id: int) -> int:
 	var status = board.add_pattern(layers.drop, id)
 	if status == board.RETURN_STATUS.SUCCESS:
-		drop.call(layers.drop)
+		drop.call([layers.drop, layers.background])
 		cycle_value = 0
 	return status
 

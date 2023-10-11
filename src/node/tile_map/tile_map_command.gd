@@ -23,21 +23,30 @@ func get_path_map(self_map: Dictionary) -> Callable:
 
 
 ## Returns a Callable:
-## Moves tiles in 'layer' to the lowest row without obstruction by solid tiles.
-## Assumes that the tile map has a layer "background".
+## Moves tiles in 'layers'[0] to the lowest row without obstruction by solid tiles.
+##		'layers': An array of layer indices.
 func get_drop() -> Callable:
-	var drop = func(layer: int):
-		var tiles = tile_map.get_used_cells(layer)
+	var drop = func(layers: Array):
+		var tiles = tile_map.get_used_cells(layers[0])
 		# Sort tiles from bottom-to-top, then left-to-right.
 		tiles.sort_custom(func(a, b): return a.y > b.y or a.y == b.y and a.x < b.x)
 		for i in tiles.size():
 			var tile_below = tiles[i] + Vector2i(0, 1)
-			# While the tile below is not solid, move the tile down.
-			while not tile_map.tile_is_solid(layer, tile_below) \
-					and not tile_map.tile_is_solid(tile_map.layers.background, tile_below):
-				var tile_type = tile_map.get_cell_atlas_coords(layer, tiles[i], false)
-				tile_map.set_cell(layer, tiles[i], -1)
+			var is_blocked = false
+			for layer in layers:
+				if tile_map.tile_is_solid(layer, tile_below):
+					is_blocked = true
+					break
+			while not is_blocked:
+				# Move the tile down.
+				var tile_type = tile_map.get_cell_atlas_coords(layers[0], tiles[i], false)
+				tile_map.set_cell(layers[0], tiles[i], -1)
 				tiles[i] = tile_below
-				tile_map.set_cell(layer, tiles[i], tile_map.atlas.SOURCES.TILES, tile_type)
+				tile_map.set_cell(layers[0], tiles[i], tile_map.atlas.SOURCES.TILES, tile_type)
+				# Update while-loop condition.
 				tile_below = tile_below + Vector2i(0, 1)
+				for layer in layers:
+					if tile_map.tile_is_solid(layer, tile_below):
+						is_blocked = true
+						break
 	return drop
