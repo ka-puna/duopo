@@ -8,14 +8,14 @@ var PauseMenu = preload("res://src/scene/pause_menu.tscn")
 
 ## The period between drops in units such as seconds.
 @export var cycle_period = 30: set = set_cycle_period
-var board: TileMapPathable
+var board: TileMapCustom
 var tile_set: TileSet
 var layers: Dictionary
 var atlas: TileAtlas
 var preview: PreviewPattern
 var commander: TileMapCommand
 var drop: Callable
-var path_effect: Callable
+var effect: Callable
 @onready var cycle_value = 0: set = set_cycle_value
 
 
@@ -72,17 +72,6 @@ func update_preview():
 func restart_game():
 	get_tree().reload_current_scene()
 	get_tree().paused = false
-
-
-## Clears and scores matched rows in the drop layer.
-## Returns the output of [TileMapPathable.match_rows]
-func score_board() -> Dictionary:
-	var result = board.match_rows(layers.drop)
-	var matched_tiles = result[Vector2i(-1, -2)]
-	if not matched_tiles.is_empty():
-		board.clear_tiles(layers.drop, matched_tiles)
-		drop.call([layers.drop, layers.background])
-	return result
 
 
 func set_cycle_period(value: float):

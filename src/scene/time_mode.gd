@@ -16,7 +16,7 @@ func _ready():
 	preview = $preview_pattern
 	commander = TileMapCommand.new(board)
 	drop = commander.get_drop()
-	path_effect = commander.get_path_map(atlas.TILES_SELF_MAPPING)
+	effect = commander.get_path_map(atlas.TILES_SELF_MAPPING)
 	preview.init(tile_set, cycle_period)
 	var pattern = get_new_pattern()
 	preview.set_pattern_id(pattern)
@@ -40,11 +40,17 @@ func get_stats() -> Dictionary:
 	return stats
 
 
+## Clears and scores matched rows in the drop layer.
+## Returns the output of [TileMapMatch.match_rows]
 func score_board() -> Dictionary:
-	var result = super()
+	var result = board.match_rows(layers.drop)
+	var matched_tiles = result[Vector2i(-1, -2)]
 	var matched_rows = result[Vector2i(-1, -1)]
-	score += matched_rows**2 * 100
-	lines_cleared += matched_rows
+	if not matched_tiles.is_empty():
+		board.clear_tiles(layers.drop, matched_tiles)
+		drop.call([layers.drop, layers.background])
+		score += matched_rows**2 * 100
+		lines_cleared += matched_rows
 	return result
 
 
@@ -53,7 +59,7 @@ func _on_tile_mouse_event(tile: Vector2i, button: MouseButtonMask, pressed: bool
 		if pressed:
 			# If tile is at the end of the path.
 			if tile == board.path_get(-1):
-				path_effect.call(layers.drop)
+				effect.call(layers.drop)
 				score_board()
 				board.clear_path()
 			elif board.path_is_empty():
