@@ -1,6 +1,6 @@
 ## This [TileMapCustom] subclass maintains a path of connected tiles.
 class_name TileMapPathable
-extends "res://src/node/tile_map_match.gd"
+extends TileMapCustom
 
 
 ## An array of coordinates corresponding to tiles in the path layer.

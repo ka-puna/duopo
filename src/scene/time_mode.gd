@@ -2,9 +2,12 @@
 extends CycleModeBase
 
 
+## Adjust this value to match the width of the play area in the board.
+@export var drop_width = 9
 @onready var run_time = 0
 @onready var score = 0
 @onready var lines_cleared = 0
+var match_rows: Callable
 
 
 # Called when the node enters the scene tree for the first time.
@@ -17,6 +20,7 @@ func _ready():
 	commander = TileMapCommand.new(board)
 	drop = commander.get_drop()
 	effect = commander.get_path_map(atlas.TILES_SELF_MAPPING)
+	match_rows = commander.get_match_rows("group")
 	preview.init(tile_set, cycle_period)
 	var pattern = get_new_pattern()
 	preview.set_pattern_id(pattern)
@@ -41,9 +45,9 @@ func get_stats() -> Dictionary:
 
 
 ## Clears and scores matched rows in the drop layer.
-## Returns the output of [TileMapMatch.match_rows]
+## Returns the output of a Callable from [TileMapCommand.get_match_rows].
 func score_board() -> Dictionary:
-	var result = board.match_rows(layers.drop)
+	var result = match_rows.call(layers.drop, drop_width)
 	var matched_tiles = result[Vector2i(-1, -2)]
 	var matched_rows = result[Vector2i(-1, -1)]
 	if not matched_tiles.is_empty():
