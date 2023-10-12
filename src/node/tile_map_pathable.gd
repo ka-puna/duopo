@@ -78,7 +78,7 @@ func truncate_path(index: int):
 		return
 	# Erase cells from the path layer.
 	for i in path.slice(index + 1).size():
-			set_cell(2, path[i + index + 1], -1)
+			erase_cell(2, path[i + index + 1])
 	# Truncate the path array.
 	path = path.slice(0, index + 1)
 	_update_path_layer()

@@ -8,6 +8,7 @@ var PauseMenu = preload("res://src/scene/pause_menu.tscn")
 
 ## The period between drops in units such as seconds.
 @export var cycle_period = 30: set = set_cycle_period
+@onready var cycle_value = 0: set = set_cycle_value
 var board: TileMapCustom
 var tile_set: TileSet
 var layers: Dictionary
@@ -16,7 +17,6 @@ var preview: PreviewPattern
 var commander: TileMapCommand
 var drop: Callable
 var effect: Callable
-@onready var cycle_value = 0: set = set_cycle_value
 
 
 # Called when there is an input event.
@@ -90,6 +90,13 @@ func _on_drop_pattern_pressed():
 	drop_pattern()
 
 
+func _on_pause_game_pressed():
+	get_tree().paused = true
+	var pause_menu = _open_pause_menu(_unpause_game, _quit_game)
+	add_child(pause_menu)
+	pause_menu.set_display_data(get_stats())
+
+
 ## Opens the pause menu and connects its signals to the given Callables.
 ## Returns the pause menu node.
 func _open_pause_menu(play_button_callback: Callable, cross_button_callback: Callable) -> Node:
@@ -98,13 +105,6 @@ func _open_pause_menu(play_button_callback: Callable, cross_button_callback: Cal
 	pause_menu.cross_button.connect(cross_button_callback)
 	pause_menu.z_index = RenderingServer.CANVAS_ITEM_Z_MAX
 	return pause_menu
-
-
-func _on_pause_game_pressed():
-	get_tree().paused = true
-	var pause_menu = _open_pause_menu(_unpause_game, _quit_game)
-	add_child(pause_menu)
-	pause_menu.set_display_data(get_stats())
 
 
 ## Called when a tile is pressed by a click or drag mouse event.

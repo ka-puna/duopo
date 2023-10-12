@@ -28,6 +28,16 @@ func get_pattern_id():
 	return pattern_id
 
 
+## Sets the progress bar's maxmimum value to 'value'.
+func progress_bar_set_max_value(value: float):
+	progress_bar.set_max(value)
+
+
+## Sets the progress bar's value to its maximum value - 'value'.
+func progress_bar_set_value_inverse(value: int):
+	progress_bar.set_value(progress_bar.max_value - value)
+
+
 ## Set the id of the displayed pattern to 'id'.
 func set_pattern_id(id: int):
 	var previous_pattern_id = pattern_id
@@ -42,13 +52,3 @@ func set_pattern_id(id: int):
 func tile_map_set_y_position(y: int) -> void:
 	tile_map.position = (Vector2(tile_map.get_position().x, y))
 	tile_map_y_position = y
-
-
-## Sets the progress bar's maxmimum value to 'value'.
-func progress_bar_set_max_value(value: float):
-	progress_bar.set_max(value)
-
-
-## Sets the progress bar's value to its maximum value - 'value'.
-func progress_bar_set_value_inverse(value: int):
-	progress_bar.set_value(progress_bar.max_value - value)

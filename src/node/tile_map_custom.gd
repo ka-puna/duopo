@@ -30,7 +30,7 @@ func add_pattern(layer: int, pattern_id: int) -> int:
 ## Clears the 'tiles' in 'layer'.
 func clear_tiles(layer: int, tiles: Array):
 	for tile in tiles:
-		set_cell(layer, tile, -1)
+		erase_cell(layer, tile)
 
 
 ## Returns true if 'tile' in layer' is pathable.
