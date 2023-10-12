@@ -26,42 +26,8 @@ func _input(event):
 		# If tile is within bounds.
 		if board.get_cell_tile_data(board.layers.background, clicked_tile):
 			var button_mask = event.get_button_mask()
-			match button_mask:
-				MOUSE_BUTTON_MASK_RIGHT:
-					# If clicked tile is at the end of the path.
-					if clicked_tile == board.path_get(-1):
-						if event is InputEventMouseButton and event.pressed:
-							board.clear_path()
-					elif board.path_has(clicked_tile):
-						board.truncate_path(board.path_find(clicked_tile))
-				MOUSE_BUTTON_MASK_LEFT:
-					if event is InputEventMouseButton:
-						if event.pressed:
-							# If clicked tile is at the end of the path.
-							if clicked_tile == board.path_get(-1):
-								path_effect.call(layers.drop)
-								score_board()
-								board.clear_path()
-							elif board.path_is_empty():
-								if board.path_can_append(clicked_tile):
-									board.path_append(clicked_tile)
-							else:
-								var path_end = board.path_get(-1)
-								if clicked_tile.x == path_end.x or clicked_tile.y == path_end.y:
-									# Extend path through shared column or row.
-									var difference = clicked_tile - path_end
-									var direction = sign(difference)
-									for i in range(1, difference.length() + 1):
-										var tile = path_end + i * direction
-										if board.path_can_append(tile):
-											board.path_append(tile)
-										else:
-											break
-					elif not board.path_is_empty():
-						if board.path_can_append(clicked_tile):
-							board.path_append(clicked_tile)
-						elif clicked_tile == board.path_get(-2):
-							board.truncate_path(-2)
+			var pressed = event is InputEventMouseButton and event.pressed
+			_on_tile_mouse_event(clicked_tile, button_mask, pressed)
 
 
 ## Adds and drops the preview pattern to the board, resets the cycle value, and
@@ -150,6 +116,11 @@ func _on_pause_game_pressed():
 	var pause_menu = _open_pause_menu(_unpause_game, _quit_game)
 	add_child(pause_menu)
 	pause_menu.set_display_data(get_stats())
+
+
+## Called when a tile is pressed by a click or drag mouse event.
+func _on_tile_mouse_event(_tile: Vector2i, _button: MouseButtonMask, _pressed: bool):
+	pass
 
 
 func _quit_game():
