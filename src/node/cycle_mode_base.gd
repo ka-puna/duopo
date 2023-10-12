@@ -4,7 +4,6 @@ extends Control
 
 
 var PauseMenu = preload("res://src/scene/pause_menu.tscn")
-var TileMapCommand = preload("res://src/node/tile_map/tile_map_command.gd")
 
 
 ## The period between drops in units such as seconds.
@@ -14,7 +13,7 @@ var tile_set: TileSet
 var layers: Dictionary
 var atlas: TileAtlas
 var preview: PreviewPattern
-var commander
+var commander: TileMapCommand
 var drop: Callable
 var path_effect: Callable
 @onready var cycle_value = 0: set = set_cycle_value

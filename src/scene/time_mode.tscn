@@ -2,9 +2,9 @@
 
 [ext_resource type="Script" path="res://src/scene/time_mode.gd" id="1_gyt65"]
 [ext_resource type="Theme" uid="uid://ryxtl4aw764c" path="res://menu_theme.tres" id="1_lihoc"]
-[ext_resource type="PackedScene" uid="uid://dxw75koeax6by" path="res://src/scene/tile_map_pathable.tscn" id="1_xl38i"]
+[ext_resource type="PackedScene" uid="uid://dxw75koeax6by" path="res://src/scene/board/tile_map_pathable.tscn" id="1_xl38i"]
 [ext_resource type="TileSet" uid="uid://cny47qhsswbse" path="res://asset/tile_atlas/menu.tres" id="2_it1s3"]
-[ext_resource type="PackedScene" uid="uid://dh5wo0og686ie" path="res://src/scene/preview_pattern.tscn" id="4_wihjq"]
+[ext_resource type="PackedScene" uid="uid://dh5wo0og686ie" path="res://src/scene/board/preview_pattern.tscn" id="4_wihjq"]
 [ext_resource type="FontFile" uid="uid://clpy5fbiwggfj" path="res://asset/JetBrainsMono.ttf" id="6_lo3lp"]
 
 [sub_resource type="FontVariation" id="FontVariation_c87ds"]

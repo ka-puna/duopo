@@ -1,5 +1,5 @@
 ## TileMapCommand creates Callable functions for [TileMapCustom].
-
+class_name TileMapCommand
 
 ## The executing object.
 var tile_map: TileMapCustom

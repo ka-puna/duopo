@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://dh5wo0og686ie"]
 
-[ext_resource type="Script" path="res://src/scene/preview_pattern.gd" id="1_hiqg3"]
-[ext_resource type="Script" path="res://src/node/tile_map_custom.gd" id="2_iu5rg"]
+[ext_resource type="Script" path="res://src/scene/board/preview_pattern.gd" id="1_i0rg4"]
+[ext_resource type="Script" path="res://src/node/tile_map_custom.gd" id="2_p8evc"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vt34b"]
 bg_color = Color(0, 0, 0, 0)
@@ -19,11 +19,11 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_hiqg3")
+script = ExtResource("1_i0rg4")
 
 [node name="tile_map" type="TileMap" parent="."]
 format = 2
-script = ExtResource("2_iu5rg")
+script = ExtResource("2_p8evc")
 
 [node name="ProgressBar" type="ProgressBar" parent="."]
 layout_mode = 1
