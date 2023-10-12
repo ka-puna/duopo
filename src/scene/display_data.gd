@@ -2,9 +2,6 @@
 extends Control
 
 
-signal quit_game
-
-
 @onready var data_label = $data_label
 @onready var text_bg = $TextBG
 @onready var tile_size = $TextBG.tile_set.tile_size
