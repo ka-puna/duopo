@@ -28,7 +28,7 @@ func set_display_size(vector: Vector2) -> void:
 func update_text(data: Dictionary) -> void:
 	data_label.text = ""
 	for key in data.keys():
-		var string = "[b]%-24s[/b] %s" % [key + ":", data[key]] + "\n"
+		var string = "[b]%-18s[/b] %s" % [key + ":", data[key]] + "\n"
 		data_label.text += string
 
 
