@@ -7,7 +7,7 @@ var PauseMenu = preload("res://src/scene/pause_menu.tscn")
 
 
 ## The period between drops in units such as seconds.
-@export var cycle_period = 30: set = set_cycle_period
+@export var cycle_period = 10: set = set_cycle_period
 @onready var cycle_value = 0: set = set_cycle_value
 var board: TileMapCustom
 var tile_set: TileSet
