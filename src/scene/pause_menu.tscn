@@ -13,6 +13,7 @@ variation_opentype = {
 
 [sub_resource type="Theme" id="Theme_wtaow"]
 default_font = SubResource("FontVariation_flwvk")
+default_font_size = 16
 
 [sub_resource type="Animation" id="Animation_shis3"]
 resource_name = "RESET"
