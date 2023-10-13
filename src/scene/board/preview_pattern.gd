@@ -34,7 +34,7 @@ func progress_bar_set_max_value(value: float):
 
 
 ## Sets the progress bar's value to its maximum value - 'value'.
-func progress_bar_set_value_inverse(value: int):
+func progress_bar_set_value_inverse(value: float):
 	progress_bar.set_value(progress_bar.max_value - value)
 
 
