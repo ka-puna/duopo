@@ -33,12 +33,6 @@ func clear_tiles(layer: int, tiles: Array):
 		erase_cell(layer, tile)
 
 
-## Returns true if 'tile' in layer' is pathable.
-func tile_is_pathable(layer: int, tile: Vector2i) -> bool:
-	var tile_data = get_cell_tile_data(layer, tile)
-	return tile_data and tile_data.get_custom_data("pathable")
-
-
 ## Returns true if 'tile' in 'layer' is solid.
 func tile_is_solid(layer: int, tile: Vector2i) -> bool:
 	var tile_data = get_cell_tile_data(layer, tile)
