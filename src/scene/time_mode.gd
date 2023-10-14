@@ -182,6 +182,18 @@ func _on_tile_mouse_event(tile: Vector2i, button: MouseButtonMask, pressed: bool
 			# If tile is second-to-last in the path.
 			elif tile == board.path_get(-2):
 				board.truncate_path(-2)
+			else:
+				var path_end = board.path_get(-1)
+				if tile.x == path_end.x or tile.y == path_end.y:
+					# Extend path through shared column or row.
+					var difference = tile - path_end
+					var direction = sign(difference)
+					for i in range(1, difference.length() + 1):
+						var next_tile = path_end + i * direction
+						if board.path_can_append([layers.background], next_tile):
+							board.path_append(next_tile)
+						else:
+							break
 	elif button == MOUSE_BUTTON_MASK_RIGHT:
 		if board.path_has(tile):
 			if tile == board.path_get(-1):
