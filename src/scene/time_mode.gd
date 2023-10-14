@@ -3,13 +3,13 @@ extends CycleModeBase
 
 
 ## Adjust this value to match the width of the play area in the board.
-@export var drop_width = 9
-@onready var run_time = 0
-@onready var score = 0
-@onready var init_cycle_period = cycle_period
-@onready var max_cycle_period = cycle_period * 2
-@onready var level = 0: set = set_level
-@onready var rows_cleared = 0: set = set_rows_cleared
+@export var drop_width: int = 9
+@onready var run_time: float = 0.0
+@onready var score: int = 0
+@onready var init_cycle_period: float = cycle_period
+@onready var max_cycle_period: float = cycle_period * 2
+@onready var level: int = 0: set = set_level
+@onready var rows_cleared: int = 0: set = set_rows_cleared
 var match_rows: Callable
 
 

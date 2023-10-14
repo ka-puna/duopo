@@ -5,10 +5,10 @@ extends Control
 
 ## The y position of the tile_map, relative to the PreviewPattern node.
 ## Adjust it according to the maximum height of the pattern.
-@export var tile_map_y_position = 0
+@export var tile_map_y_position: float = 0.0
 @onready var progress_bar: ProgressBar = $ProgressBar
 var tile_map: TileMapCustom
-var pattern_id = -1: set = set_pattern_id, get = get_pattern_id
+var pattern_id: int = -1: set = set_pattern_id, get = get_pattern_id
 
 
 # Called when the node enters the scene tree for the first time.
@@ -18,7 +18,7 @@ func _ready():
 
 
 ## Set the PreviewPattern's principal values.
-func init(tile_set: TileSet, progress_max_value: int) -> void:
+func init(tile_set: TileSet, progress_max_value: float) -> void:
 	tile_map.tile_set = tile_set
 	progress_bar_set_max_value(progress_max_value)
 
@@ -49,6 +49,6 @@ func set_pattern_id(id: int):
 
 
 ## Sets the tile map's relative y-position to 'y'.
-func tile_map_set_y_position(y: int) -> void:
+func tile_map_set_y_position(y: float) -> void:
 	tile_map.position = (Vector2(tile_map.get_position().x, y))
 	tile_map_y_position = y

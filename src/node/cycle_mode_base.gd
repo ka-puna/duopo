@@ -7,8 +7,8 @@ var PauseMenu = preload("res://src/scene/pause_menu.tscn")
 
 
 ## The period between drops in units such as seconds.
-@export var cycle_period = 10: set = set_cycle_period
-@onready var cycle_value = 0: set = set_cycle_value
+@export var cycle_period: float = 10.0: set = set_cycle_period
+@onready var cycle_value: float = 0.0: set = set_cycle_value
 var board: TileMapCustom
 var tile_set: TileSet
 var layers: Dictionary
@@ -81,7 +81,7 @@ func set_cycle_period(value: float):
 
 ## Set the cycle value.
 func set_cycle_value(value: float):
-	var v = clamp(value, 0, cycle_period)
+	var v = clampf(value, 0, cycle_period)
 	cycle_value = v
 	preview.progress_bar_set_value_inverse(v)
 
