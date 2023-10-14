@@ -155,45 +155,31 @@ func update_levels():
 
 func _on_tile_mouse_event(tile: Vector2i, button: MouseButtonMask, pressed: bool):
 	if button == MOUSE_BUTTON_MASK_LEFT:
-		if pressed:
+		if board.path_is_empty():
+			if pressed:
+				if board.path_can_append([layers.background], tile):
+					board.path_append(tile)
+		elif pressed:
 			# If tile is at the end of the path.
 			if tile == board.path_get(-1):
 				effect.call(layers.drop)
 				score_board()
 				board.clear_path()
-			elif board.path_is_empty():
-				if board.path_can_append([layers.background], tile):
-					board.path_append(tile)
-			else:
-				var path_end = board.path_get(-1)
-				if tile.x == path_end.x or tile.y == path_end.y:
-					# Extend path through shared column or row.
-					var difference = tile - path_end
-					var direction = sign(difference)
-					for i in range(1, difference.length() + 1):
-						var next_tile = path_end + i * direction
-						if board.path_can_append([layers.background], next_tile):
-							board.path_append(next_tile)
-						else:
-							break
-		elif not board.path_is_empty():
-			if board.path_can_append([layers.background], tile):
-				board.path_append(tile)
-			# If tile is second-to-last in the path.
-			elif tile == board.path_get(-2):
-				board.truncate_path(-2)
-			else:
-				var path_end = board.path_get(-1)
-				if tile.x == path_end.x or tile.y == path_end.y:
-					# Extend path through shared column or row.
-					var difference = tile - path_end
-					var direction = sign(difference)
-					for i in range(1, difference.length() + 1):
-						var next_tile = path_end + i * direction
-						if board.path_can_append([layers.background], next_tile):
-							board.path_append(next_tile)
-						else:
-							break
+		# If tile is second-to-last in the path.
+		elif tile == board.path_get(-2):
+			board.truncate_path(-2)
+		else:
+			var path_end = board.path_get(-1)
+			if tile.x == path_end.x or tile.y == path_end.y:
+				# Extend path through shared column or row.
+				var difference = tile - path_end
+				var direction = sign(difference)
+				for i in range(1, difference.length() + 1):
+					var next_tile = path_end + i * direction
+					if board.path_can_append([layers.background], next_tile):
+						board.path_append(next_tile)
+					else:
+						break
 	elif button == MOUSE_BUTTON_MASK_RIGHT:
 		if board.path_has(tile):
 			if tile == board.path_get(-1):
