@@ -36,11 +36,13 @@ func path_append(tile: Vector2i) -> void:
 	_update_path_layer()
 
 
-## Returns true if tile' can be appended to the path.
-func path_can_append(tile: Vector2i) -> bool:
-	if not tile_is_pathable(layers.background, tile):
+## Returns true if 'tile' can be appended to the path.
+##		'layers_to_check': An array of layers, excluding path, to check for unpathable tiles.
+func path_can_append(layers_to_check: Array, tile: Vector2i) -> bool:
+	for layer in layers_to_check:
+		if not tile_is_pathable(layer, tile, true):
 			return false
-	elif path.is_empty():
+	if path.is_empty():
 		return true
 	elif path.has(tile):
 		return false
@@ -73,9 +75,12 @@ func path_is_empty() -> bool:
 
 
 ## Returns true if 'tile' in layer' is pathable.
-func tile_is_pathable(layer: int, tile: Vector2i) -> bool:
+##		'allow_null': (default = false) Also return true if tile does not exist.
+func tile_is_pathable(layer: int, tile: Vector2i, allow_null = false) -> bool:
 	var tile_data = get_cell_tile_data(layer, tile)
-	return tile_data and tile_data.get_custom_data("pathable")
+	if not tile_data:
+		return allow_null
+	return tile_data.get_custom_data("pathable")
 
 
 ## Truncates the path such that it ends at 'index'.
