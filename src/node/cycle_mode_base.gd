@@ -54,7 +54,7 @@ func game_over():
 
 ## Returns a new pattern. 
 func get_new_pattern() -> int:
-	return randi_range(0, tile_set.get_patterns_count())
+	return randi_range(0, tile_set.get_patterns_count() - 1)
 
 
 ## Returns a dictionary with human-readable keys and values.
