@@ -6,7 +6,10 @@ extends CycleModeBase
 @export var drop_width = 9
 @onready var run_time = 0
 @onready var score = 0
-@onready var lines_cleared = 0
+@onready var init_cycle_period = cycle_period
+@onready var max_cycle_period = cycle_period * 2
+@onready var level = 0: set = set_level
+@onready var lines_cleared = 0: set = set_lines_cleared
 var match_rows: Callable
 
 
@@ -38,6 +41,7 @@ func _process(delta):
 func get_stats() -> Dictionary:
 	var stats = {
 		"Play Time": "%d:%02d" % [run_time / 60, int(run_time) % 60],
+		"Level": level,
 		"Score": score,
 		"Lines Cleared": lines_cleared,
 	}
@@ -56,6 +60,27 @@ func score_board() -> Dictionary:
 		score += matched_rows**2 * 100
 		lines_cleared += matched_rows
 	return result
+
+
+func set_level(value: int):
+	level = value
+	# Update cycle_period.
+	var new_cycle_period = init_cycle_period * (1.1 - 0.1 * exp(0.044 * level))
+	cycle_period = clampf(new_cycle_period, 1, max_cycle_period)
+
+
+func set_lines_cleared(value: int):
+	lines_cleared = value
+	update_level()
+
+
+func update_level():
+	var score_level = floori(score * 0.0004 - level * 0.4)
+	var line_level = floori(lines_cleared * 0.1)
+	var min_level = mini(score_level, line_level)
+	if min_level > level:
+		score += 1000
+		set_level(min_level)
 
 
 func _on_tile_mouse_event(tile: Vector2i, button: MouseButtonMask, pressed: bool):
