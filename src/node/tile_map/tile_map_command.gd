@@ -22,7 +22,7 @@ func get_drop() -> Callable:
 			var tile_below = tiles[i] + Vector2i(0, 1)
 			var is_blocked = false
 			for layer in layers:
-				if tile_map.tile_is_solid(layer, tile_below):
+				if tile_map.tile_get_data(layer, tile_below, "solid"):
 					is_blocked = true
 					break
 			while not is_blocked:
@@ -34,7 +34,7 @@ func get_drop() -> Callable:
 				# Update while-loop condition.
 				tile_below = tile_below + Vector2i(0, 1)
 				for layer in layers:
-					if tile_map.tile_is_solid(layer, tile_below):
+					if tile_map.tile_get_data(layer, tile_below, "solid"):
 						is_blocked = true
 						break
 	return drop

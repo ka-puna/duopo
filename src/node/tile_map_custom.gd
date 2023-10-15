@@ -33,7 +33,9 @@ func clear_tiles(layer: int, tiles: Array):
 		erase_cell(layer, tile)
 
 
-## Returns true if 'tile' in 'layer' is solid.
-func tile_is_solid(layer: int, tile: Vector2i) -> bool:
+## Returns custom 'data' from 'tile' in 'layer', or null if it does not exist.
+func tile_get_data(layer: int, tile: Vector2i, data: String):
 	var tile_data = get_cell_tile_data(layer, tile)
-	return tile_data and tile_data.get_custom_data("solid")
+	if tile_data:
+		return tile_data.get_custom_data(data)
+	return null
