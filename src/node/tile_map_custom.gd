@@ -3,6 +3,8 @@ class_name TileMapCustom
 extends TileMap
 
 
+## Match entries with terrains in the TileMap.Terrains editor.
+@export var TERRAINS: Dictionary
 enum RETURN_STATUS { SUCCESS = 0, INVALID_ARGS = 1, BLOCKED = 2 }
 ## Maps layer names to indices.
 var layers = {}

@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://dxw75koeax6by"]
 
 [ext_resource type="TileSet" uid="uid://ogx4rbyatygf" path="res://asset/tile_atlas/pathable.tres" id="1_wus6r"]
-[ext_resource type="Script" path="res://src/node/tile_map_pathable.gd" id="2_iofy3"]
+[ext_resource type="Script" path="res://src/node/tile_map_custom.gd" id="2_iofy3"]
 
 [node name="tile_map_pathable" type="TileMap"]
 position = Vector2(16, 48)

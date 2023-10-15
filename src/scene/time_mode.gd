@@ -11,6 +11,7 @@ extends CycleModeBase
 @onready var max_cycle_period: float = cycle_period * 2
 @onready var level: int = 0: set = set_level
 @onready var rows_cleared: int = 0: set = set_rows_cleared
+@onready var path = Path.new()
 var match_rows: Callable
 var pattern_level: int: set = set_pattern_level
 var patterns: Array
@@ -27,6 +28,7 @@ func _ready():
 	drop = commander.get_drop()
 	effect = commander.get_path_map(atlas.TILES_SELF_MAPPING)
 	match_rows = commander.get_match_rows("group")
+	path.updated.connect(_on_path_updated)
 	preview.init(tile_set, cycle_period)
 	score = 0
 	pattern_level = 0
@@ -41,6 +43,15 @@ func _process(delta):
 	if cycle_value >= cycle_period:
 		if not drop_pattern():
 			game_over()
+
+
+## Returns true if the tile can be added to the path.
+func can_append_to_path(tile: Vector2i) -> bool:
+	for layer in layers.values():
+		var tile_data = board.get_cell_tile_data(layer, tile)
+		if tile_data and not tile_data.get_custom_data("pathable"):
+			return false
+	return path.can_append(tile)
 
 
 func get_new_pattern(repeat = true) -> int:
@@ -160,37 +171,49 @@ func update_levels():
 		set_pattern_level(min_pattern_level)
 
 
+
+func _on_path_updated():
+	# Update the drawing of the path layer.
+	board.clear_layer(layers.path)
+	if not path.is_empty():
+		board.set_cells_terrain_path(layers.path, path.get_tiles(), \
+				board.TERRAINS.PATH.SET, board.TERRAINS.PATH.INDEX)
+		# Set the last tile to an animated tile.
+		board.set_cell(layers.path, path.get_index(-1), \
+				atlas.SOURCES.ANIM_PATH_END, atlas.ANIMS.BASE.PATH_END)
+
+
 func _on_tile_mouse_event(tile: Vector2i, button: MouseButtonMask, pressed: bool):
 	if button == MOUSE_BUTTON_MASK_LEFT:
-		if board.path_is_empty():
+		if path.is_empty():
 			if pressed:
-				if board.path_can_append([layers.background], tile):
-					board.path_append(tile)
+				if can_append_to_path(tile):
+					path.append(tile)
 		# If tile is at the end of the path.
-		elif tile == board.path_get(-1):
+		elif tile == path.get_index(-1):
 			if pressed:	
-				effect.call(layers.drop)
+				effect.call(layers.drop, path.get_tiles())
 				score_board()
-				board.clear_path()
+				path.clear()
 		# If tile is second-to-last in the path.
-		elif tile == board.path_get(-2):
-			board.truncate_path(-2)
+		elif tile == path.get_index(-2):
+			path.truncate(-2)
 		else:
-			var path_end = board.path_get(-1)
+			var path_end = path.get_index(-1)
 			if tile.x == path_end.x or tile.y == path_end.y:
 				# Extend path through shared column or row.
 				var difference = tile - path_end
 				var direction = sign(difference)
 				for i in range(1, difference.length() + 1):
 					var next_tile = path_end + i * direction
-					if board.path_can_append([layers.background], next_tile):
-						board.path_append(next_tile)
+					if can_append_to_path(next_tile):
+						path.append(next_tile)
 					else:
 						break
 	elif button == MOUSE_BUTTON_MASK_RIGHT:
-		if board.path_has(tile):
-			if tile == board.path_get(-1):
+		if path.has(tile):
+			if tile == path.get_index(-1):
 				if pressed:
-					board.clear_path()
+					path.clear()
 			else:
-				board.truncate_path(board.path_find(tile))
+				path.truncate(path.find(tile))
