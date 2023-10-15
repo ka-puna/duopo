@@ -62,12 +62,6 @@ func get_stats() -> Dictionary:
 	return {}
 
 
-## Updates the preview pattern.
-func update_preview():
-	var new_pattern = get_new_pattern()
-	preview.set_pattern_id(new_pattern)
-
-
 ## Restarts the game mode.
 func restart_game():
 	get_tree().reload_current_scene()
@@ -86,6 +80,12 @@ func set_cycle_value(value: float):
 	preview.progress_bar_set_value_inverse(v)
 
 
+## Updates the preview pattern.
+func update_preview():
+	var new_pattern = get_new_pattern()
+	preview.set_pattern_id(new_pattern)
+
+
 func _on_drop_pattern_pressed():
 	drop_pattern()
 
@@ -95,7 +95,6 @@ func _on_pause_game_pressed():
 	var pause_menu = _open_pause_menu(_unpause_game, _quit_game)
 	add_child(pause_menu)
 	pause_menu.set_display_data(get_stats())
-
 
 ## Opens the pause menu and connects its signals to the given Callables.
 ## Returns the pause menu node.
@@ -107,11 +106,6 @@ func _open_pause_menu(play_button_callback: Callable, cross_button_callback: Cal
 	return pause_menu
 
 
-## Called when a tile is pressed by a click or drag mouse event.
-func _on_tile_mouse_event(_tile: Vector2i, _button: MouseButtonMask, _pressed: bool):
-	pass
-
-
 func _quit_game():
 	get_tree().quit()
 
@@ -119,3 +113,9 @@ func _quit_game():
 func _unpause_game():
 	remove_child($pause_menu)
 	get_tree().paused = false
+
+
+## Called when a tile is pressed by a click or drag mouse event.
+func _on_tile_mouse_event(_tile: Vector2i, _button: MouseButtonMask, _pressed: bool):
+	pass
+
