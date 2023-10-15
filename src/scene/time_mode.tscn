@@ -56,7 +56,7 @@ offset_right = 272.0
 offset_bottom = 160.0
 grow_horizontal = 1
 grow_vertical = 1
-tile_map_y_position = 48
+tile_map_y_position = 48.0
 
 [node name="PreviewBG" type="TileMap" parent="preview_pattern"]
 show_behind_parent = true
