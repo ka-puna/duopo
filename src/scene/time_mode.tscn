@@ -1,20 +1,20 @@
 [gd_scene load_steps=9 format=3 uid="uid://03fnvm5r1yli"]
 
+[ext_resource type="FontFile" uid="uid://clpy5fbiwggfj" path="res://asset/fonts/JetBrainsMono.ttf" id="1_07wey"]
 [ext_resource type="Script" path="res://src/scene/time_mode.gd" id="1_gyt65"]
 [ext_resource type="PackedScene" uid="uid://dxw75koeax6by" path="res://src/scene/board/tile_map_pathable.tscn" id="1_xl38i"]
 [ext_resource type="TileSet" uid="uid://cny47qhsswbse" path="res://asset/tile_atlas/menu.tres" id="2_it1s3"]
 [ext_resource type="PackedScene" uid="uid://dh5wo0og686ie" path="res://src/scene/board/preview_pattern.tscn" id="4_wihjq"]
-[ext_resource type="FontFile" uid="uid://clpy5fbiwggfj" path="res://asset/JetBrainsMono.ttf" id="6_lo3lp"]
 
 [sub_resource type="FontVariation" id="FontVariation_dg62v"]
-base_font = ExtResource("6_lo3lp")
+base_font = ExtResource("1_07wey")
 
 [sub_resource type="Theme" id="Theme_ox6uk"]
 default_font = SubResource("FontVariation_dg62v")
 default_font_size = 28
 
 [sub_resource type="FontVariation" id="FontVariation_c87ds"]
-base_font = ExtResource("6_lo3lp")
+base_font = ExtResource("1_07wey")
 variation_opentype = {
 2003265652: 800
 }
