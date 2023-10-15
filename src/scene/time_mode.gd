@@ -5,7 +5,8 @@ extends CycleModeBase
 ## Adjust this value to match the width of the play area in the board.
 @export var drop_width: int = 9
 @onready var run_time: float = 0.0
-@onready var score: int = 0
+@onready var score_label = $Score
+@onready var score: int: set = set_score
 @onready var init_cycle_period: float = cycle_period
 @onready var max_cycle_period: float = cycle_period * 2
 @onready var level: int = 0: set = set_level
@@ -27,6 +28,7 @@ func _ready():
 	effect = commander.get_path_map(atlas.TILES_SELF_MAPPING)
 	match_rows = commander.get_match_rows("group")
 	preview.init(tile_set, cycle_period)
+	score = 0
 	pattern_level = 0
 	var pattern = get_new_pattern()
 	preview.set_pattern_id(pattern)
@@ -139,6 +141,11 @@ func set_pattern_level(value: int):
 func set_rows_cleared(value: int):
 	rows_cleared = value
 	update_levels()
+
+
+func set_score(value: int):
+	score = value
+	score_label.text = str(value)
 
 
 func update_levels():
