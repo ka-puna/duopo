@@ -166,9 +166,9 @@ func _on_tile_mouse_event(tile: Vector2i, button: MouseButtonMask, pressed: bool
 			if pressed:
 				if board.path_can_append([layers.background], tile):
 					board.path_append(tile)
-		elif pressed:
-			# If tile is at the end of the path.
-			if tile == board.path_get(-1):
+		# If tile is at the end of the path.
+		elif tile == board.path_get(-1):
+			if pressed:	
 				effect.call(layers.drop)
 				score_board()
 				board.clear_path()
