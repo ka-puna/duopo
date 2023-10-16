@@ -10,13 +10,10 @@ var PauseMenu = preload("res://src/scene/pause_menu.tscn")
 @export var cycle_period: float = 10.0: set = set_cycle_period
 @onready var cycle_value: float = 0.0: set = set_cycle_value
 var board: TileMapCustom
-var tile_set: TileSet
-var layers: Dictionary
-var atlas: TileAtlas
-var preview: PreviewPattern
-var commander: TileMapCommand
 var drop: Callable
-var effect: Callable
+var layers: Dictionary
+var tile_set: TileSet
+var preview: PreviewPattern
 
 
 # Called when there is an input event.
@@ -96,6 +93,7 @@ func _on_pause_game_pressed():
 	add_child(pause_menu)
 	pause_menu.set_display_data(get_stats())
 
+
 ## Opens the pause menu and connects its signals to the given Callables.
 ## Returns the pause menu node.
 func _open_pause_menu(play_button_callback: Callable, cross_button_callback: Callable) -> Node:
@@ -113,6 +111,9 @@ func _quit_game():
 func _unpause_game():
 	remove_child($pause_menu)
 	get_tree().paused = false
+
+
+# Methods without implementation.
 
 
 ## Called when a tile is pressed by a click or drag mouse event.

@@ -4,17 +4,21 @@ extends CycleModeBase
 
 ## Adjust this value to match the width of the play area in the board.
 @export var drop_width: int = 9
-@onready var run_time: float = 0.0
-@onready var score_label = $Score
-@onready var score: int: set = set_score
 @onready var init_cycle_period: float = cycle_period
 @onready var max_cycle_period: float = cycle_period * 2
+@onready var run_time: float = 0.0
 @onready var level: int = 0: set = set_level
 @onready var rows_cleared: int = 0: set = set_rows_cleared
-@onready var path = Path.new()
-var match_rows: Callable
+@onready var score: int: set = set_score
+@onready var score_label = $Score
 var pattern_level: int: set = set_pattern_level
 var patterns: Array
+
+@onready var path = Path.new()
+var atlas: TileAtlas
+var commander: TileMapCommand
+var effect: Callable
+var match_rows: Callable
 
 
 # Called when the node enters the scene tree for the first time.
@@ -170,7 +174,6 @@ func update_levels():
 	var min_pattern_level = floori(min_level * 0.2)
 	if min_pattern_level > pattern_level:
 		set_pattern_level(min_pattern_level)
-
 
 
 func _on_path_updated():
