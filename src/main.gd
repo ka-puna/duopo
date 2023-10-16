@@ -7,6 +7,10 @@ func _ready():
 	pass
 
 
+func _on_credits_pressed():
+	$Credits.visible = !$Credits.visible
+
+
 func _on_quit_game_pressed():
 	get_tree().quit()
 
