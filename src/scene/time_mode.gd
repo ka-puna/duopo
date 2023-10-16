@@ -23,6 +23,7 @@ func _ready():
 	tile_set = $board.tile_set
 	layers = $board.layers
 	atlas = $board.atlas
+	board.update_terrains()
 	preview = $preview_pattern
 	commander = TileMapCommand.new(board)
 	drop = commander.get_drop()
@@ -177,7 +178,7 @@ func _on_path_updated():
 	board.clear_layer(layers.path)
 	if not path.is_empty():
 		board.set_cells_terrain_path(layers.path, path.get_tiles(), \
-				board.TERRAINS.PATH.SET, board.TERRAINS.PATH.INDEX)
+				board.terrains.path.set, board.terrains.path.index)
 		# Set the last tile to an animated tile.
 		board.set_cell(layers.path, path.get_index(-1), \
 				atlas.SOURCES.ANIM_PATH_END, atlas.ANIMS.BASE.PATH_END)

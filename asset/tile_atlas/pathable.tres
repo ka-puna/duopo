@@ -263,7 +263,7 @@ texture = ExtResource("3_87xvw")
 
 [resource]
 terrain_set_0/mode = 0
-terrain_set_0/terrain_0/name = "Path"
+terrain_set_0/terrain_0/name = "path"
 terrain_set_0/terrain_0/color = Color(0.5, 0.34375, 0.25, 1)
 custom_data_layer_0/name = "pathable"
 custom_data_layer_0/type = 1

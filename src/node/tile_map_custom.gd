@@ -3,16 +3,17 @@ class_name TileMapCustom
 extends TileMap
 
 
-## Match entries with terrains in the TileMap.Terrains editor.
-@export var TERRAINS: Dictionary
 enum RETURN_STATUS { SUCCESS = 0, INVALID_ARGS = 1, BLOCKED = 2 }
+## Maps terrain names to a dictionary of set id and index.
+## [update_terrains] is provided for runtime updates, with the requirement that
+## terrain names are unique.
+var terrains = {}
 ## Maps layer names to indices.
 var layers = {}
 var atlas = TileAtlas.new()
 
 func _ready():
-	for i in get_layers_count():
-		layers[get_layer_name(i)] = i
+	update_layers()
 
 
 ## Adds the pattern associated with 'pattern_id' to 'layer' at or above the tile map origin.
@@ -41,3 +42,22 @@ func tile_get_data(layer: int, tile: Vector2i, data: String):
 	if tile_data:
 		return tile_data.get_custom_data(data)
 	return null
+
+
+## Updates the layers mapping.
+func update_layers():
+	for i in get_layers_count():
+		layers[get_layer_name(i)] = i
+
+
+## Updates the terrains mapping.
+## Requires the tile_map to have a valid tile_set.
+func update_terrains():
+	for i in tile_set.get_terrain_sets_count():
+		terrains[i] = {}
+		for j in tile_set.get_terrains_count(i):
+			var terrain_name = tile_set.get_terrain_name(i, j)
+			terrains[terrain_name] = {
+				"set": i,
+				"index": j,
+			}

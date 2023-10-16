@@ -45,12 +45,6 @@ color = Color(0, 0, 0, 1)
 
 [node name="board" parent="." instance=ExtResource("1_xl38i")]
 position = Vector2(128, 224)
-TERRAINS = {
-"PATH": {
-"INDEX": 0,
-"SET": 0
-}
-}
 
 [node name="preview_pattern" parent="." instance=ExtResource("4_wihjq")]
 anchors_preset = 0
