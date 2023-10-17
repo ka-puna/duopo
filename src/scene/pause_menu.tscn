@@ -51,7 +51,7 @@ tracks/2/loop_wrap = true
 tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
+"update": 0,
 "values": [true]
 }
 
@@ -90,8 +90,8 @@ tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
 "times": PackedFloat32Array(0, 0.4),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
+"transitions": PackedFloat32Array(0, 0),
+"update": 0,
 "values": [false, true]
 }
 
@@ -131,7 +131,7 @@ tracks/2/loop_wrap = true
 tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
+"update": 0,
 "values": [false]
 }
 
@@ -150,7 +150,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-focus_mode = 2
 theme = SubResource("Theme_wtaow")
 script = ExtResource("1_bggmv")
 
@@ -204,6 +203,12 @@ offset_right = 48.0
 offset_bottom = -16.0
 grow_horizontal = 2
 grow_vertical = 0
+focus_neighbor_left = NodePath("../play_button")
+focus_neighbor_top = NodePath("../play_button")
+focus_neighbor_right = NodePath("../play_button")
+focus_neighbor_bottom = NodePath("../play_button")
+focus_next = NodePath("../play_button")
+focus_previous = NodePath("../play_button")
 text = "×"
 flat = true
 
@@ -227,6 +232,12 @@ offset_right = 48.0
 offset_bottom = -64.0
 grow_horizontal = 2
 grow_vertical = 0
+focus_neighbor_left = NodePath("../cross_button")
+focus_neighbor_top = NodePath("../cross_button")
+focus_neighbor_right = NodePath("../cross_button")
+focus_neighbor_bottom = NodePath("../cross_button")
+focus_next = NodePath("../cross_button")
+focus_previous = NodePath("../cross_button")
 text = "▶"
 flat = true
 
