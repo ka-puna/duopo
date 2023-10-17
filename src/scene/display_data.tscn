@@ -3,7 +3,7 @@
 [ext_resource type="Theme" uid="uid://ryxtl4aw764c" path="res://menu_theme.tres" id="1_fqfbc"]
 [ext_resource type="Script" path="res://src/scene/display_data.gd" id="1_wnswa"]
 [ext_resource type="TileSet" uid="uid://cny47qhsswbse" path="res://asset/tile_atlas/menu.tres" id="2_jo1ee"]
-[ext_resource type="FontFile" uid="uid://clpy5fbiwggfj" path="res://asset/JetBrainsMono.ttf" id="4_83ndi"]
+[ext_resource type="FontFile" uid="uid://clpy5fbiwggfj" path="res://asset/fonts/JetBrainsMono.ttf" id="4_83ndi"]
 
 [sub_resource type="FontVariation" id="FontVariation_i6o4s"]
 base_font = ExtResource("4_83ndi")
