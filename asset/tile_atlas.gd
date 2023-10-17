@@ -7,6 +7,7 @@ const SOURCES = {
 	"TILES" = 0,
 	"PATH" = 1,
 	"ANIM_PATH_END" = 2,
+	"ANIM_TILE_SELECT" = 3,
 	"ORANGE" = 100,
 }
 
@@ -40,6 +41,7 @@ const TILES_SELF_MAPPING = {
 const ANIMS = {
 	"BASE": {
 		"PATH_END": Vector2i(0, 0),
+		"TILE_SELECT": Vector2i(0, 0),
 	},
 }
 

@@ -1,8 +1,9 @@
-[gd_resource type="TileSet" load_steps=63 format=3 uid="uid://ogx4rbyatygf"]
+[gd_resource type="TileSet" load_steps=65 format=3 uid="uid://ogx4rbyatygf"]
 
 [ext_resource type="Texture2D" uid="uid://cn1884g6a7vf0" path="res://asset/tile_atlas/tiles.png" id="1_53hqo"]
 [ext_resource type="Texture2D" uid="uid://b1nxvjgmb0kvd" path="res://asset/tile_atlas/path.png" id="2_xmfn6"]
 [ext_resource type="Texture2D" uid="uid://p2u7tet8ysny" path="res://asset/tile_atlas/anim_path_end.png" id="3_87xvw"]
+[ext_resource type="Texture2D" uid="uid://bfw86mauckp7v" path="res://asset/tile_atlas/anim_tile_select.png" id="4_byuuv"]
 
 [sub_resource type="TileMapPattern" id="TileMapPattern_i7xy5"]
 tile_data = PackedInt32Array(0, 65536, 0, 65536, 0, 0, 131072, 65536, 0, 1, 65536, 0, 65537, 0, 0, 131073, 65536, 0, 2, 0, 0, 65538, 65536, 0, 131074, 0, 0, 3, 65536, 0, 65539, 0, 0, 131075, 65536, 0, 4, 65536, 0, 65540, 0, 0, 131076, 65536, 0, 5, 65536, 0, 65541, 0, 0, 131077, 65536, 0, 6, 0, 0, 65542, 65536, 0, 131078, 0, 0, 7, 65536, 0, 65543, 0, 0, 131079, 65536, 0, 8, 65536, 0, 65544, 0, 0, 131080, 65536, 0)
@@ -261,6 +262,19 @@ texture = ExtResource("3_87xvw")
 0:0/animation_frame_6/duration = 1.0
 0:0/0 = 0
 
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_dlrdr"]
+texture = ExtResource("4_byuuv")
+0:0/animation_speed = 8.0
+0:0/animation_frame_0/duration = 1.0
+0:0/animation_frame_1/duration = 1.0
+0:0/animation_frame_2/duration = 1.0
+0:0/animation_frame_3/duration = 1.0
+0:0/animation_frame_4/duration = 1.0
+0:0/animation_frame_5/duration = 1.0
+0:0/animation_frame_6/duration = 1.0
+0:0/0 = 0
+0:0/0/custom_data_0 = true
+
 [resource]
 terrain_set_0/mode = 0
 terrain_set_0/terrain_0/name = "path"
@@ -274,6 +288,7 @@ custom_data_layer_2/type = 2
 sources/0 = SubResource("TileSetAtlasSource_c5ml5")
 sources/1 = SubResource("TileSetAtlasSource_lvb3i")
 sources/2 = SubResource("TileSetAtlasSource_6cmod")
+sources/3 = SubResource("TileSetAtlasSource_dlrdr")
 tile_proxies/coords_level = [[1, Vector2i(0, 0)], [6, Vector2i(0, 0)], [2, Vector2i(0, 0)], [6, Vector2i(1, 0)]]
 pattern_0 = SubResource("TileMapPattern_i7xy5")
 pattern_1 = SubResource("TileMapPattern_f7jeb")

@@ -15,7 +15,6 @@ var pattern_level: int: set = set_pattern_level
 var patterns: Array
 
 @onready var path = Path.new()
-var atlas: TileAtlas
 var commander: TileMapCommand
 var effect: Callable
 var match_rows: Callable
@@ -39,6 +38,7 @@ func _ready():
 	pattern_level = 0
 	var pattern = get_new_pattern()
 	preview.set_pattern_id(pattern)
+	update_tile_selected(tile_selected)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

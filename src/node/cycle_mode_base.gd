@@ -6,9 +6,12 @@ extends Control
 var PauseMenu = preload("res://src/scene/pause_menu.tscn")
 
 
+## The position of the selected tile. Set its intial position in the editor.
+@export var tile_selected: Vector2i
 ## The period between drops in units such as seconds.
 @export var cycle_period: float = 10.0: set = set_cycle_period
 @onready var cycle_value: float = 0.0: set = set_cycle_value
+var atlas: TileAtlas
 var board: TileMapCustom
 var drop: Callable
 var layers: Dictionary
@@ -21,9 +24,10 @@ func _input(event):
 	if event is InputEventMouse:
 		var clicked_tile = board.local_to_map(board.get_local_mouse_position())
 		# If tile is within bounds.
-		if board.get_cell_tile_data(board.layers.background, clicked_tile):
+		if board.get_cell_tile_data(layers.background, clicked_tile):
 			var button_mask = event.get_button_mask()
 			var pressed = event is InputEventMouseButton and event.pressed
+			update_tile_selected(clicked_tile)
 			_on_tile_mouse_event(clicked_tile, button_mask, pressed)
 
 
@@ -81,6 +85,13 @@ func set_cycle_value(value: float):
 func update_preview():
 	var new_pattern = get_new_pattern()
 	preview.set_pattern_id(new_pattern)
+
+
+func update_tile_selected(coordinates: Vector2i):
+	tile_selected = coordinates
+	board.clear_layer(layers.select)
+	board.set_cell(layers.select, coordinates, \
+			atlas.SOURCES.ANIM_TILE_SELECT, atlas.ANIMS.BASE.TILE_SELECT)
 
 
 func _on_drop_pattern_pressed():

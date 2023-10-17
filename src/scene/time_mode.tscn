@@ -28,6 +28,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = SubResource("Theme_ox6uk")
 script = ExtResource("1_gyt65")
+tile_selected = Vector2i(0, 19)
 
 [node name="TileBG" type="TileMap" parent="."]
 tile_set = ExtResource("2_it1s3")
