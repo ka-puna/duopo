@@ -194,25 +194,26 @@ func _on_tile_action(tile: Vector2i, action: StringName, state: ACTION_STATE):
 					effect.call(layers.drop, path.get_tiles())
 					score_board()
 					path.clear()
-			# If tile is second-to-last in the path.
-			elif tile == path.get_index(-2):
-				path.truncate(-2)
-			else:
-				var path_end = path.get_index(-1)
-				if tile.x == path_end.x or tile.y == path_end.y:
-					# Extend path through shared column or row.
-					var difference = tile - path_end
-					var direction = sign(difference)
-					for i in range(1, difference.length() + 1):
-						var next_tile = path_end + i * direction
-						if can_append_to_path(next_tile):
-							path.append(next_tile)
-						else:
-							break
+			elif state != ACTION_STATE.JUST_RELEASED:
+				# If tile is second-to-last in the path.
+				if tile == path.get_index(-2):
+					path.truncate(-2)
+				else:
+					var path_end = path.get_index(-1)
+					if tile.x == path_end.x or tile.y == path_end.y:
+						# Extend path through shared column or row.
+						var difference = tile - path_end
+						var direction = sign(difference)
+						for i in range(1, difference.length() + 1):
+							var next_tile = path_end + i * direction
+							if can_append_to_path(next_tile):
+								path.append(next_tile)
+							else:
+								break
 		"game_select_tile_secondary":
 			if path.has(tile):
 				if tile == path.get_index(-1):
 					if state == ACTION_STATE.JUST_PRESSED:
 						path.clear()
-				else:
+				elif state != ACTION_STATE.JUST_RELEASED:
 					path.truncate(path.find(tile))

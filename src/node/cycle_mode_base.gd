@@ -36,6 +36,11 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
+	# Exclude out-of-bounds mouse actions.
+	if Input.get_mouse_button_mask() != 0:
+		var mouse_tile = board.local_to_map(board.get_local_mouse_position())
+		if not board.get_cell_tile_data(layers.background, mouse_tile):
+			return
 	for action in actions:
 		if Input.is_action_pressed(action, true):
 			if Input.is_action_just_pressed(action, true):
