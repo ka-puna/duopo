@@ -7,8 +7,6 @@ signal play_button
 
 @onready var display_data = $Group/display_data
 var use_enter_anim = true
-var use_exit_anim = true
-
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -31,8 +29,6 @@ func set_display_data(data: Dictionary) -> void:
 func _on_animation_player_animation_finished(anim_name):
 	if anim_name == "enter":
 		$Group/play_button.grab_focus()
-	elif anim_name == "exit":
-		play_button.emit()
 
 
 func _on_cross_button_pressed():
@@ -40,7 +36,4 @@ func _on_cross_button_pressed():
 
 
 func _on_play_button_pressed():
-	if use_exit_anim:
-		$AnimationPlayer.play("exit")
-	else:
-		play_button.emit()
+	play_button.emit()

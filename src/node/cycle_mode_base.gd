@@ -101,6 +101,7 @@ func _open_pause_menu(play_button_callback: Callable, cross_button_callback: Cal
 	pause_menu.play_button.connect(play_button_callback)
 	pause_menu.cross_button.connect(cross_button_callback)
 	pause_menu.z_index = RenderingServer.CANVAS_ITEM_Z_MAX
+	pause_menu.set_name("pause_menu")
 	return pause_menu
 
 
@@ -109,7 +110,7 @@ func _quit_game():
 
 
 func _unpause_game():
-	remove_child($pause_menu)
+	$pause_menu.queue_free()
 	get_tree().paused = false
 
 
