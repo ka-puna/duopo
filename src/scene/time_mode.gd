@@ -36,6 +36,7 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+	super(delta)
 	run_time += delta
 	set_cycle_value(cycle_value + delta)
 	if cycle_value >= cycle_period:
@@ -180,37 +181,38 @@ func _on_path_updated():
 				atlas.SOURCES.ANIM_PATH_END, atlas.ANIMS.BASE.PATH_END)
 
 
-func _on_tile_mouse_event(tile: Vector2i, button: MouseButtonMask, pressed: bool):
-	if button == MOUSE_BUTTON_MASK_LEFT:
-		if path.is_empty():
-			if pressed:
-				if can_append_to_path(tile):
-					path.append(tile)
-		# If tile is at the end of the path.
-		elif tile == path.get_index(-1):
-			if pressed:	
-				effect.call(layers.drop, path.get_tiles())
-				score_board()
-				path.clear()
-		# If tile is second-to-last in the path.
-		elif tile == path.get_index(-2):
-			path.truncate(-2)
-		else:
-			var path_end = path.get_index(-1)
-			if tile.x == path_end.x or tile.y == path_end.y:
-				# Extend path through shared column or row.
-				var difference = tile - path_end
-				var direction = sign(difference)
-				for i in range(1, difference.length() + 1):
-					var next_tile = path_end + i * direction
-					if can_append_to_path(next_tile):
-						path.append(next_tile)
-					else:
-						break
-	elif button == MOUSE_BUTTON_MASK_RIGHT:
-		if path.has(tile):
-			if tile == path.get_index(-1):
-				if pressed:
+func _on_tile_action(tile: Vector2i, action: StringName, state: ACTION_STATE):
+	match action:
+		"game_select_tile_primary":
+			if path.is_empty():
+				if state == ACTION_STATE.JUST_PRESSED:
+					if can_append_to_path(tile):
+						path.append(tile)
+			# If tile is at the end of the path.
+			elif tile == path.get_index(-1):
+				if state == ACTION_STATE.JUST_PRESSED:	
+					effect.call(layers.drop, path.get_tiles())
+					score_board()
 					path.clear()
+			# If tile is second-to-last in the path.
+			elif tile == path.get_index(-2):
+				path.truncate(-2)
 			else:
-				path.truncate(path.find(tile))
+				var path_end = path.get_index(-1)
+				if tile.x == path_end.x or tile.y == path_end.y:
+					# Extend path through shared column or row.
+					var difference = tile - path_end
+					var direction = sign(difference)
+					for i in range(1, difference.length() + 1):
+						var next_tile = path_end + i * direction
+						if can_append_to_path(next_tile):
+							path.append(next_tile)
+						else:
+							break
+		"game_select_tile_secondary":
+			if path.has(tile):
+				if tile == path.get_index(-1):
+					if state == ACTION_STATE.JUST_PRESSED:
+						path.clear()
+				else:
+					path.truncate(path.find(tile))

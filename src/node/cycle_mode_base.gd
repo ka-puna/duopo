@@ -6,6 +6,7 @@ extends Control
 var PauseMenu = preload("res://src/scene/pause_menu.tscn")
 
 
+enum ACTION_STATE { JUST_PRESSED, PRESSED, JUST_RELEASED }
 ## The position of the selected tile. Set its intial position in the editor.
 @export var tile_selected: Vector2i
 ## The period between drops in units such as seconds.
@@ -33,21 +34,25 @@ func _ready():
 	update_actions()
 
 
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(_delta):
+	for action in actions:
+		if Input.is_action_pressed(action, true):
+			if Input.is_action_just_pressed(action, true):
+				_on_tile_action(tile_selected, action, ACTION_STATE.JUST_PRESSED)
+			else:
+				_on_tile_action(tile_selected, action, ACTION_STATE.PRESSED)
+		if Input.is_action_just_released(action,true):
+			_on_tile_action(tile_selected, action, ACTION_STATE.JUST_RELEASED)
+
+
 # Called when there is an input event.
 func _input(event):
-	if event is InputEventKey:
-		for action in actions:
-			if event.is_action(action):
-				_on_tile_key_action(tile_selected, action, event.pressed)
-				break
-	elif event is InputEventMouse:
-		var clicked_tile = board.local_to_map(board.get_local_mouse_position())
+	if event is InputEventMouse:
+		var mouse_tile = board.local_to_map(board.get_local_mouse_position())
 		# If tile is within bounds.
-		if board.get_cell_tile_data(layers.background, clicked_tile):
-			var button_mask = event.get_button_mask()
-			var pressed = event is InputEventMouseButton and event.pressed
-			update_tile_selected(clicked_tile)
-			_on_tile_mouse_event(clicked_tile, button_mask, pressed)
+		if board.get_cell_tile_data(layers.background, mouse_tile):
+			update_tile_selected(mouse_tile)
 
 
 ## Adds and drops the preview pattern to the board, resets the cycle value, and
@@ -154,11 +159,6 @@ func _unpause_game():
 # Methods without implementation.
 
 
-## Called when action is performed. 
-func _on_tile_key_action(_tile: Vector2i, _action: StringName, _pressed: bool):
-	pass
-
-
-## Called when a tile is pressed by a click or drag mouse event.
-func _on_tile_mouse_event(_tile: Vector2i, _button: MouseButtonMask, _pressed: bool):
+## Called when action on a tile is performed. 
+func _on_tile_action(_tile: Vector2i, _action: StringName, _state: ACTION_STATE):
 	pass
