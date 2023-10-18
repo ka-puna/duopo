@@ -22,6 +22,14 @@ var preview: PreviewPattern
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	tile_set = board.tile_set
+	layers = board.layers
+	atlas = board.atlas
+	board.update_terrains()
+	preview.init(tile_set, cycle_period)
+	var pattern = get_new_pattern()
+	preview.set_pattern_id(pattern)
+	update_tile_selected(tile_selected)
 	update_actions()
 
 

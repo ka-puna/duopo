@@ -23,22 +23,15 @@ var match_rows: Callable
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	board = $board
-	tile_set = $board.tile_set
-	layers = $board.layers
-	atlas = $board.atlas
-	board.update_terrains()
 	preview = $preview_pattern
 	commander = TileMapCommand.new(board)
 	drop = commander.get_drop()
 	effect = commander.get_path_map(atlas.TILES_SELF_MAPPING)
 	match_rows = commander.get_match_rows("group")
 	path.updated.connect(_on_path_updated)
-	preview.init(tile_set, cycle_period)
 	score = 0
 	pattern_level = 0
-	var pattern = get_new_pattern()
-	preview.set_pattern_id(pattern)
-	update_tile_selected(tile_selected)
+	super()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
