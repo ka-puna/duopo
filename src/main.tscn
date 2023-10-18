@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://dd1ltsn8x10nt"]
+[gd_scene load_steps=7 format=3 uid="uid://dd1ltsn8x10nt"]
 
 [ext_resource type="Theme" uid="uid://ryxtl4aw764c" path="res://menu_theme.tres" id="1_4vuqe"]
 [ext_resource type="Script" path="res://src/main.gd" id="1_dqgsu"]
 [ext_resource type="TileSet" uid="uid://cny47qhsswbse" path="res://asset/tile_atlas/menu.tres" id="3_t7p15"]
+[ext_resource type="Shortcut" uid="uid://n1uv6k2iflk6" path="res://asset/shortcuts/ui_cancel.tres" id="4_3y5pi"]
 [ext_resource type="FontFile" uid="uid://clpy5fbiwggfj" path="res://asset/fonts/JetBrainsMono.ttf" id="4_fj6hv"]
 
 [sub_resource type="FontVariation" id="FontVariation_6c8we"]
@@ -63,6 +64,7 @@ offset_top = -112.0
 offset_right = 64.0
 offset_bottom = -96.0
 grow_horizontal = 2
+shortcut = ExtResource("4_3y5pi")
 text = "Quit"
 flat = true
 
