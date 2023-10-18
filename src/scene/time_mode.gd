@@ -183,6 +183,9 @@ func _on_path_updated():
 
 func _on_tile_action(tile: Vector2i, action: StringName, state: ACTION_STATE):
 	match action:
+		"game_clear_path":
+			if state == ACTION_STATE.JUST_PRESSED:
+				path.clear()
 		"game_drop_pattern":
 			if state == ACTION_STATE.JUST_PRESSED:
 				drop_pattern()
