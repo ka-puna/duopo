@@ -11,6 +11,7 @@ var PauseMenu = preload("res://src/scene/pause_menu.tscn")
 ## The period between drops in units such as seconds.
 @export var cycle_period: float = 10.0: set = set_cycle_period
 @onready var cycle_value: float = 0.0: set = set_cycle_value
+var actions: Array[StringName]
 var atlas: TileAtlas
 var board: TileMapCustom
 var drop: Callable
@@ -19,9 +20,19 @@ var tile_set: TileSet
 var preview: PreviewPattern
 
 
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	update_actions()
+
+
 # Called when there is an input event.
 func _input(event):
-	if event is InputEventMouse:
+	if event is InputEventKey:
+		for action in actions:
+			if event.is_action(action):
+				_on_tile_key_action(tile_selected, action, event.pressed)
+				break
+	elif event is InputEventMouse:
 		var clicked_tile = board.local_to_map(board.get_local_mouse_position())
 		# If tile is within bounds.
 		if board.get_cell_tile_data(layers.background, clicked_tile):
@@ -81,6 +92,13 @@ func set_cycle_value(value: float):
 	preview.progress_bar_set_value_inverse(v)
 
 
+## Updates the array of actions.
+func update_actions():
+	var list = InputMap.get_actions()
+	list = list.filter(func(s): return s.begins_with("game_"))
+	actions = list
+
+
 ## Updates the preview pattern.
 func update_preview():
 	var new_pattern = get_new_pattern()
@@ -128,7 +146,11 @@ func _unpause_game():
 # Methods without implementation.
 
 
+## Called when action is performed. 
+func _on_tile_key_action(_tile: Vector2i, _action: StringName, _pressed: bool):
+	pass
+
+
 ## Called when a tile is pressed by a click or drag mouse event.
 func _on_tile_mouse_event(_tile: Vector2i, _button: MouseButtonMask, _pressed: bool):
 	pass
-
