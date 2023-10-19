@@ -6,7 +6,7 @@ extends Control
 var PauseMenu = preload("res://src/scene/pause_menu.tscn")
 
 
-enum ACTION_STATE { JUST_PRESSED, PRESSED, JUST_RELEASED }
+enum ACTION_STATE {JUST_PRESSED, PRESSED, JUST_RELEASED}
 enum DIRECTION {LEFT = 0, RIGHT = 1, UP = 2, DOWN = 3}
 ## The position of the selected tile. Set its intial position in the editor.
 @export var tile_selected: Vector2i
@@ -14,19 +14,20 @@ enum DIRECTION {LEFT = 0, RIGHT = 1, UP = 2, DOWN = 3}
 @export var cycle_period: float = 10.0: set = set_cycle_period
 @onready var cycle_value: float = 0.0: set = set_cycle_value
 var actions: Array[StringName]
-var atlas: TileAtlas
 var board: TileMapCustom
-var drop: Callable
+var atlas: TileAtlas
 var layers: Dictionary
 var tile_set: TileSet
 var preview: PreviewPattern
 
+var drop: Callable
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	tile_set = board.tile_set
-	layers = board.layers
 	atlas = board.atlas
+	layers = board.layers
+	tile_set = board.tile_set
 	board.update_terrains()
 	preview.init(tile_set, cycle_period)
 	var pattern = get_new_pattern()
@@ -86,11 +87,6 @@ func game_over():
 ## Returns a new pattern. 
 func get_new_pattern() -> int:
 	return randi_range(0, tile_set.get_patterns_count() - 1)
-
-
-## Returns a dictionary with human-readable keys and values.
-func get_stats() -> Dictionary:
-	return {}
 
 
 ## Restarts the game mode.
@@ -163,6 +159,11 @@ func _unpause_game():
 
 
 # Methods without implementation.
+
+
+## Returns a dictionary with human-readable keys and values.
+func get_stats() -> Dictionary:
+	return {}
 
 
 ## Called when action on a tile is performed. 

@@ -22,7 +22,7 @@ func _process(_delta):
 
 
 ## Set the data to display.
-func set_display_data(data: Dictionary) -> void:
+func set_display_data(data: Dictionary):
 	display_data.update_text(data)
 
 

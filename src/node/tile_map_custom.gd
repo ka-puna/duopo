@@ -3,14 +3,15 @@ class_name TileMapCustom
 extends TileMap
 
 
-enum RETURN_STATUS { SUCCESS = 0, INVALID_ARGS = 1, BLOCKED = 2 }
+enum RETURN_STATUS {SUCCESS = 0, INVALID_ARGS = 1, BLOCKED = 2}
 ## Maps terrain names to a dictionary of set id and index.
 ## [update_terrains] is provided for runtime updates, with the requirement that
-## terrain names are unique.
-var terrains = {}
+var atlas = TileAtlas.new()
 ## Maps layer names to indices.
 var layers = {}
-var atlas = TileAtlas.new()
+## terrain names are unique.
+var terrains = {}
+
 
 func _ready():
 	update_layers()

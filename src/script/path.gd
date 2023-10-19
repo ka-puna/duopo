@@ -62,7 +62,7 @@ func is_empty() -> bool:
 
 
 ## Truncates the path such that it ends at 'index'.
-func truncate(index: int):
+func truncate(index: int) -> void:
 	if index < -path.size() or index >= path.size():
 		return
 	# Report cells for deletion.

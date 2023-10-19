@@ -18,13 +18,13 @@ const move_selection_vector: Array[Vector2i] = [
 @onready var max_cycle_period: float = cycle_period * 2
 @onready var run_time: float = 0.0
 @onready var level: int = 0: set = set_level
+@onready var path = Path.new()
 @onready var rows_cleared: int = 0: set = set_rows_cleared
 @onready var score: int: set = set_score
 @onready var score_label = $Score
 var pattern_level: int: set = set_pattern_level
+# A non-rectangular array of integers storing pattern indices.
 var patterns: Array
-
-@onready var path = Path.new()
 var commander: TileMapCommand
 var effect: Callable
 var match_rows: Callable
