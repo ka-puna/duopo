@@ -2,8 +2,18 @@
 extends CycleModeBase
 
 
+const move_selection_vector: Array[Vector2i] = [
+	Vector2i(-1, 0),
+	Vector2i(1, 0),
+	Vector2i(0, -1),
+	Vector2i(0, 1)
+]
+
 ## Adjust this value to match the width of the play area in the board.
 @export var drop_width: int = 9
+## The approximate minimum time in seconds between tile_selected movements.
+@export var move_selection_period: float = 0.125
+@onready var move_selection_value: Array[float] = [0.0, 0.0, 0.0, 0.0]
 @onready var init_cycle_period: float = cycle_period
 @onready var max_cycle_period: float = cycle_period * 2
 @onready var run_time: float = 0.0
@@ -170,6 +180,29 @@ func update_levels():
 		set_pattern_level(min_pattern_level)
 
 
+# Handles game_* directional actions.
+func _game_directional_action(direction: DIRECTION, state: ACTION_STATE, delta: float):
+	if state == ACTION_STATE.JUST_RELEASED:
+		move_selection_value[direction] = 0.0
+	else:
+		if state == ACTION_STATE.PRESSED:
+			move_selection_value[direction] += delta
+			if move_selection_value[direction] >= move_selection_period:
+				var vector = move_selection_vector[direction]
+				var next_tile = tile_selected + vector
+				# If next_tile is within bounds.
+				if board.get_cell_tile_data(layers.background, next_tile):
+					update_tile_selected(next_tile)
+				move_selection_value[direction] = 0.001
+		elif state == ACTION_STATE.JUST_PRESSED:
+			var vector = move_selection_vector[direction]
+			var next_tile = tile_selected + vector
+			# If next_tile is within bounds.
+			if board.get_cell_tile_data(layers.background, next_tile):
+				move_selection_value[direction] = 0.001
+				update_tile_selected(next_tile)
+
+
 func _on_path_updated():
 	# Update the drawing of the path layer.
 	board.clear_layer(layers.path)
@@ -181,7 +214,7 @@ func _on_path_updated():
 				atlas.SOURCES.ANIM_PATH_END, atlas.ANIMS.BASE.PATH_END)
 
 
-func _on_tile_action(tile: Vector2i, action: StringName, state: ACTION_STATE):
+func _on_tile_action(tile: Vector2i, action: StringName, state: ACTION_STATE, delta: float):
 	match action:
 		"game_clear_path":
 			if state == ACTION_STATE.JUST_PRESSED:
@@ -223,3 +256,11 @@ func _on_tile_action(tile: Vector2i, action: StringName, state: ACTION_STATE):
 						path.clear()
 				elif state != ACTION_STATE.JUST_RELEASED:
 					path.truncate(path.find(tile))
+		"game_left":
+			_game_directional_action(DIRECTION.LEFT, state, delta)
+		"game_right":
+			_game_directional_action(DIRECTION.RIGHT, state, delta)
+		"game_up":
+			_game_directional_action(DIRECTION.UP, state, delta)
+		"game_down":
+			_game_directional_action(DIRECTION.DOWN, state, delta)

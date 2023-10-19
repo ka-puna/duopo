@@ -7,6 +7,7 @@ var PauseMenu = preload("res://src/scene/pause_menu.tscn")
 
 
 enum ACTION_STATE { JUST_PRESSED, PRESSED, JUST_RELEASED }
+enum DIRECTION {LEFT = 0, RIGHT = 1, UP = 2, DOWN = 3}
 ## The position of the selected tile. Set its intial position in the editor.
 @export var tile_selected: Vector2i
 ## The period between drops in units such as seconds.
@@ -35,7 +36,7 @@ func _ready():
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(_delta):
+func _process(delta):
 	# Exclude out-of-bounds mouse actions.
 	if Input.get_mouse_button_mask() != 0:
 		var mouse_tile = board.local_to_map(board.get_local_mouse_position())
@@ -44,11 +45,11 @@ func _process(_delta):
 	for action in actions:
 		if Input.is_action_pressed(action, true):
 			if Input.is_action_just_pressed(action, true):
-				_on_tile_action(tile_selected, action, ACTION_STATE.JUST_PRESSED)
+				_on_tile_action(tile_selected, action, ACTION_STATE.JUST_PRESSED, delta)
 			else:
-				_on_tile_action(tile_selected, action, ACTION_STATE.PRESSED)
+				_on_tile_action(tile_selected, action, ACTION_STATE.PRESSED, delta)
 		if Input.is_action_just_released(action,true):
-			_on_tile_action(tile_selected, action, ACTION_STATE.JUST_RELEASED)
+			_on_tile_action(tile_selected, action, ACTION_STATE.JUST_RELEASED, delta)
 
 
 # Called when there is an input event.
@@ -165,5 +166,5 @@ func _unpause_game():
 
 
 ## Called when action on a tile is performed. 
-func _on_tile_action(_tile: Vector2i, _action: StringName, _state: ACTION_STATE):
+func _on_tile_action(_tile: Vector2i, _action: StringName, _state: ACTION_STATE, _delta: float):
 	pass
