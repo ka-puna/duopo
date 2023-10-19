@@ -36,7 +36,7 @@ func _ready():
 	preview = $preview_pattern
 	commander = TileMapCommand.new(board)
 	drop = commander.get_drop()
-	effect = commander.get_path_map(atlas.TILES_SELF_MAPPING)
+	effect = commander.get_self_map(atlas.TILES_SELF_MAPPING)
 	match_rows = commander.get_match_rows("group")
 	path.updated.connect(_on_path_updated)
 	score = 0

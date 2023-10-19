@@ -92,13 +92,13 @@ func get_match_rows(data_layer: String) -> Callable:
 
 
 ## Returns a Callable:
-## Changes tiles in the path and 'layer' according to a ''self_map'' dictionary
-## mapping the set of atlas coordinates to itself.
-func get_path_map(self_map: Dictionary) -> Callable:
-	var path_map = func(layer: int, tiles: Array):
+## Changes tiles in 'layer' according to a ''map'' dictionary mapping the set of
+## atlas coordinates to itself.
+func get_self_map(map: Dictionary) -> Callable:
+	var self_map = func(layer: int, tiles: Array):
 		for tile in tiles:
 			var tile_type = tile_map.get_cell_atlas_coords(layer, tile)
-			if tile_type in self_map:
+			if tile_type in map:
 				tile_map.set_cell(layer, tile, \
-						tile_map.atlas.SOURCES.TILES, self_map[tile_type])
-	return path_map
+						tile_map.atlas.SOURCES.TILES, map[tile_type])
+	return self_map
