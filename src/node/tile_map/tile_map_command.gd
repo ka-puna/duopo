@@ -30,7 +30,7 @@ func get_drop() -> Callable:
 				var tile_type = tile_map.get_cell_atlas_coords(layers[0], tiles[i], false)
 				tile_map.erase_cell(layers[0], tiles[i])
 				tiles[i] = tile_below
-				tile_map.set_cell(layers[0], tiles[i], tile_map.atlas.SOURCES.TILES, tile_type)
+				tile_map.set_cell(layers[0], tiles[i], Constants.SOURCES.TILES, tile_type)
 				# Update while-loop condition.
 				tile_below = tile_below + Vector2i(0, 1)
 				for layer in layers:
@@ -99,6 +99,5 @@ func get_self_map(map: Dictionary) -> Callable:
 		for tile in tiles:
 			var tile_type = tile_map.get_cell_atlas_coords(layer, tile)
 			if tile_type in map:
-				tile_map.set_cell(layer, tile, \
-						tile_map.atlas.SOURCES.TILES, map[tile_type])
+				tile_map.set_cell(layer, tile, Constants.SOURCES.TILES, map[tile_type])
 	return self_map

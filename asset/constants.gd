@@ -1,5 +1,5 @@
-## TileAtlas stores constants for atlas sources, and tiles in tile_atlas/*.tres resources.
-class_name TileAtlas
+## Stores constants for various resources.
+extends Node
 
 
 ## The first tile of anim_* tile sources.

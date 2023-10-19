@@ -15,7 +15,6 @@ enum DIRECTION {LEFT = 0, RIGHT = 1, UP = 2, DOWN = 3}
 @onready var cycle_value: float = 0.0: set = set_cycle_value
 var actions: Array[StringName]
 var board: TileMapCustom
-var atlas: TileAtlas
 var layers: Dictionary
 var tile_set: TileSet
 var preview: PreviewPattern
@@ -25,7 +24,6 @@ var drop: Callable
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	atlas = board.atlas
 	layers = board.layers
 	tile_set = board.tile_set
 	board.update_terrains()
@@ -124,7 +122,7 @@ func update_tile_selected(coordinates: Vector2i):
 	tile_selected = coordinates
 	board.clear_layer(layers.select)
 	board.set_cell(layers.select, coordinates, \
-			atlas.SOURCES.ANIM_TILE_SELECT, atlas.ANIMS.BASE.TILE_SELECT)
+			Constants.SOURCES.ANIM_TILE_SELECT, Constants.ANIMS.BASE.TILE_SELECT)
 
 
 func _on_drop_pattern_pressed():

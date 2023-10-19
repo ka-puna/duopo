@@ -36,7 +36,7 @@ func _ready():
 	preview = $preview_pattern
 	commander = TileMapCommand.new(board)
 	drop = commander.get_drop()
-	effect = commander.get_self_map(atlas.TILES_SELF_MAPPING)
+	effect = commander.get_self_map(Constants.TILES_SELF_MAPPING)
 	match_rows = commander.get_match_rows("group")
 	path.updated.connect(_on_path_updated)
 	score = 0
@@ -114,40 +114,40 @@ func set_pattern_level(value: int):
 	match value:
 		0:
 			# 3-height patterns.
-			patterns = atlas.SAMPLE.slice(0, 6, 1, true)
+			patterns = Constants.SAMPLE.slice(0, 6, 1, true)
 		1:
 			# 3-height and 1-height patterns.
-			patterns = atlas.SAMPLE.slice(0, 6, 1, true)
-			patterns.append_array(atlas.SAMPLE.slice(10, 14, 1, true))
+			patterns = Constants.SAMPLE.slice(0, 6, 1, true)
+			patterns.append_array(Constants.SAMPLE.slice(10, 14, 1, true))
 		2:
 			# 3-height and 2-height patterns
-			patterns = atlas.SAMPLE.slice(0, 6, 1, true)
-			patterns.append_array(atlas.SAMPLE.slice(6, 10, 1, true))
+			patterns = Constants.SAMPLE.slice(0, 6, 1, true)
+			patterns.append_array(Constants.SAMPLE.slice(6, 10, 1, true))
 		3:
 			# 3-height and 4-height patterns.
-			patterns = atlas.SAMPLE.slice(0, 6, 1, true)
-			patterns.append_array(atlas.SAMPLE.slice(14, 19, 1, true))
+			patterns = Constants.SAMPLE.slice(0, 6, 1, true)
+			patterns.append_array(Constants.SAMPLE.slice(14, 19, 1, true))
 		4:
 			# 4-height and 2-height patterns.
-			patterns = atlas.SAMPLE.slice(14, 19, 1, true)
-			patterns.append_array(atlas.SAMPLE.slice(6, 10, 1, true))
+			patterns = Constants.SAMPLE.slice(14, 19, 1, true)
+			patterns.append_array(Constants.SAMPLE.slice(6, 10, 1, true))
 		5:
 			# 2-height, 1-height, and 4-height patterns.
-			patterns = atlas.SAMPLE.slice(6, 14, 1, true)
-			patterns.append_array(atlas.SAMPLE.slice(14, 19, 1, true))
+			patterns = Constants.SAMPLE.slice(6, 14, 1, true)
+			patterns.append_array(Constants.SAMPLE.slice(14, 19, 1, true))
 		6:
 			# 3-height patterns.
-			patterns = atlas.SAMPLE.slice(0, 14, 1, true)
+			patterns = Constants.SAMPLE.slice(0, 14, 1, true)
 		7:
 			# 3-height and 2-height patterns.
-			patterns = atlas.SAMPLE.slice(0, 6, 1, true)
-			patterns.append_array(atlas.SAMPLE.slice(6, 10, 1, true))
+			patterns = Constants.SAMPLE.slice(0, 6, 1, true)
+			patterns.append_array(Constants.SAMPLE.slice(6, 10, 1, true))
 		8:
 			# 3-height, 2-height, and 1-height patterns.
-			patterns = atlas.SAMPLE.slice(0, 14, 1, true)
+			patterns = Constants.SAMPLE.slice(0, 14, 1, true)
 		9:
 			# Full pattern set.
-			patterns = atlas.SAMPLE.duplicate(true)
+			patterns = Constants.SAMPLE.duplicate(true)
 		_:
 			set_pattern_level(value % 10)
 	# Correct subset values.
@@ -211,7 +211,7 @@ func _on_path_updated():
 				board.terrains.path.set, board.terrains.path.index)
 		# Set the last tile to an animated tile.
 		board.set_cell(layers.path, path.get_index(-1), \
-				atlas.SOURCES.ANIM_PATH_END, atlas.ANIMS.BASE.PATH_END)
+				Constants.SOURCES.ANIM_PATH_END, Constants.ANIMS.BASE.PATH_END)
 
 
 func _on_tile_action(tile: Vector2i, action: StringName, state: ACTION_STATE, delta: float):
