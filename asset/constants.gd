@@ -30,7 +30,7 @@ const SOURCES = {
 	"PATH" = 1,
 	"ANIM_PATH_END" = 2,
 	"ANIM_TILE_SELECT" = 3,
-	"ORANGE" = 100,
+	"BLOCKS" = 100,
 }
 
 
@@ -44,7 +44,7 @@ const TILES = {
 		"GRAY_X": Vector2i(4, 0),
 		"GRAY_RED_X": Vector2i(5, 0),
 		"GRAY_CIRCLE": Vector2i(6, 0),
-		"ORANGE": Vector2i(7, 0),
+		"BLOCK": Vector2i(7, 0),
 	},
 	"ALT_1": {
 		"GRAY_SOLID": Vector2i(3, 0),
