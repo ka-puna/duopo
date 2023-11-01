@@ -3,9 +3,6 @@ class_name CycleModeBase
 extends Control
 
 
-var PauseMenu = preload("res://src/scene/pause_menu.tscn")
-
-
 enum ACTION_STATE {JUST_PRESSED, PRESSED, JUST_RELEASED}
 enum DIRECTION {LEFT = 0, RIGHT = 1, UP = 2, DOWN = 3}
 ## The position of the selected tile. Set its intial position in the editor.
@@ -74,23 +71,9 @@ func drop_pattern() -> bool:
 	return false
 
 
-## Opens the pause menu, with options to restart or quit the game.
-func game_over():
-	get_tree().paused = true
-	var pause_menu = _open_pause_menu(restart_game, _quit_game)
-	add_child(pause_menu)
-	pause_menu.set_display_data(get_stats())
-
-
 ## Returns a new pattern. 
 func get_new_pattern() -> int:
 	return randi_range(0, tile_set.get_patterns_count() - 1)
-
-
-## Restarts the game mode.
-func restart_game():
-	get_tree().reload_current_scene()
-	get_tree().paused = false
 
 
 func set_cycle_period(value: float):
@@ -125,39 +108,7 @@ func update_tile_selected(coordinates: Vector2i):
 			Constants.SOURCES.ANIM_TILE_SELECT, Constants.ANIMS.BASE.TILE_SELECT)
 
 
-## Opens the pause menu and connects its signals to the given Callables.
-## Returns the pause menu node.
-func _open_pause_menu(play_button_callback: Callable, cross_button_callback: Callable) -> Node:
-	var pause_menu = PauseMenu.instantiate()
-	pause_menu.play_button.connect(play_button_callback)
-	pause_menu.cross_button.connect(cross_button_callback)
-	pause_menu.z_index = RenderingServer.CANVAS_ITEM_Z_MAX
-	pause_menu.set_name("pause_menu")
-	return pause_menu
-
-
-func pause_game():
-	get_tree().paused = true
-	var pause_menu = _open_pause_menu(_unpause_game, _quit_game)
-	add_child(pause_menu)
-	pause_menu.set_display_data(get_stats())
-
-
-func _quit_game():
-	get_tree().quit()
-
-
-func _unpause_game():
-	$pause_menu.queue_free()
-	get_tree().paused = false
-
-
 # Methods without implementation.
-
-
-## Returns a dictionary with human-readable keys and values.
-func get_stats() -> Dictionary:
-	return {}
 
 
 ## Called when action on a tile is performed. 

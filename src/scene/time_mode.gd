@@ -2,6 +2,8 @@
 extends CycleModeBase
 
 
+var PauseMenu = preload("res://src/scene/pause_menu.tscn")
+
 const move_selection_vector: Array[Vector2i] = [
 	Vector2i(-1, 0),
 	Vector2i(1, 0),
@@ -63,6 +65,14 @@ func can_append_to_path(tile: Vector2i) -> bool:
 	return path.can_append(tile)
 
 
+## Opens the pause menu, with options to restart or quit the game.
+func game_over():
+	get_tree().paused = true
+	var pause_menu = open_pause_menu(restart_game, quit_game)
+	add_child(pause_menu)
+	pause_menu.set_display_data(get_stats())
+
+
 func get_new_pattern(repeat = true) -> int:
 	var limit = patterns.size()
 	var random_f = randf_range(0, limit)
@@ -85,6 +95,34 @@ func get_stats() -> Dictionary:
 		"Rows Cleared": rows_cleared,
 	}
 	return stats
+
+
+## Opens the pause menu and connects its signals to the given Callables.
+## Returns the pause menu node.
+func open_pause_menu(play_button_callback: Callable, cross_button_callback: Callable) -> Node:
+	var pause_menu = PauseMenu.instantiate()
+	pause_menu.play_button.connect(play_button_callback)
+	pause_menu.cross_button.connect(cross_button_callback)
+	pause_menu.z_index = RenderingServer.CANVAS_ITEM_Z_MAX
+	pause_menu.set_name("pause_menu")
+	return pause_menu
+
+
+func pause_game():
+	get_tree().paused = true
+	var pause_menu = open_pause_menu(unpause_game, quit_game)
+	add_child(pause_menu)
+	pause_menu.set_display_data(get_stats())
+
+
+func quit_game():
+	get_tree().quit()
+
+
+## Restarts the game mode.
+func restart_game():
+	get_tree().reload_current_scene()
+	get_tree().paused = false
 
 
 ## Clears and scores matched rows in the drop layer.
@@ -166,6 +204,11 @@ func set_rows_cleared(value: int):
 func set_score(value: int):
 	score = value
 	score_label.text = str(value)
+
+
+func unpause_game():
+	$pause_menu.queue_free()
+	get_tree().paused = false
 
 
 func update_levels():
