@@ -67,7 +67,7 @@ func can_append_to_path(tile: Vector2i) -> bool:
 ## Opens the pause menu, with options to restart or quit the game.
 func game_over():
 	get_tree().paused = true
-	var pause_menu = open_pause_menu(restart_game, quit_game)
+	var pause_menu = open_pause_menu(restart_game, restart_game, quit_game)
 	add_child(pause_menu)
 	pause_menu.set_display_data(get_stats())
 
@@ -98,9 +98,10 @@ func get_stats() -> Dictionary:
 
 ## Opens the pause menu and connects its signals to the given Callables.
 ## Returns the pause menu node.
-func open_pause_menu(play_button_callback: Callable, cross_button_callback: Callable) -> Node:
+func open_pause_menu(play_button_callback: Callable, open_circle_button_callback: Callable, cross_button_callback: Callable) -> Node:
 	var pause_menu = PauseMenu.instantiate()
 	pause_menu.play_button.connect(play_button_callback)
+	pause_menu.open_circle_button.connect(open_circle_button_callback)
 	pause_menu.cross_button.connect(cross_button_callback)
 	pause_menu.z_index = RenderingServer.CANVAS_ITEM_Z_MAX
 	pause_menu.set_name("pause_menu")
@@ -109,7 +110,7 @@ func open_pause_menu(play_button_callback: Callable, cross_button_callback: Call
 
 func pause_game():
 	get_tree().paused = true
-	var pause_menu = open_pause_menu(unpause_game, quit_game)
+	var pause_menu = open_pause_menu(unpause_game, restart_game, quit_game)
 	add_child(pause_menu)
 	pause_menu.set_display_data(get_stats())
 

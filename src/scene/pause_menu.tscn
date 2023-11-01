@@ -163,8 +163,8 @@ offset_right = 48.0
 offset_bottom = -16.0
 grow_horizontal = 2
 grow_vertical = 0
-focus_neighbor_left = NodePath("../play_button")
-focus_neighbor_top = NodePath("../play_button")
+focus_neighbor_left = NodePath("../open_circle_button")
+focus_neighbor_top = NodePath("../open_circle_button")
 focus_neighbor_right = NodePath("../play_button")
 focus_neighbor_bottom = NodePath("../play_button")
 focus_next = NodePath("../play_button")
@@ -173,6 +173,36 @@ text = "×"
 flat = true
 
 [node name="ButtonBG" type="TileMap" parent="Group/cross_button"]
+show_behind_parent = true
+tile_set = ExtResource("3_f22oi")
+format = 2
+layer_0/tile_data = PackedInt32Array(0, 65636, 0, 65536, 65636, 2, 1, 131172, 0, 65537, 131172, 2, 2, 131172, 0, 65538, 131172, 2, 3, 131172, 0, 65539, 131172, 2, 4, 131172, 0, 65540, 131172, 2, 5, 196708, 0, 65541, 196708, 2)
+
+[node name="open_circle_button" type="Button" parent="Group"]
+self_modulate = Color(0, 0, 0, 1)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -48.0
+offset_top = -96.0
+offset_right = 48.0
+offset_bottom = -64.0
+grow_horizontal = 2
+grow_vertical = 0
+focus_neighbor_left = NodePath("../play_button")
+focus_neighbor_top = NodePath("../play_button")
+focus_neighbor_right = NodePath("../cross_button")
+focus_neighbor_bottom = NodePath("../cross_button")
+focus_next = NodePath("../cross_button")
+focus_previous = NodePath("../cross_button")
+shortcut = ExtResource("5_h12ti")
+text = "⟲"
+flat = true
+
+[node name="ButtonBG" type="TileMap" parent="Group/open_circle_button"]
 show_behind_parent = true
 tile_set = ExtResource("3_f22oi")
 format = 2
@@ -187,15 +217,15 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -48.0
-offset_top = -96.0
+offset_top = -146.0
 offset_right = 48.0
-offset_bottom = -64.0
+offset_bottom = -114.0
 grow_horizontal = 2
 grow_vertical = 0
 focus_neighbor_left = NodePath("../cross_button")
 focus_neighbor_top = NodePath("../cross_button")
-focus_neighbor_right = NodePath("../cross_button")
-focus_neighbor_bottom = NodePath("../cross_button")
+focus_neighbor_right = NodePath("../open_circle_button")
+focus_neighbor_bottom = NodePath("../open_circle_button")
 focus_next = NodePath("../cross_button")
 focus_previous = NodePath("../cross_button")
 shortcut = ExtResource("5_h12ti")
@@ -210,4 +240,5 @@ layer_0/tile_data = PackedInt32Array(0, 65636, 0, 65536, 65636, 2, 1, 131172, 0,
 
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
 [connection signal="pressed" from="Group/cross_button" to="." method="_on_cross_button_pressed"]
+[connection signal="pressed" from="Group/open_circle_button" to="." method="_on_open_circle_button_pressed"]
 [connection signal="pressed" from="Group/play_button" to="." method="_on_play_button_pressed"]

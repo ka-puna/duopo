@@ -2,6 +2,7 @@ extends Control
 
 
 signal cross_button
+signal open_circle_button
 signal play_button
 
 
@@ -33,6 +34,10 @@ func _on_animation_player_animation_finished(anim_name):
 
 func _on_cross_button_pressed():
 	cross_button.emit()
+
+
+func _on_open_circle_button_pressed():
+	open_circle_button.emit()
 
 
 func _on_play_button_pressed():
