@@ -203,6 +203,10 @@ func _game_directional_action(direction: DIRECTION, state: ACTION_STATE, delta: 
 				update_tile_selected(next_tile)
 
 
+func _on_drop_pattern_pressed():
+	drop_pattern()
+
+
 func _on_path_updated():
 	# Update the drawing of the path layer.
 	board.clear_layer(layers.path)
@@ -212,6 +216,10 @@ func _on_path_updated():
 		# Set the last tile to an animated tile.
 		board.set_cell(layers.path, path.get_index(-1), \
 				Constants.SOURCES.ANIM_PATH_END, Constants.ANIMS.BASE.PATH_END)
+
+
+func _on_pause_game_pressed():
+	pause_game()
 
 
 func _on_tile_action(tile: Vector2i, action: StringName, state: ACTION_STATE, delta: float):

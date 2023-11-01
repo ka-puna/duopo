@@ -125,17 +125,6 @@ func update_tile_selected(coordinates: Vector2i):
 			Constants.SOURCES.ANIM_TILE_SELECT, Constants.ANIMS.BASE.TILE_SELECT)
 
 
-func _on_drop_pattern_pressed():
-	drop_pattern()
-
-
-func _on_pause_game_pressed():
-	get_tree().paused = true
-	var pause_menu = _open_pause_menu(_unpause_game, _quit_game)
-	add_child(pause_menu)
-	pause_menu.set_display_data(get_stats())
-
-
 ## Opens the pause menu and connects its signals to the given Callables.
 ## Returns the pause menu node.
 func _open_pause_menu(play_button_callback: Callable, cross_button_callback: Callable) -> Node:
@@ -145,6 +134,13 @@ func _open_pause_menu(play_button_callback: Callable, cross_button_callback: Cal
 	pause_menu.z_index = RenderingServer.CANVAS_ITEM_Z_MAX
 	pause_menu.set_name("pause_menu")
 	return pause_menu
+
+
+func pause_game():
+	get_tree().paused = true
+	var pause_menu = _open_pause_menu(_unpause_game, _quit_game)
+	add_child(pause_menu)
+	pause_menu.set_display_data(get_stats())
 
 
 func _quit_game():
