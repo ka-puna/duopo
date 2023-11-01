@@ -169,6 +169,7 @@ focus_neighbor_right = NodePath("../play_button")
 focus_neighbor_bottom = NodePath("../play_button")
 focus_next = NodePath("../play_button")
 focus_previous = NodePath("../play_button")
+shortcut_in_tooltip = false
 text = "×"
 flat = true
 
@@ -199,6 +200,7 @@ focus_neighbor_bottom = NodePath("../cross_button")
 focus_next = NodePath("../cross_button")
 focus_previous = NodePath("../cross_button")
 shortcut = ExtResource("5_h12ti")
+shortcut_in_tooltip = false
 text = "⟲"
 flat = true
 
@@ -229,6 +231,7 @@ focus_neighbor_bottom = NodePath("../open_circle_button")
 focus_next = NodePath("../cross_button")
 focus_previous = NodePath("../cross_button")
 shortcut = ExtResource("5_h12ti")
+shortcut_in_tooltip = false
 text = "▶"
 flat = true
 
