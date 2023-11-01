@@ -37,7 +37,6 @@ func _ready():
 	board = $board
 	preview = $preview_pattern
 	commander = TileMapCommand.new(board)
-	drop = commander.get_drop()
 	effect = commander.get_self_map(Constants.TILES_SELF_MAPPING)
 	match_rows = commander.get_match_rows("group")
 	path.updated.connect(_on_path_updated)
@@ -52,7 +51,7 @@ func _process(delta):
 	run_time += delta
 	set_cycle_value(cycle_value + delta)
 	if cycle_value >= cycle_period:
-		if not drop_pattern():
+		if not drop_pattern([layers.drop, layers.background]):
 			game_over()
 
 
@@ -133,7 +132,7 @@ func score_board() -> Dictionary:
 	var matched_rows = result[Vector2i(-1, -1)]
 	if not matched_tiles.is_empty():
 		board.clear_tiles(layers.drop, matched_tiles)
-		drop.call([layers.drop, layers.background])
+		drop([layers.drop, layers.background])
 		score += matched_rows**2 * 100
 		rows_cleared += matched_rows
 	return result
@@ -247,7 +246,7 @@ func _game_directional_action(direction: DIRECTION, state: ACTION_STATE, delta: 
 
 
 func _on_drop_pattern_pressed():
-	drop_pattern()
+	drop_pattern([layers.drop, layers.background])
 
 
 func _on_path_updated():
@@ -272,7 +271,7 @@ func _on_tile_action(tile: Vector2i, action: StringName, state: ACTION_STATE, de
 				path.clear()
 		"game_drop_pattern":
 			if state == ACTION_STATE.JUST_PRESSED:
-				drop_pattern()
+				drop_pattern([layers.drop, layers.background])
 		"game_select_tile_primary":
 			if path.is_empty():
 				if state == ACTION_STATE.JUST_PRESSED:

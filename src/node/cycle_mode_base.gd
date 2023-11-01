@@ -16,8 +16,6 @@ var layers: Dictionary
 var tile_set: TileSet
 var preview: PreviewPattern
 
-var drop: Callable
-
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -57,14 +55,42 @@ func _input(event):
 			update_tile_selected(mouse_tile)
 
 
+## Moves tiles in 'drop_layers'[0] to the lowest row without obstruction by solid tiles.
+##		'drop_layers': An array of layers to check for solid tiles.
+func drop(drop_layers: Array):
+	var tiles = board.get_used_cells(drop_layers[0])
+	# Sort tiles from bottom-to-top, then left-to-right.
+	tiles.sort_custom(func(a, b): return a.y > b.y or a.y == b.y and a.x < b.x)
+	for i in tiles.size():
+		var tile_below = tiles[i] + Vector2i(0, 1)
+		var is_blocked = false
+		for layer in drop_layers:
+			if board.tile_get_data(layer, tile_below, "solid"):
+				is_blocked = true
+				break
+		while not is_blocked:
+			# Move the tile down.
+			var tile_type = board.get_cell_atlas_coords(drop_layers[0], tiles[i], false)
+			board.erase_cell(drop_layers[0], tiles[i])
+			tiles[i] = tile_below
+			board.set_cell(drop_layers[0], tiles[i], Constants.SOURCES.TILES, tile_type)
+			# Update while-loop condition.
+			tile_below = tile_below + Vector2i(0, 1)
+			for layer in drop_layers:
+				if board.tile_get_data(layer, tile_below, "solid"):
+					is_blocked = true
+					break
+
+
 ## Adds and drops the preview pattern to the board, resets the cycle value, and
 ## updates the pattern preview.
 ## Returns true if successful.
-func drop_pattern() -> bool:
+##		'drop_layers': An array of layers to use when dropping tiles.
+func drop_pattern(drop_layers: Array) -> bool:
 	var pattern_id = preview.get_pattern_id()
 	var status = board.add_pattern(layers.drop, pattern_id)
 	if status == board.RETURN_STATUS.SUCCESS:
-		drop.call([layers.drop, layers.background])
+		drop(drop_layers)
 		cycle_value = 0
 		update_preview()
 		return true
