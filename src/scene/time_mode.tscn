@@ -83,6 +83,7 @@ grow_vertical = 0
 focus_mode = 0
 theme_override_fonts/font = SubResource("FontVariation_c87ds")
 shortcut = ExtResource("6_35jsp")
+shortcut_in_tooltip = false
 text = "||"
 flat = true
 
