@@ -87,7 +87,7 @@ text = "||"
 flat = true
 
 [node name="ButtonBG" type="TileMap" parent="pause_game"]
-modulate = Color(0.764706, 0.764706, 0.764706, 1)
+modulate = Color(1, 0.675, 0.25, 1)
 show_behind_parent = true
 tile_set = ExtResource("2_it1s3")
 format = 2
@@ -105,7 +105,7 @@ text = "▼"
 flat = true
 
 [node name="ButtonBG" type="TileMap" parent="drop_pattern"]
-modulate = Color(0.764706, 0.764706, 0.764706, 1)
+modulate = Color(1, 0.675, 0.25, 1)
 show_behind_parent = true
 tile_set = ExtResource("2_it1s3")
 format = 2
