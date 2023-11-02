@@ -201,7 +201,7 @@ focus_next = NodePath("../cross_button")
 focus_previous = NodePath("../cross_button")
 shortcut = ExtResource("5_h12ti")
 shortcut_in_tooltip = false
-text = "⟲"
+text = "↪"
 flat = true
 
 [node name="ButtonBG" type="TileMap" parent="Group/open_circle_button"]
