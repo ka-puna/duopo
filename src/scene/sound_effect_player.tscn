@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://chqr77rftg6db"]
+
+[ext_resource type="Script" path="res://src/scene/sound_effect_player.gd" id="1_il5at"]
+
+[sub_resource type="AudioStreamPolyphonic" id="AudioStreamPolyphonic_28k8l"]
+
+[node name="sound_effect_player" type="Node"]
+script = ExtResource("1_il5at")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = SubResource("AudioStreamPolyphonic_28k8l")
+max_polyphony = 8

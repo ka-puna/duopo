@@ -3,6 +3,7 @@ extends CycleModeBase
 
 
 var PauseMenu = preload("res://src/scene/pause_menu.tscn")
+var sfx_player = preload("res://src/scene/sound_effect_player.tscn").instantiate() as SoundEffectPlayer
 
 const move_selection_vector: Array[Vector2i] = [
 	Vector2i(-1, 0),
@@ -40,6 +41,7 @@ func _ready():
 	effect = commander.get_self_map(Constants.TILES_SELF_MAPPING)
 	match_rows = commander.get_match_rows("group")
 	path.updated.connect(_on_path_updated)
+	add_child(sfx_player)
 	score = 0
 	pattern_level = 0
 	super()
@@ -315,3 +317,7 @@ func _on_tile_action(tile: Vector2i, action: StringName, state: ACTION_STATE, de
 			_game_directional_action(DIRECTION.UP, state, delta)
 		"game_down":
 			_game_directional_action(DIRECTION.DOWN, state, delta)
+
+
+func _on_tiles_dropped():
+	sfx_player.play(sfx_player.streams.TILES_DROPPED)

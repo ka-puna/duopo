@@ -59,6 +59,7 @@ func _input(event):
 ##		'drop_layers': An array of layers to check for solid tiles.
 func drop(drop_layers: Array):
 	var tiles = board.get_used_cells(drop_layers[0])
+	var has_dropped = false
 	# Sort tiles from bottom-to-top, then left-to-right.
 	tiles.sort_custom(func(a, b): return a.y > b.y or a.y == b.y and a.x < b.x)
 	for i in tiles.size():
@@ -74,12 +75,15 @@ func drop(drop_layers: Array):
 			board.erase_cell(drop_layers[0], tiles[i])
 			tiles[i] = tile_below
 			board.set_cell(drop_layers[0], tiles[i], Constants.SOURCES.TILES, tile_type)
+			has_dropped = true
 			# Update while-loop condition.
 			tile_below = tile_below + Vector2i(0, 1)
 			for layer in drop_layers:
 				if board.tile_get_data(layer, tile_below, "solid"):
 					is_blocked = true
 					break
+	if has_dropped:
+		_on_tiles_dropped()
 
 
 ## Adds and drops the preview pattern to the board, resets the cycle value, and
@@ -139,4 +143,9 @@ func update_tile_selected(coordinates: Vector2i):
 
 ## Called when action on a tile is performed. 
 func _on_tile_action(_tile: Vector2i, _action: StringName, _state: ACTION_STATE, _delta: float):
+	pass
+
+
+## Called when tiles are dropped.
+func _on_tiles_dropped():
 	pass
