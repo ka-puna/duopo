@@ -133,7 +133,11 @@ https://github.com/JetBrains/JetBrainsMono/blob/master/OFL.txt
 
 [b]Godot Engine:[/b]
 https://godotengine.org/license
-Portions of this software are copyright © 2023 The FreeType Project (www.freetype.org). All rights reserved."
+Portions of this software are copyright © 2023 The FreeType Project (www.freetype.org). All rights reserved.
+
+[b]Music:[/b]
+\"Arpent,\" Kevin McLeod
+"
 selection_enabled = true
 
 [connection signal="pressed" from="toggle_credits" to="." method="_on_toggle_credits_pressed"]
