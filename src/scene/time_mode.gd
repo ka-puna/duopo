@@ -320,4 +320,4 @@ func _on_tile_action(tile: Vector2i, action: StringName, state: ACTION_STATE, de
 
 
 func _on_tiles_dropped():
-	sfx_player.play(sfx_player.streams.TILES_DROPPED)
+	sfx_player.play(sfx_player.SOUNDS.TILES_DROPPED)
