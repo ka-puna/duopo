@@ -5,6 +5,7 @@ extends Node
 
 var SOUNDS = {
 	"TILES_DROPPED": "BLIP",
+	"PATH_UPDATED": "BLIP2",
 }
 
 

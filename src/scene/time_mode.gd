@@ -261,6 +261,7 @@ func _on_path_updated():
 		# Set the last tile to an animated tile.
 		board.set_cell(layers.path, path.get_index(-1), \
 				Constants.SOURCES.ANIM_PATH_END, Constants.ANIMS.BASE.PATH_END)
+	sfx_player.play(sfx_player.SOUNDS.PATH_UPDATED)
 
 
 func _on_pause_game_pressed():

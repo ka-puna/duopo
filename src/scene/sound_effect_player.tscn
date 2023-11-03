@@ -9,3 +9,8 @@ script = ExtResource("1_il5at")
 [node name="BLIP" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("2_lytf8")
 volume_db = -20.0
+
+[node name="BLIP2" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_lytf8")
+volume_db = -20.0
+pitch_scale = 2.0
