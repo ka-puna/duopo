@@ -3,6 +3,7 @@ extends CycleModeBase
 
 
 var PauseMenu = preload("res://src/scene/pause_menu.tscn")
+var ParticleEffect = preload("res://src/scene/particle_effect.tscn")
 
 const move_selection_vector: Array[Vector2i] = [
 	Vector2i(-1, 0),
@@ -135,6 +136,13 @@ func score_board() -> Dictionary:
 	var matched_rows = result[Vector2i(-1, -1)]
 	if not matched_tiles.is_empty():
 		board.clear_tiles(layers.drop, matched_tiles)
+		# Add particle effects.
+		for tile in matched_tiles:
+			var pos: Vector2 = board.map_to_local(tile)
+			var particle_effect = ParticleEffect.instantiate()
+			particle_effect.position = board.to_global(pos)
+			add_child(particle_effect)
+			particle_effect.expired.connect(_on_expired)
 		drop([layers.drop, layers.background])
 		score += matched_rows**2 * 100
 		rows_cleared += matched_rows
@@ -250,6 +258,10 @@ func _game_directional_action(direction: DIRECTION, state: ACTION_STATE, delta: 
 
 func _on_drop_pattern_pressed():
 	drop_pattern([layers.drop, layers.background])
+
+
+func _on_expired(node: Node):
+	node.queue_free()	
 
 
 func _on_path_updated():

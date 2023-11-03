@@ -1,0 +1,16 @@
+[gd_scene load_steps=2 format=3 uid="uid://bgnqfeowve6w7"]
+
+[ext_resource type="Script" path="res://src/scene/particle_effect.gd" id="1_3lywj"]
+
+[node name="particle_effect" type="CPUParticles2D"]
+modulate = Color(1, 1, 0, 1)
+z_index = 2
+lifetime = 0.25
+fract_delta = false
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 48.0
+initial_velocity_max = 60.0
+scale_amount_min = 2.4
+scale_amount_max = 2.4
+script = ExtResource("1_3lywj")
