@@ -3,7 +3,6 @@ extends CycleModeBase
 
 
 var PauseMenu = preload("res://src/scene/pause_menu.tscn")
-var sfx_player = preload("res://src/scene/sound_effect_player.tscn").instantiate() as SoundEffectPlayer
 
 const move_selection_vector: Array[Vector2i] = [
 	Vector2i(-1, 0),
@@ -28,6 +27,7 @@ const move_selection_vector: Array[Vector2i] = [
 var pattern_level: int: set = set_pattern_level
 # A non-rectangular array of integers storing pattern indices.
 var patterns: Array
+var sfx_player: SoundEffectPlayer
 var commander: TileMapCommand
 var effect: Callable
 var match_rows: Callable
@@ -37,11 +37,11 @@ var match_rows: Callable
 func _ready():
 	board = $board
 	preview = $preview_pattern
+	sfx_player = $sound_effect_player
 	commander = TileMapCommand.new(board)
 	effect = commander.get_self_map(Constants.TILES_SELF_MAPPING)
 	match_rows = commander.get_match_rows("group")
 	path.updated.connect(_on_path_updated)
-	add_child(sfx_player)
 	score = 0
 	pattern_level = 0
 	super()
