@@ -5,6 +5,7 @@ extends CycleModeBase
 var PauseMenu = preload("res://src/scene/pause_menu.tscn")
 var ParticleEffect = preload("res://src/scene/particle_effect.tscn")
 
+enum DIRECTION {LEFT = 0, RIGHT = 1, UP = 2, DOWN = 3}
 const move_selection_vector: Array[Vector2i] = [
 	Vector2i(-1, 0),
 	Vector2i(1, 0),
@@ -27,6 +28,7 @@ var level: int: set = set_level
 var score: int: set = set_score
 @onready var score_label = $Score
 var pattern_level: int: set = set_pattern_level
+var game_input: GameInput
 # A non-rectangular array of integers storing pattern indices.
 var patterns: Array
 var sfx_player: SoundEffectPlayer
@@ -48,16 +50,24 @@ func _ready():
 	score = 0
 	pattern_level = 0
 	super()
+	game_input = GameInput.new(board, layers.background)
+	game_input.tile_action.connect(_on_tile_action)
+	game_input.tile_selection.connect(update_tile_selected)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	super(delta)
+	game_input.process(delta)
 	run_time += delta
 	set_cycle_value(cycle_value + delta)
 	if cycle_value >= cycle_period:
 		if not drop_pattern([layers.drop, layers.background]):
 			game_over()
+
+
+# Called when there is an input event.
+func _input(event):
+	game_input.input(event)
 
 
 ## Returns true if the tile can be added to the path.
@@ -238,11 +248,11 @@ func update_levels():
 
 
 # Handles game_* directional actions.
-func _game_directional_action(direction: DIRECTION, state: ACTION_STATE, delta: float):
-	if state == ACTION_STATE.JUST_RELEASED:
+func _game_directional_action(direction: DIRECTION, state: GameInput.ACTION_STATE, delta: float):
+	if state == game_input.ACTION_STATE.JUST_RELEASED:
 		move_selection_value[direction] = 0.0
 	else:
-		if state == ACTION_STATE.PRESSED:
+		if state == game_input.ACTION_STATE.PRESSED:
 			move_selection_value[direction] += delta
 			if move_selection_value[direction] >= move_selection_period:
 				var vector = move_selection_vector[direction]
@@ -251,7 +261,7 @@ func _game_directional_action(direction: DIRECTION, state: ACTION_STATE, delta: 
 				if board.get_cell_tile_data(layers.background, next_tile):
 					update_tile_selected(next_tile)
 				move_selection_value[direction] = 0.001
-		elif state == ACTION_STATE.JUST_PRESSED:
+		elif state == game_input.ACTION_STATE.JUST_PRESSED:
 			var vector = move_selection_vector[direction]
 			var next_tile = tile_selected + vector
 			# If next_tile is within bounds.
@@ -284,34 +294,34 @@ func _on_pause_game_pressed():
 	pause_game()
 
 
-func _on_tile_action(tile: Vector2i, action: StringName, state: ACTION_STATE, delta: float):
+func _on_tile_action(action: StringName, state: GameInput.ACTION_STATE, delta: float):
 	match action:
 		"game_clear_path":
-			if state == ACTION_STATE.JUST_PRESSED:
+			if state == game_input.ACTION_STATE.JUST_PRESSED:
 				path.clear()
 		"game_drop_pattern":
-			if state == ACTION_STATE.JUST_PRESSED:
+			if state == game_input.ACTION_STATE.JUST_PRESSED:
 				drop_pattern([layers.drop, layers.background])
 		"game_select_tile_primary":
 			if path.is_empty():
-				if state == ACTION_STATE.JUST_PRESSED:
-					if can_append_to_path(tile):
-						path.append(tile)
+				if state == game_input.ACTION_STATE.JUST_PRESSED:
+					if can_append_to_path(tile_selected):
+						path.append(tile_selected)
 			# If tile is at the end of the path.
-			elif tile == path.get_index(-1):
-				if state == ACTION_STATE.JUST_PRESSED:	
+			elif tile_selected == path.get_index(-1):
+				if state == game_input.ACTION_STATE.JUST_PRESSED:	
 					effect.call(layers.drop, path.get_tiles())
 					score_board()
 					path.clear()
-			elif state != ACTION_STATE.JUST_RELEASED:
+			elif state != game_input.ACTION_STATE.JUST_RELEASED:
 				# If tile is second-to-last in the path.
-				if tile == path.get_index(-2):
+				if tile_selected == path.get_index(-2):
 					path.truncate(-2)
 				else:
 					var path_end = path.get_index(-1)
-					if tile.x == path_end.x or tile.y == path_end.y:
+					if tile_selected.x == path_end.x or tile_selected.y == path_end.y:
 						# Extend path through shared column or row.
-						var difference = tile - path_end
+						var difference = tile_selected - path_end
 						var direction = sign(difference)
 						for i in range(1, difference.length() + 1):
 							var next_tile = path_end + i * direction
@@ -320,12 +330,12 @@ func _on_tile_action(tile: Vector2i, action: StringName, state: ACTION_STATE, de
 							else:
 								break
 		"game_select_tile_secondary":
-			if path.has(tile):
-				if tile == path.get_index(-1):
-					if state == ACTION_STATE.JUST_PRESSED:
+			if path.has(tile_selected):
+				if tile_selected == path.get_index(-1):
+					if state == game_input.ACTION_STATE.JUST_PRESSED:
 						path.clear()
-				elif state != ACTION_STATE.JUST_RELEASED:
-					path.truncate(path.find(tile))
+				elif state != game_input.ACTION_STATE.JUST_RELEASED:
+					path.truncate(path.find(tile_selected))
 		"game_left":
 			_game_directional_action(DIRECTION.LEFT, state, delta)
 		"game_right":
