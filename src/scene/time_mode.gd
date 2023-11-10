@@ -20,10 +20,11 @@ const move_selection_vector: Array[Vector2i] = [
 @onready var init_cycle_period: float = cycle_period
 @onready var max_cycle_period: float = cycle_period * 2
 @onready var run_time: float = 0.0
-@onready var level: int = 0: set = set_level
+var level: int: set = set_level
+@onready var level_label = $Level
 @onready var path = Path.new()
 @onready var rows_cleared: int = 0: set = set_rows_cleared
-@onready var score: int: set = set_score
+var score: int: set = set_score
 @onready var score_label = $Score
 var pattern_level: int: set = set_pattern_level
 # A non-rectangular array of integers storing pattern indices.
@@ -43,6 +44,7 @@ func _ready():
 	effect = commander.get_self_map(Constants.TILES_SELF_MAPPING)
 	match_rows = commander.get_match_rows("group")
 	path.updated.connect(_on_path_updated)
+	level = 0
 	score = 0
 	pattern_level = 0
 	super()
@@ -151,6 +153,7 @@ func score_board() -> Dictionary:
 
 func set_level(value: int):
 	level = value
+	level_label.text = "Level\n%d" % level
 	# Update cycle_period.
 	var new_cycle_period = init_cycle_period * (1.1 - 0.1 * exp(0.044 * level))
 	cycle_period = clampf(new_cycle_period, 1, max_cycle_period)

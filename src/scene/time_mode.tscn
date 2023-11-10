@@ -144,5 +144,23 @@ text = "01189998819991197253"
 horizontal_alignment = 2
 vertical_alignment = 1
 
+[node name="Level" type="Label" parent="."]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -80.0
+offset_right = 112.0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 24
+text = "Level
+42"
+horizontal_alignment = 1
+vertical_alignment = 2
+clip_text = true
+text_overrun_behavior = 3
+max_lines_visible = 2
+
 [connection signal="pressed" from="pause_game" to="." method="_on_pause_game_pressed"]
 [connection signal="pressed" from="drop_pattern" to="." method="_on_drop_pattern_pressed"]
