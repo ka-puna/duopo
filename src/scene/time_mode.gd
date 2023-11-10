@@ -201,6 +201,7 @@ func set_pattern_level(value: int):
 			patterns = Constants.SAMPLE.duplicate(true)
 		_:
 			set_pattern_level(value % 10)
+			return
 	# Correct subset values.
 	var num_patterns = patterns.size()
 	for subset in patterns:
