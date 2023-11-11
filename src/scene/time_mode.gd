@@ -13,24 +13,25 @@ const move_selection_vector: Array[Vector2i] = [
 	Vector2i(0, 1)
 ]
 
-## Adjust this value to match the width of the play area in the board.
-@export var drop_width: int = 9
-## The approximate minimum time in seconds between tile_selected movements.
-@export var move_selection_period: float = 0.125
-@onready var move_selection_value: Array[float] = [0.0, 0.0, 0.0, 0.0]
-## The position of the selected tile. Set its intial position in the editor.
-@export var tile_selected: Vector2i
 ## The intial period between drops, in seconds.
 @export var init_cycle_period: float = 10.0
 ## The minimum period between drops, in seconds.
 @export var min_cycle_period: float = 1.0
-@onready var run_time: float = 0.0
-var level: int: set = set_level
-@onready var level_label = $Level
+## Adjust this value to match the width of the play area in the board.
+@export var drop_width: int = 9
+## The approximate minimum time in seconds between tile_selected movements.
+@export var move_selection_period: float = 0.125
+## The position of the selected tile. Set its intial position in the editor.
+@export var tile_selected: Vector2i
+## Accumulates value for moving the tile selection.
+@onready var move_selection_value: Array[float] = [0.0, 0.0, 0.0, 0.0]
 @onready var path = Path.new()
+@onready var run_time: float = 0.0
 @onready var rows_cleared: int = 0: set = set_rows_cleared
-var score: int: set = set_score
+@onready var level_label = $Level
 @onready var score_label = $Score
+var level: int: set = set_level
+var score: int: set = set_score
 var layers: Dictionary
 var pattern_level: int: set = set_pattern_level
 # A non-rectangular array of integers storing pattern indices.
@@ -57,20 +58,23 @@ func _ready():
 	level = 0
 	score = 0
 	pattern_level = 0
+
 	layers = board.layers
 	tile_set = board.tile_set
 	game_input = GameInput.new(board, layers.background)
-	game_input.tile_action.connect(_on_tile_action)
-	game_input.tile_selection.connect(update_tile_selected)
+	effect = commander.get_self_map(Constants.TILES_SELF_MAPPING)
+	match_rows = commander.get_match_rows("group")
+
 	update_tile_selected(tile_selected)
 	board.update_terrains()
-	cycle.cycle_value_changed.connect(_on_cycle_value_changed)
-	cycle.cycle_value_overflowed.connect(_on_cycle_value_overflowed)
 	preview.init(tile_set, init_cycle_period)
 	var pattern = get_new_pattern()
 	preview.set_pattern_id(pattern)
-	effect = commander.get_self_map(Constants.TILES_SELF_MAPPING)
-	match_rows = commander.get_match_rows("group")
+
+	game_input.tile_action.connect(_on_tile_action)
+	game_input.tile_selection.connect(update_tile_selected)
+	cycle.cycle_value_changed.connect(_on_cycle_value_changed)
+	cycle.cycle_value_overflowed.connect(_on_cycle_value_overflowed)
 	path.updated.connect(_on_path_updated)
 
 
