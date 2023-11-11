@@ -20,11 +20,10 @@ const move_selection_vector: Array[Vector2i] = [
 @onready var move_selection_value: Array[float] = [0.0, 0.0, 0.0, 0.0]
 ## The position of the selected tile. Set its intial position in the editor.
 @export var tile_selected: Vector2i
-## The period between drops in units such as seconds.
-@export var cycle_period: float = 10.0: set = set_cycle_period
-@onready var cycle_value: float = 0.0: set = set_cycle_value
-@onready var init_cycle_period: float = cycle_period
-@onready var max_cycle_period: float = cycle_period * 2
+## The intial period between drops, in seconds.
+@export var init_cycle_period: float = 10.0
+## The minimum period between drops, in seconds.
+@export var min_cycle_period: float = 1.0
 @onready var run_time: float = 0.0
 var level: int: set = set_level
 @onready var level_label = $Level
@@ -41,6 +40,7 @@ var effect: Callable
 var match_rows: Callable
 
 var board: TileMapCustom
+var cycle: CycleValue
 var commander: TileMapCommand
 var game_input: GameInput
 var preview: PreviewPattern
@@ -50,6 +50,7 @@ var sfx_player: SoundEffectPlayer
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	board = $board
+	cycle = CycleValue.new(0.0, 0.0, init_cycle_period)
 	preview = $preview_pattern
 	sfx_player = $sound_effect_player
 	commander = TileMapCommand.new(board)
@@ -63,7 +64,9 @@ func _ready():
 	game_input.tile_selection.connect(update_tile_selected)
 	update_tile_selected(tile_selected)
 	board.update_terrains()
-	preview.init(tile_set, cycle_period)
+	cycle.cycle_value_changed.connect(_on_cycle_value_changed)
+	cycle.cycle_value_overflowed.connect(_on_cycle_value_overflowed)
+	preview.init(tile_set, init_cycle_period)
 	var pattern = get_new_pattern()
 	preview.set_pattern_id(pattern)
 	effect = commander.get_self_map(Constants.TILES_SELF_MAPPING)
@@ -75,10 +78,7 @@ func _ready():
 func _process(delta):
 	game_input.process(delta)
 	run_time += delta
-	set_cycle_value(cycle_value + delta)
-	if cycle_value >= cycle_period:
-		if not drop_pattern([layers.drop, layers.background]):
-			game_over()
+	cycle.value += delta
 
 
 # Called when there is an input event.
@@ -135,7 +135,7 @@ func drop_pattern(drop_layers: Array) -> bool:
 	var status = board.add_pattern(layers.drop, pattern_id)
 	if status == board.RETURN_STATUS.SUCCESS:
 		drop(drop_layers)
-		cycle_value = 0
+		cycle.value = 0.0
 		update_preview()
 		return true
 	return false
@@ -223,24 +223,14 @@ func score_board() -> Dictionary:
 	return result
 
 
-func set_cycle_period(value: float):
-	cycle_period = value
-	preview.progress_bar_set_max_value(value)
-
-
-## Set the cycle value.
-func set_cycle_value(value: float):
-	var v = clampf(value, 0, cycle_period)
-	cycle_value = v
-	preview.progress_bar_set_value_inverse(v)
-
-
 func set_level(value: int):
 	level = value
 	level_label.text = "Level\n%d" % level
-	# Update cycle_period.
-	var new_cycle_period = init_cycle_period * (1.1 - 0.1 * exp(0.044 * level))
-	cycle_period = clampf(new_cycle_period, 1, max_cycle_period)
+	# Update cycle periods.
+	var cycle_period = init_cycle_period * (1.1 - 0.1 * exp(0.044 * level))
+	cycle_period = max(cycle_period, min_cycle_period)
+	cycle.max_value = cycle_period
+	preview.progress_bar_set_max_value(cycle_period)
 
 
 ## Set the patterns used by the game according to 'pattern_level'. 
@@ -435,3 +425,12 @@ func _on_tile_action(action: StringName, state: GameInput.ACTION_STATE, delta: f
 
 func _on_tiles_dropped():
 	sfx_player.play(sfx_player.SOUNDS.TILES_DROPPED)
+
+
+func _on_cycle_value_changed(value):
+	preview.progress_bar_set_value_inverse(value)
+
+
+func _on_cycle_value_overflowed():
+	if not drop_pattern([layers.drop, layers.background]):
+		game_over()
