@@ -1,5 +1,5 @@
 ## The main scene for the time mode of play.
-extends CycleModeBase
+extends Control
 
 
 var PauseMenu = preload("res://src/scene/pause_menu.tscn")
@@ -18,6 +18,11 @@ const move_selection_vector: Array[Vector2i] = [
 ## The approximate minimum time in seconds between tile_selected movements.
 @export var move_selection_period: float = 0.125
 @onready var move_selection_value: Array[float] = [0.0, 0.0, 0.0, 0.0]
+## The position of the selected tile. Set its intial position in the editor.
+@export var tile_selected: Vector2i
+## The period between drops in units such as seconds.
+@export var cycle_period: float = 10.0: set = set_cycle_period
+@onready var cycle_value: float = 0.0: set = set_cycle_value
 @onready var init_cycle_period: float = cycle_period
 @onready var max_cycle_period: float = cycle_period * 2
 @onready var run_time: float = 0.0
@@ -27,14 +32,19 @@ var level: int: set = set_level
 @onready var rows_cleared: int = 0: set = set_rows_cleared
 var score: int: set = set_score
 @onready var score_label = $Score
+var layers: Dictionary
 var pattern_level: int: set = set_pattern_level
-var game_input: GameInput
 # A non-rectangular array of integers storing pattern indices.
 var patterns: Array
-var sfx_player: SoundEffectPlayer
-var commander: TileMapCommand
+var tile_set: TileSet
 var effect: Callable
 var match_rows: Callable
+
+var board: TileMapCustom
+var commander: TileMapCommand
+var game_input: GameInput
+var preview: PreviewPattern
+var sfx_player: SoundEffectPlayer
 
 
 # Called when the node enters the scene tree for the first time.
@@ -43,16 +53,22 @@ func _ready():
 	preview = $preview_pattern
 	sfx_player = $sound_effect_player
 	commander = TileMapCommand.new(board)
-	effect = commander.get_self_map(Constants.TILES_SELF_MAPPING)
-	match_rows = commander.get_match_rows("group")
-	path.updated.connect(_on_path_updated)
 	level = 0
 	score = 0
 	pattern_level = 0
-	super()
+	layers = board.layers
+	tile_set = board.tile_set
 	game_input = GameInput.new(board, layers.background)
 	game_input.tile_action.connect(_on_tile_action)
 	game_input.tile_selection.connect(update_tile_selected)
+	update_tile_selected(tile_selected)
+	board.update_terrains()
+	preview.init(tile_set, cycle_period)
+	var pattern = get_new_pattern()
+	preview.set_pattern_id(pattern)
+	effect = commander.get_self_map(Constants.TILES_SELF_MAPPING)
+	match_rows = commander.get_match_rows("group")
+	path.updated.connect(_on_path_updated)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -77,6 +93,52 @@ func can_append_to_path(tile: Vector2i) -> bool:
 		if tile_data and not tile_data.get_custom_data("pathable"):
 			return false
 	return path.can_append(tile)
+
+
+## Moves tiles in 'drop_layers'[0] to the lowest row without obstruction by solid tiles.
+##		'drop_layers': An array of layers to check for solid tiles.
+func drop(drop_layers: Array):
+	var tiles = board.get_used_cells(drop_layers[0])
+	var has_dropped = false
+	# Sort tiles from bottom-to-top, then left-to-right.
+	tiles.sort_custom(func(a, b): return a.y > b.y or a.y == b.y and a.x < b.x)
+	for i in tiles.size():
+		var tile_below = tiles[i] + Vector2i(0, 1)
+		var is_blocked = false
+		for layer in drop_layers:
+			if board.tile_get_data(layer, tile_below, "solid"):
+				is_blocked = true
+				break
+		while not is_blocked:
+			# Move the tile down.
+			var tile_type = board.get_cell_atlas_coords(drop_layers[0], tiles[i], false)
+			board.erase_cell(drop_layers[0], tiles[i])
+			tiles[i] = tile_below
+			board.set_cell(drop_layers[0], tiles[i], Constants.SOURCES.TILES, tile_type)
+			has_dropped = true
+			# Update while-loop condition.
+			tile_below = tile_below + Vector2i(0, 1)
+			for layer in drop_layers:
+				if board.tile_get_data(layer, tile_below, "solid"):
+					is_blocked = true
+					break
+	if has_dropped:
+		_on_tiles_dropped()
+
+
+## Adds and drops the preview pattern to the board, resets the cycle value, and
+## updates the pattern preview.
+## Returns true if successful.
+##		'drop_layers': An array of layers to use when dropping tiles.
+func drop_pattern(drop_layers: Array) -> bool:
+	var pattern_id = preview.get_pattern_id()
+	var status = board.add_pattern(layers.drop, pattern_id)
+	if status == board.RETURN_STATUS.SUCCESS:
+		drop(drop_layers)
+		cycle_value = 0
+		update_preview()
+		return true
+	return false
 
 
 ## Opens the pause menu, with options to restart or quit the game.
@@ -161,6 +223,18 @@ func score_board() -> Dictionary:
 	return result
 
 
+func set_cycle_period(value: float):
+	cycle_period = value
+	preview.progress_bar_set_max_value(value)
+
+
+## Set the cycle value.
+func set_cycle_value(value: float):
+	var v = clampf(value, 0, cycle_period)
+	cycle_value = v
+	preview.progress_bar_set_value_inverse(v)
+
+
 func set_level(value: int):
 	level = value
 	level_label.text = "Level\n%d" % level
@@ -235,6 +309,12 @@ func unpause_game():
 	get_tree().paused = false
 
 
+## Updates the preview pattern.
+func update_preview():
+	var new_pattern = get_new_pattern()
+	preview.set_pattern_id(new_pattern)
+
+
 func update_levels():
 	var score_level = floori(score * 0.0004 - level * 0.4)
 	var row_level = floori(rows_cleared * 0.1)
@@ -245,6 +325,13 @@ func update_levels():
 	var min_pattern_level = floori(min_level * 0.2)
 	if min_pattern_level > pattern_level:
 		set_pattern_level(min_pattern_level)
+
+
+func update_tile_selected(coordinates: Vector2i):
+	tile_selected = coordinates
+	board.clear_layer(layers.select)
+	board.set_cell(layers.select, coordinates, \
+			Constants.SOURCES.ANIM_TILE_SELECT, Constants.ANIMS.BASE.TILE_SELECT)
 
 
 # Handles game_* directional actions.
