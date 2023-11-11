@@ -35,30 +35,25 @@ var tile_set: TileSet
 var effect: Callable
 var match_rows: Callable
 
-var board: TileMapCustom
-var cycle: CycleValue
+@onready var board: TileMapCustom = $board
+@onready var game_state: GameState = $game_state
+@onready var preview: PreviewPattern = $preview_pattern
+@onready var sfx_player: SoundEffectPlayer = $sound_effect_player
+@onready var cycle = CycleValue.new(0.0, 0.0, init_cycle_period)
 var commander: TileMapCommand
 var game_input: GameInput
-var game_state: GameState
-var preview: PreviewPattern
-var sfx_player: SoundEffectPlayer
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	board = $board
-	cycle = CycleValue.new(0.0, 0.0, init_cycle_period)
-	preview = $preview_pattern
-	sfx_player = $sound_effect_player
 	commander = TileMapCommand.new(board)
-	game_state = $game_state
-
 	layers = board.layers
 	tile_set = board.tile_set
-	game_input = GameInput.new(board, layers.background)
 	effect = commander.get_self_map(Constants.TILES_SELF_MAPPING)
 	match_rows = commander.get_match_rows("group")
+	game_input = GameInput.new(board, layers.background)
 
+	# Update scene for initial game.
 	update_tile_selected(tile_selected)
 	board.update_terrains()
 	preview.init(tile_set, init_cycle_period)
@@ -67,6 +62,7 @@ func _ready():
 	_on_score_updated(game_state.score)
 	update_preview()
 
+	# Connect signals.
 	game_state.level_updated.connect(_on_level_updated)
 	game_state.pattern_level_updated.connect(_on_pattern_level_updated)
 	game_state.score_updated.connect(_on_score_updated)
@@ -257,6 +253,15 @@ func _game_directional_action(direction: DIRECTION, state: GameInput.ACTION_STAT
 				update_tile_selected(next_tile)
 
 
+func _on_cycle_value_changed(value):
+	preview.progress_bar_set_value_inverse(value)
+
+
+func _on_cycle_value_overflowed():
+	if not drop_pattern([layers.drop, layers.background]):
+		game_over()
+
+
 func _on_drop_pattern_pressed():
 	drop_pattern([layers.drop, layers.background])
 
@@ -398,12 +403,3 @@ func _on_tile_action(action: StringName, state: GameInput.ACTION_STATE, delta: f
 
 func _on_tiles_dropped():
 	sfx_player.play(sfx_player.SOUNDS.TILES_DROPPED)
-
-
-func _on_cycle_value_changed(value):
-	preview.progress_bar_set_value_inverse(value)
-
-
-func _on_cycle_value_overflowed():
-	if not drop_pattern([layers.drop, layers.background]):
-		game_over()
