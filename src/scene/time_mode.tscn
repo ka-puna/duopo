@@ -1,10 +1,11 @@
-[gd_scene load_steps=12 format=3 uid="uid://03fnvm5r1yli"]
+[gd_scene load_steps=13 format=3 uid="uid://03fnvm5r1yli"]
 
 [ext_resource type="FontFile" uid="uid://clpy5fbiwggfj" path="res://asset/fonts/JetBrainsMono.ttf" id="1_07wey"]
 [ext_resource type="Script" path="res://src/scene/time_mode.gd" id="1_gyt65"]
 [ext_resource type="PackedScene" uid="uid://dxw75koeax6by" path="res://src/scene/board/tile_map_pathable.tscn" id="1_xl38i"]
 [ext_resource type="TileSet" uid="uid://cny47qhsswbse" path="res://asset/tile_atlas/menu.tres" id="2_it1s3"]
 [ext_resource type="AudioStream" uid="uid://dc0iqb80jkber" path="res://asset/audio/Arpent.mp3" id="3_1aofg"]
+[ext_resource type="Script" path="res://src/node/game_state.gd" id="3_oo05h"]
 [ext_resource type="PackedScene" uid="uid://chqr77rftg6db" path="res://src/scene/sound_effect_player.tscn" id="4_47xae"]
 [ext_resource type="PackedScene" uid="uid://dh5wo0og686ie" path="res://src/scene/board/preview_pattern.tscn" id="4_wihjq"]
 [ext_resource type="Shortcut" uid="uid://n1uv6k2iflk6" path="res://asset/shortcuts/ui_cancel.tres" id="6_35jsp"]
@@ -32,6 +33,9 @@ grow_vertical = 2
 theme = SubResource("Theme_ox6uk")
 script = ExtResource("1_gyt65")
 tile_selected = Vector2i(0, 19)
+
+[node name="game_state" type="Node" parent="."]
+script = ExtResource("3_oo05h")
 
 [node name="BackgroundMusic" type="AudioStreamPlayer" parent="."]
 process_mode = 3

@@ -26,14 +26,9 @@ const move_selection_vector: Array[Vector2i] = [
 ## Accumulates value for moving the tile selection.
 @onready var move_selection_value: Array[float] = [0.0, 0.0, 0.0, 0.0]
 @onready var path = Path.new()
-@onready var run_time: float = 0.0
-@onready var rows_cleared: int = 0: set = set_rows_cleared
 @onready var level_label = $Level
 @onready var score_label = $Score
-var level: int: set = set_level
-var score: int: set = set_score
 var layers: Dictionary
-var pattern_level: int: set = set_pattern_level
 # A non-rectangular array of integers storing pattern indices.
 var patterns: Array
 var tile_set: TileSet
@@ -44,6 +39,7 @@ var board: TileMapCustom
 var cycle: CycleValue
 var commander: TileMapCommand
 var game_input: GameInput
+var game_state: GameState
 var preview: PreviewPattern
 var sfx_player: SoundEffectPlayer
 
@@ -55,9 +51,7 @@ func _ready():
 	preview = $preview_pattern
 	sfx_player = $sound_effect_player
 	commander = TileMapCommand.new(board)
-	level = 0
-	score = 0
-	pattern_level = 0
+	game_state = $game_state
 
 	layers = board.layers
 	tile_set = board.tile_set
@@ -68,9 +62,14 @@ func _ready():
 	update_tile_selected(tile_selected)
 	board.update_terrains()
 	preview.init(tile_set, init_cycle_period)
-	var pattern = get_new_pattern()
-	preview.set_pattern_id(pattern)
+	_on_level_updated(game_state.level)
+	_on_pattern_level_updated(game_state.pattern_level)
+	_on_score_updated(game_state.score)
+	update_preview()
 
+	game_state.level_updated.connect(_on_level_updated)
+	game_state.pattern_level_updated.connect(_on_pattern_level_updated)
+	game_state.score_updated.connect(_on_score_updated)
 	game_input.tile_action.connect(_on_tile_action)
 	game_input.tile_selection.connect(update_tile_selected)
 	cycle.cycle_value_changed.connect(_on_cycle_value_changed)
@@ -81,7 +80,6 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	game_input.process(delta)
-	run_time += delta
 	cycle.value += delta
 
 
@@ -150,9 +148,10 @@ func game_over():
 	get_tree().paused = true
 	var pause_menu = open_pause_menu(restart_game, restart_game, quit_game)
 	add_child(pause_menu)
-	pause_menu.set_display_data(get_stats())
+	pause_menu.set_display_data(game_state.get_stats())
 
 
+## Returns the id of a pattern, or -1 if there are no patterns available.
 func get_new_pattern(repeat = true) -> int:
 	var limit = patterns.size()
 	var random_f = randf_range(0, limit)
@@ -165,16 +164,6 @@ func get_new_pattern(repeat = true) -> int:
 		return patterns[index][random_i]
 	else:
 		return get_new_pattern(false)
-
-
-func get_stats() -> Dictionary:
-	var stats = {
-		"Play Time": "%d:%02d" % [run_time / 60, int(run_time) % 60],
-		"Level": level,
-		"Score": score,
-		"Rows Cleared": rows_cleared,
-	}
-	return stats
 
 
 ## Opens the pause menu and connects its signals to the given Callables.
@@ -193,7 +182,7 @@ func pause_game():
 	get_tree().paused = true
 	var pause_menu = open_pause_menu(unpause_game, restart_game, quit_game)
 	add_child(pause_menu)
-	pause_menu.set_display_data(get_stats())
+	pause_menu.set_display_data(game_state.get_stats())
 
 
 func quit_game():
@@ -222,80 +211,9 @@ func score_board() -> Dictionary:
 			add_child(particle_effect)
 			particle_effect.expired.connect(_on_expired)
 		drop([layers.drop, layers.background])
-		score += matched_rows**2 * 100
-		rows_cleared += matched_rows
+		game_state.score += matched_rows**2 * 100
+		game_state.rows_cleared += matched_rows
 	return result
-
-
-func set_level(value: int):
-	level = value
-	level_label.text = "Level\n%d" % level
-	# Update cycle periods.
-	var cycle_period = init_cycle_period * (1.1 - 0.1 * exp(0.044 * level))
-	cycle_period = max(cycle_period, min_cycle_period)
-	cycle.max_value = cycle_period
-	preview.progress_bar_set_max_value(cycle_period)
-
-
-## Set the patterns used by the game according to 'pattern_level'. 
-func set_pattern_level(value: int):
-	pattern_level = value
-	match value:
-		0:
-			# 3-height patterns.
-			patterns = Constants.SAMPLE.slice(0, 6, 1, true)
-		1:
-			# 3-height and 1-height patterns.
-			patterns = Constants.SAMPLE.slice(0, 6, 1, true)
-			patterns.append_array(Constants.SAMPLE.slice(10, 14, 1, true))
-		2:
-			# 3-height and 2-height patterns
-			patterns = Constants.SAMPLE.slice(0, 6, 1, true)
-			patterns.append_array(Constants.SAMPLE.slice(6, 10, 1, true))
-		3:
-			# 3-height and 4-height patterns.
-			patterns = Constants.SAMPLE.slice(0, 6, 1, true)
-			patterns.append_array(Constants.SAMPLE.slice(14, 19, 1, true))
-		4:
-			# 4-height and 2-height patterns.
-			patterns = Constants.SAMPLE.slice(14, 19, 1, true)
-			patterns.append_array(Constants.SAMPLE.slice(6, 10, 1, true))
-		5:
-			# 2-height, 1-height, and 4-height patterns.
-			patterns = Constants.SAMPLE.slice(6, 14, 1, true)
-			patterns.append_array(Constants.SAMPLE.slice(14, 19, 1, true))
-		6:
-			# 3-height patterns.
-			patterns = Constants.SAMPLE.slice(0, 14, 1, true)
-		7:
-			# 3-height and 2-height patterns.
-			patterns = Constants.SAMPLE.slice(0, 6, 1, true)
-			patterns.append_array(Constants.SAMPLE.slice(6, 10, 1, true))
-		8:
-			# 3-height, 2-height, and 1-height patterns.
-			patterns = Constants.SAMPLE.slice(0, 14, 1, true)
-		9:
-			# Full pattern set.
-			patterns = Constants.SAMPLE.duplicate(true)
-		_:
-			set_pattern_level(value % 10)
-			return
-	# Correct subset values.
-	var num_patterns = patterns.size()
-	for subset in patterns:
-		if subset[0] < 1:
-			var p = subset[0]
-			subset[0] = (p * num_patterns + p - 1)/(num_patterns + p -1)
-
-
-func set_rows_cleared(value: int):
-	rows_cleared = value
-	update_levels()
-
-
-func set_score(value: int):
-	score = value
-	score_label.text = str(value)
 
 
 func unpause_game():
@@ -307,18 +225,6 @@ func unpause_game():
 func update_preview():
 	var new_pattern = get_new_pattern()
 	preview.set_pattern_id(new_pattern)
-
-
-func update_levels():
-	var score_level = floori(score * 0.0004 - level * 0.4)
-	var row_level = floori(rows_cleared * 0.1)
-	var min_level = mini(score_level, row_level)
-	if min_level > level:
-		score += 1000
-		set_level(min_level)
-	var min_pattern_level = floori(min_level * 0.2)
-	if min_pattern_level > pattern_level:
-		set_pattern_level(min_pattern_level)
 
 
 func update_tile_selected(coordinates: Vector2i):
@@ -357,6 +263,69 @@ func _on_drop_pattern_pressed():
 
 func _on_expired(node: Node):
 	node.queue_free()	
+
+
+func _on_level_updated(value: int):
+	level_label.text = "Level\n%d" % value
+	# Update cycle periods.
+	var cycle_period = init_cycle_period * (1.1 - 0.1 * exp(0.044 * value))
+	cycle_period = max(cycle_period, min_cycle_period)
+	cycle.max_value = cycle_period
+	preview.progress_bar_set_max_value(cycle_period)
+
+
+func _on_pattern_level_updated(value: int):
+	## Updates the patterns used by the game according to value.
+	match value:
+		0:
+			# 3-height patterns.
+			patterns = Constants.SAMPLE.slice(0, 6, 1, true)
+		1:
+			# 3-height and 1-height patterns.
+			patterns = Constants.SAMPLE.slice(0, 6, 1, true)
+			patterns.append_array(Constants.SAMPLE.slice(10, 14, 1, true))
+		2:
+			# 3-height and 2-height patterns
+			patterns = Constants.SAMPLE.slice(0, 6, 1, true)
+			patterns.append_array(Constants.SAMPLE.slice(6, 10, 1, true))
+		3:
+			# 3-height and 4-height patterns.
+			patterns = Constants.SAMPLE.slice(0, 6, 1, true)
+			patterns.append_array(Constants.SAMPLE.slice(14, 19, 1, true))
+		4:
+			# 4-height and 2-height patterns.
+			patterns = Constants.SAMPLE.slice(14, 19, 1, true)
+			patterns.append_array(Constants.SAMPLE.slice(6, 10, 1, true))
+		5:
+			# 2-height, 1-height, and 4-height patterns.
+			patterns = Constants.SAMPLE.slice(6, 14, 1, true)
+			patterns.append_array(Constants.SAMPLE.slice(14, 19, 1, true))
+		6:
+			# 3-height patterns.
+			patterns = Constants.SAMPLE.slice(0, 14, 1, true)
+		7:
+			# 3-height and 2-height patterns.
+			patterns = Constants.SAMPLE.slice(0, 6, 1, true)
+			patterns.append_array(Constants.SAMPLE.slice(6, 10, 1, true))
+		8:
+			# 3-height, 2-height, and 1-height patterns.
+			patterns = Constants.SAMPLE.slice(0, 14, 1, true)
+		9:
+			# Full pattern set.
+			patterns = Constants.SAMPLE.duplicate(true)
+		_:
+			_on_pattern_level_updated(value % 10)
+			return
+	# Correct subset values.
+	var num_patterns = patterns.size()
+	for subset in patterns:
+		if subset[0] < 1:
+			var p = subset[0]
+			subset[0] = (p * num_patterns + p - 1)/(num_patterns + p -1)
+
+
+func _on_score_updated(value: int):
+	score_label.text = str(value)
 
 
 func _on_path_updated():
