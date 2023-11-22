@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://dh5wo0og686ie"]
+[gd_scene load_steps=6 format=3 uid="uid://dh5wo0og686ie"]
 
 [ext_resource type="Script" path="res://src/scene/board/preview_pattern.gd" id="1_i0rg4"]
+[ext_resource type="TileSet" uid="uid://ogx4rbyatygf" path="res://asset/tile_atlas/pathable.tres" id="2_0c3mu"]
 [ext_resource type="Script" path="res://src/node/tile_map_custom.gd" id="2_p8evc"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vt34b"]
@@ -22,6 +23,7 @@ grow_vertical = 2
 script = ExtResource("1_i0rg4")
 
 [node name="tile_map" type="TileMap" parent="."]
+tile_set = ExtResource("2_0c3mu")
 format = 2
 script = ExtResource("2_p8evc")
 

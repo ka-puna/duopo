@@ -17,12 +17,6 @@ func _ready():
 	tile_map_set_y_position(tile_map_y_position)
 
 
-## Set the PreviewPattern's principal values.
-func init(tile_set: TileSet, progress_max_value: float):
-	tile_map.tile_set = tile_set
-	progress_bar_set_max_value(progress_max_value)
-
-
 ## Returns the id of the displayed pattern, or -1 if it does not exist.
 func get_pattern_id():
 	return pattern_id

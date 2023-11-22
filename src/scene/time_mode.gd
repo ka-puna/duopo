@@ -31,7 +31,6 @@ const move_selection_vector: Array[Vector2i] = [
 var layers: Dictionary
 # A non-rectangular array of integers storing pattern indices.
 var patterns: Array
-var tile_set: TileSet
 var effect: Callable
 var match_rows: Callable
 
@@ -48,7 +47,6 @@ var game_input: GameInput
 func _ready():
 	commander = TileMapCommand.new(board)
 	layers = board.layers
-	tile_set = board.tile_set
 	effect = commander.get_self_map(Constants.TILES_SELF_MAPPING)
 	match_rows = commander.get_match_rows("group")
 	game_input = GameInput.new(board, layers.background)
@@ -56,7 +54,7 @@ func _ready():
 	# Update scene for initial game.
 	update_tile_selected(tile_selected)
 	board.update_terrains()
-	preview.init(tile_set, init_cycle_period)
+	preview.progress_bar_set_max_value(init_cycle_period)
 	_on_level_updated(game_state.level)
 	_on_pattern_level_updated(game_state.pattern_level)
 	_on_score_updated(game_state.score)
